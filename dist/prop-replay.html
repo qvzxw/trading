@@ -1,0 +1,2366 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prop Replay</title>
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAE+klEQVR4nO3dQa4TRxSG0UuUKftggNhBNsYC2Fh2gBiwGzKInhQRHs/u7qq61f85w0Q8e3C/qrLdbr97//79j4JQf6x+ArCSAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCI9ufqJwAvPn7+/sv//u3Lh2GPaQeghdeG/63/d9Y7P5LHSs8O99W7gR2AaAJgmSNHm6uPQwJgiTODfGUEAiCaAIgmAKIJgGgCIJoAmO7suzhXfhgmAKbqNPxVAmCikdf0HOVqUKbotvK/sAMwXNfhr7IDMNgzwz9y0F9jB2CY7sNfJQAG2WH4qwTAALsMf5UAuNhOw18lAC602/BXCYCL7Dj8VQLgArsOf5UAOGnn4a8SACfsPvxVAuCgOwx/lQA44C7DXyUAnnSn4a8SAE+42/BXuRp0G/8dvhXDdcfhr3Jz3PZW3DL80efwKzsNf5UjUGurbhl+9HF2G/4qAWzt4+fvQ0O4+/BXCaCtZ4ZvRAQJw18lgJZW3zY8ZfirBHArVxyJkoa/SgDtXLGSH/0bacNfJYDbejaCxOGvEkArjwzhM8P36JEodfirBNDGyCG86vOEuw1/lU+C2zi6+p/5mdH04a+yA7Rw5oXv0d3A8P/LDrDYo4P4yBCO+EDszsNfZQfYwqNDePWw3n34qwSwVOcVO2H4qxyBlrny6HP2Ma58zN3YARo7O4hH/n3S8FcJYImZPxX0zECnDX+VANq6chi/ffnw5t9LHP4qAUx39eUOz3jt76YOf5UvxU/V4VcSk4f9V+wAzRjQuQQwSYfVn/8TwAQz3vPnGAE0YfjXEMBgjj69CWAgR5/+BLCY4V9LAIM4+uzh1h+E/TyE3Vbbbs8n0S0vh35r9R09eCsvd+A5tzsCXX0bkBGPTx+3CuDZG8quGlarfx+3CuCIK0Ow+u/nNgHMvCnsmX9v9e/lFgFcuYKPXMUNfz/bB7D6xyFGPQfm2Ppt0BmD99aq7eizt+13gEc88p3Y11xxLDL8fW0bwJGV92wIR58DfW0ZwNljx8zdwOrf23avAa4+c3vXJ9tWO8CIF5xnjkXsb5sARp+33Vk50zYBPOrM4NkN8mwRwOz32lfclJY12r8IXv1Bk3d97q31DrB6+F/+tqG+r7YBdBj+Zx9HKPu59XeCr/Yy4N2/a8zjWr4G6Lb6c1/tjkCGn5laBWD4ma1NAIafFdoEACu0CMDqzyrLAzD8rLQ0AMPPassCMPx0sCQA36Wli+WvAX7H6s9o0wNw9KGTqQEYfrqZFoDhp6MpARh+umr9IhhGGx6A1Z/OhgZg+OluaAC+R0t3w49Avxtww89qU74U/+3Lh+jLH/7+9Gn1U9jSX1+/Dn+Mae8C/bzaW/3pYPpdIT5+/h4x/Fb98261A7xIGH724YMwogmAaG6NONmMcy2PswMQTQBEEwDRBEA0ARBNAEQTANEEQDQBEG3aJ8GujqQjOwDRBEA0F8NN4iK4nuwARBMA0Vr+UjzMYgcgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCIJoAiCYAogmAaAIgmgCIJgCiCYBoAiCaAIgmAKIJgGgCINo/kXGr4vQ2xbQAAAAASUVORK5CYII=">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Prop Replay — dark-first, beide Themes über Tokens. */
+
+:root {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --raised: #222221;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #898781;
+  --hairline: #2c2c2a;
+  --ring: rgba(255, 255, 255, 0.10);
+  --accent: #3987e5;
+  --accent-strong: #256abf; /* Button-Grund mit weißem Text (≥4.5:1) */
+  --accent-text: #3987e5;   /* Akzent als Kleintext auf der Surface */
+  --accent-soft: rgba(57, 135, 229, 0.14);
+  --good: #0ca30c;
+  --good-soft: rgba(12, 163, 12, 0.14);
+  --warning: #fab219;
+  --warning-soft: rgba(250, 178, 25, 0.12);
+  --critical: #d03b3b;
+  --critical-soft: rgba(208, 59, 59, 0.14);
+  --pos-text: #0ca30c;
+  --neg-text: #e66767;
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --raised: #f2f1ee;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #6b6a64;
+    --hairline: #e1e0d9;
+    --ring: rgba(11, 11, 11, 0.10);
+    --accent: #2a78d6;
+    --accent-strong: #1c5cab;
+    --accent-text: #1c5cab;
+    --accent-soft: rgba(42, 120, 214, 0.10);
+    --good-soft: rgba(12, 163, 12, 0.10);
+    --warning-soft: rgba(250, 178, 25, 0.14);
+    --critical-soft: rgba(208, 59, 59, 0.10);
+    --pos-text: #006300;
+    --neg-text: #d03b3b;
+    --shadow: 0 8px 28px rgba(11, 11, 11, 0.08);
+  }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --raised: #f2f1ee;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #6b6a64;
+  --hairline: #e1e0d9;
+  --ring: rgba(11, 11, 11, 0.10);
+  --accent: #2a78d6;
+  --accent-strong: #1c5cab;
+  --accent-text: #1c5cab;
+  --accent-soft: rgba(42, 120, 214, 0.10);
+  --good-soft: rgba(12, 163, 12, 0.10);
+  --warning-soft: rgba(250, 178, 25, 0.14);
+  --critical-soft: rgba(208, 59, 59, 0.10);
+  --pos-text: #006300;
+  --neg-text: #d03b3b;
+  --shadow: 0 8px 28px rgba(11, 11, 11, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  padding-inline: 16px;
+  padding-block: 0 48px;
+}
+
+.wrap { max-width: 1080px; margin-inline: auto; }
+
+h1, h2, h3 { font-family: "Archivo", system-ui, sans-serif; text-wrap: balance; margin: 0; }
+
+
+/* ---------- Header ---------- */
+
+.site-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px;
+  padding-block: 28px 8px;
+}
+.site-head h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+.site-head h1 .tick { color: var(--accent); }
+.site-head .sub { color: var(--ink-2); font-size: 14px; }
+
+/* ---------- Schritt-Karten ---------- */
+
+.step {
+  background: var(--surface);
+  border: 1px solid var(--ring);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-top: 16px;
+}
+.step-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+.step-no {
+  font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600;
+  color: var(--accent-text); letter-spacing: 0.08em;
+}
+.step-head h2 { font-size: 17px; font-weight: 600; }
+.step-head .hint { color: var(--muted); font-size: 13px; }
+
+/* Firmen-Auswahl */
+.firm-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1px solid var(--hairline);
+  background: var(--raised);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+.chip:hover { border-color: var(--muted); }
+.chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.chip:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, .equity-chart:focus-visible, .dropzone:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+.acct-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; margin-top: 12px; }
+.acct-card {
+  text-align: left;
+  border: 1px solid var(--hairline);
+  background: var(--raised);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  display: grid; gap: 2px;
+}
+.acct-card:hover { border-color: var(--muted); }
+.acct-card[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.acct-card .acct-name { font-weight: 600; font-size: 14px; }
+.acct-card .acct-meta { color: var(--ink-2); font-size: 12.5px; }
+
+/* Regel-Zusammenfassung */
+.rules-summary {
+  margin-top: 14px;
+  border-top: 1px solid var(--hairline);
+  padding-top: 12px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 18px;
+}
+.rule-kv .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+.rule-kv .v { font-size: 14px; font-weight: 600; font-family: "IBM Plex Mono", monospace; }
+.rule-kv .v small { color: var(--ink-2); font-weight: 400; font-family: system-ui, sans-serif; }
+.rule-kv .v.neg { color: var(--neg-text); }
+.firm-note { grid-column: 1 / -1; color: var(--ink-2); font-size: 13px; }
+
+/* ---------- Datenimport ---------- */
+
+.import-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; }
+@media (max-width: 760px) { .import-grid { grid-template-columns: 1fr; } }
+
+.dropzone {
+  border: 1.5px dashed var(--hairline);
+  border-radius: 10px;
+  padding: 22px 16px;
+  text-align: center;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+.dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: var(--accent-soft); }
+.dropzone strong { color: var(--ink); }
+.dropzone .small { font-size: 12.5px; color: var(--muted); display: block; margin-top: 6px; }
+
+.paste-box { display: grid; gap: 8px; }
+.paste-box textarea {
+  background: var(--raised); color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: 8px;
+  min-height: 96px; padding: 10px 12px; resize: vertical;
+  font-family: "IBM Plex Mono", monospace; font-size: 12px;
+}
+.btn {
+  border: 1px solid var(--hairline); background: var(--raised); color: var(--ink);
+  border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+.btn.ghost { background: none; }
+
+.import-status { margin-top: 12px; font-size: 13.5px; color: var(--ink-2); display: grid; gap: 4px; }
+.import-status .ok { color: var(--pos-text); }
+
+.opts-row {
+  display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 14px;
+  border-top: 1px solid var(--hairline); padding-top: 12px; align-items: end;
+}
+.opt { display: grid; gap: 4px; font-size: 13px; color: var(--ink-2); min-width: 0; max-width: 100%; }
+.opt select, .opt input {
+  background: var(--raised); color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: 7px; padding: 6px 9px; font-size: 13.5px;
+  max-width: 100%;
+}
+
+/* ---------- Ergebnis ---------- */
+
+.result-hero {
+  margin-top: 20px;
+  border-radius: 12px;
+  padding: 20px 22px;
+  border: 1px solid var(--ring);
+  background: var(--surface);
+  display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline;
+}
+.result-hero.passed { border-color: var(--good); background: var(--good-soft); }
+.result-hero.failed { border-color: var(--critical); background: var(--critical-soft); }
+.result-hero.ongoing { border-color: var(--accent); background: var(--accent-soft); }
+.result-hero .verdict { font-family: "Archivo", system-ui, sans-serif; font-size: 24px; font-weight: 700; }
+.result-hero.passed .verdict { color: var(--pos-text); }
+.result-hero.failed .verdict { color: var(--critical); }
+.result-hero.ongoing .verdict { color: var(--accent); }
+.result-hero .why { color: var(--ink-2); font-size: 14.5px; flex: 1 1 320px; }
+
+.tiles {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr));
+  gap: 10px; margin-top: 12px;
+}
+.tile {
+  background: var(--surface); border: 1px solid var(--ring); border-radius: 10px;
+  padding: 12px 14px; display: grid; gap: 2px; align-content: start;
+}
+.tile .label { color: var(--muted); font-size: 12px; }
+.tile .value { font-family: "IBM Plex Mono", monospace; font-size: 20px; font-weight: 600; }
+.tile .value.pos { color: var(--pos-text); }
+.tile .value.neg { color: var(--neg-text); }
+.tile .sub { color: var(--ink-2); font-size: 12px; }
+
+/* Chart-Karte */
+.chart-card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 16px 18px 10px; margin-top: 12px; }
+.chart-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.chart-host { width: 100%; }
+
+.equity-chart { display: block; touch-action: pan-y; }
+.equity-chart .grid { stroke: var(--hairline); stroke-width: 1; }
+.equity-chart .tick { fill: var(--muted); font-size: 11px; font-family: "IBM Plex Mono", monospace; }
+.equity-chart .refline.start { stroke: var(--muted); stroke-width: 1; opacity: 0.6; }
+.equity-chart .refline.target { stroke: var(--good); stroke-width: 1.5; }
+.equity-chart .reflabel { font-size: 11px; fill: var(--ink-2); font-family: "IBM Plex Mono", monospace; }
+.equity-chart .equity-line { stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.equity-chart .equity-area { fill: var(--accent); opacity: 0.1; }
+.equity-chart .floor-line { stroke: var(--critical); stroke-width: 2; stroke-linejoin: round; }
+.equity-chart .end-dot { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.equity-chart .fail-dot { fill: var(--critical); stroke: var(--surface); stroke-width: 2; }
+.equity-chart .fail-ring { fill: none; stroke: var(--critical); stroke-width: 1.5; opacity: 0.5; }
+.equity-chart .pass-dot { fill: var(--good); stroke: var(--surface); stroke-width: 2; }
+.equity-chart .crosshair-line { stroke: var(--muted); stroke-width: 1; }
+.equity-chart .cross-dot.equity { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.equity-chart .cross-dot.floor { fill: var(--critical); stroke: var(--surface); stroke-width: 2; }
+
+.chart-tip {
+  position: absolute; pointer-events: none; z-index: 5;
+  background: var(--raised); border: 1px solid var(--ring); border-radius: 8px;
+  padding: 8px 10px; box-shadow: var(--shadow); min-width: 170px;
+}
+.chart-tip .tip-head { color: var(--muted); font-size: 11.5px; margin-bottom: 4px; font-family: "IBM Plex Mono", monospace; }
+.tip-row { display: flex; align-items: center; gap: 7px; font-size: 12.5px; }
+.tip-key { width: 14px; height: 0; border-top: 2.5px solid var(--muted); border-radius: 2px; flex: none; }
+.tip-key.equity { border-color: var(--accent); }
+.tip-key.floor { border-color: var(--critical); }
+.tip-key.target { border-color: var(--good); }
+.tip-key.room { border-color: transparent; }
+.tip-label { color: var(--ink-2); flex: 1; }
+.tip-value { font-family: "IBM Plex Mono", monospace; font-weight: 600; }
+
+.chart-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 8px 2px 4px; font-size: 12.5px; color: var(--ink-2); }
+.legend-item { display: inline-flex; align-items: center; gap: 7px; }
+
+/* Regel-Checkliste + Tagestabelle */
+.result-cols { display: grid; grid-template-columns: 1fr 1.35fr; gap: 12px; margin-top: 12px; align-items: start; }
+@media (max-width: 860px) { .result-cols { grid-template-columns: 1fr; } }
+
+.panel { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 16px 18px; }
+.panel h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+
+.rule-check { display: grid; gap: 8px; }
+.rule-item { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; }
+.rule-item .dot {
+  flex: none; width: 18px; height: 18px; border-radius: 50%; margin-top: 1px;
+  display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff;
+}
+.rule-item.ok .dot { background: var(--good); }
+.rule-item.bad .dot { background: var(--critical); }
+.rule-item.warn .dot { background: var(--warning); color: #1a1a19; }
+.rule-item.na .dot { background: var(--muted); }
+.rule-item .rule-name { font-weight: 600; }
+.rule-item .rule-detail { color: var(--ink-2); }
+
+.table-wrap { overflow-x: auto; }
+table.days { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.days th {
+  text-align: right; color: var(--muted); font-weight: 500; font-size: 11.5px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--hairline); padding: 6px 10px;
+}
+table.days th:first-child, table.days td:first-child { text-align: left; padding-left: 2px; }
+table.days td {
+  text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--hairline);
+  font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+table.days td.pos { color: var(--pos-text); }
+table.days td.neg { color: var(--neg-text); }
+table.days tr.after-fail td { opacity: 0.45; }
+table.days td .flag { font-family: system-ui, sans-serif; font-size: 11px; border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
+table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); border: 1px solid var(--warning); }
+
+/* Warnungen */
+.warnings { margin-top: 12px; display: grid; gap: 6px; }
+.warn-item {
+  background: var(--warning-soft); border: 1px solid var(--warning);
+  border-radius: 8px; padding: 8px 12px; font-size: 13px; color: var(--ink);
+}
+
+/* Quick-Check */
+.quick-grid { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: end; }
+.quick-out { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 12px; }
+
+.footer-note { color: var(--muted); font-size: 12.5px; margin-top: 26px; line-height: 1.6; }
+
+.hidden-input { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="site-head">
+    <h1><span class="tick">▮</span> Prop Replay</h1>
+    <span class="sub">TradingView-Paper-Trading gegen echte Prop-Firm-Regeln laufen lassen</span>
+  </header>
+
+  <!-- Schritt 1: Firma + Account -->
+  <section class="step" id="step-firm">
+    <div class="step-head">
+      <span class="step-no">01</span>
+      <h2>Prop Firm &amp; Account wählen</h2>
+      <span class="hint">Regeln der Evaluation (Challenge-Phase)</span>
+    </div>
+    <div class="firm-row" id="firm-row" role="group" aria-label="Prop Firm"></div>
+    <div class="acct-row" id="acct-row" role="group" aria-label="Account"></div>
+    <div class="rules-summary" id="rules-summary"></div>
+  </section>
+
+  <!-- Schritt 2: Daten -->
+  <section class="step" id="step-data">
+    <div class="step-head">
+      <span class="step-no">02</span>
+      <h2>TradingView-Export laden</h2>
+      <span class="hint">Papierhandel → Download-Symbol → „Daten herunterladen“</span>
+    </div>
+    <div class="import-grid">
+      <div class="dropzone" id="dropzone" role="button" tabindex="0"
+           aria-label="CSV-Dateien hierher ziehen oder klicken zum Auswählen">
+        <strong>CSV-Dateien hier reinziehen</strong> oder klicken zum Auswählen
+        <span class="small">„Alle Tabs“ lädt mehrere Dateien herunter – zieh sie einfach alle zusammen rein. Gebraucht wird die Guthabenübersicht (Balance History); der Order-Verlauf zusätzlich macht den Kontrakt-Check möglich. Deutsche und englische Header werden erkannt.</span>
+        <input type="file" id="file-input" class="hidden-input" accept=".csv,text/csv,text/plain" multiple>
+      </div>
+      <div class="paste-box">
+        <textarea id="paste-area" placeholder="…oder CSV-Inhalt hier einfügen" aria-label="CSV-Inhalt einfügen"></textarea>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn primary" id="paste-btn">Einfügen auswerten</button>
+          <button class="btn ghost" id="demo-btn">Beispieldaten laden</button>
+          <button class="btn ghost" id="clear-btn" hidden>Daten löschen</button>
+        </div>
+      </div>
+    </div>
+    <div class="import-status" id="import-status"></div>
+    <div class="opts-row" id="opts-row">
+      <label class="opt">Zeitzone im CSV (= deine Chart-Zeitzone)
+        <select id="tz-select">
+          <option value="America/New_York" selected>New York (UTC-4/-5)</option>
+          <option value="Europe/Berlin">Berlin (UTC+1/+2)</option>
+          <option value="America/Chicago">Chicago (UTC-5/-6)</option>
+          <option value="UTC">UTC</option>
+          <option value="local">Meine Systemzeit</option>
+        </select>
+      </label>
+      <label class="opt">Handelstag
+        <select id="day-select">
+          <option value="exchange" selected>CME-Handelstag (17:00 NY)</option>
+          <option value="calendar">Kalendertag</option>
+        </select>
+      </label>
+      <label class="opt">Von
+        <input type="date" id="range-start">
+      </label>
+      <label class="opt">Bis
+        <input type="date" id="range-end">
+      </label>
+    </div>
+  </section>
+
+  <!-- Ergebnis -->
+  <div id="result-root" hidden>
+    <div class="result-hero" id="result-hero">
+      <span class="verdict" id="verdict"></span>
+      <span class="why" id="verdict-why"></span>
+    </div>
+
+    <div class="tiles" id="tiles"></div>
+
+    <div class="chart-card">
+      <h3>Equity vs. Drawdown-Limit</h3>
+      <div class="chart-host" id="chart-host"></div>
+    </div>
+
+    <div class="result-cols">
+      <div class="panel">
+        <h3>Regel-Check</h3>
+        <div class="rule-check" id="rule-check"></div>
+      </div>
+      <div class="panel">
+        <h3>Handelstage</h3>
+        <div class="table-wrap">
+          <table class="days" id="days-table"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Außerhalb von #result-root, damit Warnungen auch bei leerem Ergebnis sichtbar sind -->
+  <div class="warnings" id="warnings"></div>
+
+  <!-- Quick-Check -->
+  <section class="step" id="quick-check">
+    <div class="step-head">
+      <span class="step-no">✦</span>
+      <h2>Quick-Check ohne CSV</h2>
+      <span class="hint">Wo steht mein Limit gerade?</span>
+    </div>
+    <div class="quick-grid">
+      <label class="opt">Aktueller Kontostand (Paper)
+        <input type="number" id="qc-balance" step="0.01" placeholder="50655.00">
+      </label>
+      <label class="opt">Höchster Stand bisher <span id="qc-hwm-label">(EOD-Hoch)</span>
+        <input type="number" id="qc-hwm" step="0.01" placeholder="51100.00">
+      </label>
+      <label class="opt">Paper-Startguthaben
+        <input type="number" id="qc-start" step="0.01" placeholder="50000.00">
+      </label>
+      <button class="btn primary" id="qc-btn">Rechnen</button>
+    </div>
+    <div class="quick-out" id="qc-out"></div>
+  </section>
+
+  <p class="footer-note" id="footer-note"></p>
+</div>
+
+<script>
+// ===== js/symbols.js =====
+// Kontrakt-Spezifikationen für gängige Futures (CME/CBOT/COMEX/NYMEX).
+// multiplier = USD pro vollem Indexpunkt/Preispunkt und Kontrakt.
+// miniEquiv = wie viele dieser Kontrakte einem Mini entsprechen (Micro = 0.1).
+
+const SPECS = {
+  // Equity Index
+  ES:  { name: 'E-mini S&P 500',        multiplier: 50,     miniEquiv: 1 },
+  MES: { name: 'Micro E-mini S&P 500',  multiplier: 5,      miniEquiv: 0.1, micro: true },
+  NQ:  { name: 'E-mini Nasdaq-100',     multiplier: 20,     miniEquiv: 1 },
+  MNQ: { name: 'Micro E-mini Nasdaq',   multiplier: 2,      miniEquiv: 0.1, micro: true },
+  YM:  { name: 'E-mini Dow',            multiplier: 5,      miniEquiv: 1 },
+  MYM: { name: 'Micro E-mini Dow',      multiplier: 0.5,    miniEquiv: 0.1, micro: true },
+  RTY: { name: 'E-mini Russell 2000',   multiplier: 50,     miniEquiv: 1 },
+  M2K: { name: 'Micro E-mini Russell',  multiplier: 5,      miniEquiv: 0.1, micro: true },
+  NKD: { name: 'Nikkei 225 (USD)',      multiplier: 5,      miniEquiv: 1 },
+  // Energie
+  CL:  { name: 'Crude Oil',             multiplier: 1000,   miniEquiv: 1 },
+  MCL: { name: 'Micro Crude Oil',       multiplier: 100,    miniEquiv: 0.1, micro: true },
+  QM:  { name: 'E-mini Crude Oil',      multiplier: 500,    miniEquiv: 0.5 },
+  NG:  { name: 'Henry Hub Natural Gas', multiplier: 10000,  miniEquiv: 1 },
+  MNG: { name: 'Micro Natural Gas',     multiplier: 1000,   miniEquiv: 0.1, micro: true },
+  QG:  { name: 'E-mini Natural Gas',    multiplier: 2500,   miniEquiv: 0.25 },
+  RB:  { name: 'RBOB Gasoline',         multiplier: 42000,  miniEquiv: 1 },
+  HO:  { name: 'Heating Oil',           multiplier: 42000,  miniEquiv: 1 },
+  // Metalle
+  GC:  { name: 'Gold',                  multiplier: 100,    miniEquiv: 1 },
+  MGC: { name: 'Micro Gold',            multiplier: 10,     miniEquiv: 0.1, micro: true },
+  SI:  { name: 'Silber',                multiplier: 5000,   miniEquiv: 1 },
+  SIL: { name: 'Micro Silber',          multiplier: 1000,   miniEquiv: 0.2, micro: true },
+  HG:  { name: 'Kupfer',                multiplier: 25000,  miniEquiv: 1 },
+  MHG: { name: 'Micro Kupfer',          multiplier: 2500,   miniEquiv: 0.1, micro: true },
+  PL:  { name: 'Platin',                multiplier: 50,     miniEquiv: 1 },
+  // Zinsen
+  ZB:  { name: '30Y T-Bond',            multiplier: 1000,   miniEquiv: 1 },
+  ZN:  { name: '10Y T-Note',            multiplier: 1000,   miniEquiv: 1 },
+  ZF:  { name: '5Y T-Note',             multiplier: 1000,   miniEquiv: 1 },
+  ZT:  { name: '2Y T-Note',             multiplier: 2000,   miniEquiv: 1 },
+  UB:  { name: 'Ultra T-Bond',          multiplier: 1000,   miniEquiv: 1 },
+  TN:  { name: 'Ultra 10Y T-Note',      multiplier: 1000,   miniEquiv: 1 },
+  // FX
+  '6E': { name: 'Euro FX',              multiplier: 125000, miniEquiv: 1 },
+  M6E: { name: 'Micro Euro FX',         multiplier: 12500,  miniEquiv: 0.1, micro: true },
+  '6B': { name: 'British Pound',        multiplier: 62500,  miniEquiv: 1 },
+  M6B: { name: 'Micro British Pound',   multiplier: 6250,   miniEquiv: 0.1, micro: true },
+  '6J': { name: 'Japanese Yen',         multiplier: 12500000, miniEquiv: 1 },
+  '6A': { name: 'Australian Dollar',    multiplier: 100000, miniEquiv: 1 },
+  M6A: { name: 'Micro AUD',             multiplier: 10000,  miniEquiv: 0.1, micro: true },
+  '6C': { name: 'Canadian Dollar',      multiplier: 100000, miniEquiv: 1 },
+  // Agrar
+  ZC:  { name: 'Mais',                  multiplier: 50,     miniEquiv: 1 },
+  ZW:  { name: 'Weizen',                multiplier: 50,     miniEquiv: 1 },
+  ZS:  { name: 'Sojabohnen',            multiplier: 50,     miniEquiv: 1 },
+  ZL:  { name: 'Sojaöl',                multiplier: 600,    miniEquiv: 1 },
+  ZM:  { name: 'Sojamehl',              multiplier: 100,    miniEquiv: 1 },
+  LE:  { name: 'Live Cattle',           multiplier: 400,    miniEquiv: 1 },
+  HE:  { name: 'Lean Hogs',             multiplier: 400,    miniEquiv: 1 },
+  // Krypto (CME)
+  BTC: { name: 'Bitcoin',               multiplier: 5,      miniEquiv: 1 },
+  MBT: { name: 'Micro Bitcoin',         multiplier: 0.1,    miniEquiv: 0.02, micro: true },
+  ETH: { name: 'Ether',                 multiplier: 50,     miniEquiv: 1 },
+  MET: { name: 'Micro Ether',           multiplier: 0.1,    miniEquiv: 0.002, micro: true },
+};
+
+const MONTH_CODES = 'FGHJKMNQUVXZ';
+
+// "CME_MINI:NQ1!", "CME_MINI:NQZ2026", "COMEX:GC1!", "NQ1!", "MNQH2026" -> Root wie "NQ"
+function symbolRoot(raw) {
+  if (!raw) return null;
+  let s = String(raw).trim().toUpperCase();
+  const colon = s.lastIndexOf(':');
+  if (colon >= 0) s = s.slice(colon + 1);
+  s = s.replace(/[0-9]*!$/, '');                    // Continuous: NQ1! -> NQ
+  const m = s.match(/^(.*?)([FGHJKMNQUVXZ])(\d{4}|\d{1,2})$/); // Kontraktmonat: NQZ2026 -> NQ
+  if (m && m[1] && SPECS[m[1]] && MONTH_CODES.includes(m[2])) s = m[1];
+  return s || null;
+}
+
+function symbolSpec(raw) {
+  const root = symbolRoot(raw);
+  return root && SPECS[root] ? { root, ...SPECS[root] } : (root ? { root, name: root, multiplier: null, miniEquiv: 1 } : null);
+}
+
+
+// ===== js/parse.js =====
+// Parser für TradingView-Paper-Trading-CSV-Exporte (deutsche + englische Header).
+// Erkennt die Tabs "Guthabenübersicht"/"Account balance", "Handelsverlauf"/"Trading Journal",
+// "Order-Verlauf"/"History" und "All Tabs"-Exporte mit mehreren Sektionen in einer Datei.
+
+
+// ---------- Low-level CSV ----------
+
+// Delimiter über die ersten ~10 nicht-leeren Zeilen sniffen – die erste Zeile kann
+// ein Sektionstitel ohne Trennzeichen sein (deutscher All-Tabs-Export).
+function sniffDelimiter(text) {
+  const counts = { ',': 0, ';': 0, '\t': 0 };
+  const lines = String(text).split(/\r?\n/).filter((l) => l.trim() !== '').slice(0, 10);
+  for (const line of lines) {
+    let inQ = false;
+    for (const ch of line) {
+      if (ch === '"') inQ = !inQ;
+      else if (!inQ && counts[ch] != null) counts[ch]++;
+    }
+  }
+  let best = ',', bestCount = -1;
+  for (const d of [',', ';', '\t']) {
+    if (counts[d] > bestCount) { bestCount = counts[d]; best = d; }
+  }
+  return best;
+}
+
+// Erkennt den Dezimalstil einer Datei (Punkt- vs. Komma-Dezimal), damit mehrdeutige
+// Einzelwerte wie "2,875" oder "50.000" konsistent gelesen werden.
+function detectNumberStyle(text, delimiter) {
+  const t = String(text);
+  const count = (re) => (t.match(re) || []).length;
+  let comma = 3 * count(/\d{1,3}(?:\.\d{3})+,\d{1,2}(?!\d)/g) + count(/(?<![\d.,])\d+,\d{1,2}(?![\d.,])/g);
+  let dot = 3 * count(/\d{1,3}(?:,\d{3})+\.\d{1,2}(?!\d)/g) + count(/(?<![\d.,:])\d+\.\d{1,2}(?![\d.,])/g);
+  if (delimiter === ';') comma += 2;
+  if (comma >= dot + 2) return 'comma';
+  if (dot >= comma + 2) return 'dot';
+  return null;
+}
+
+// RFC-4180-artig: Quotes, escaped Quotes, Delimiter in Quotes, \r\n.
+function parseCsv(text, delimiter) {
+  const rows = [];
+  let row = [], field = '', inQ = false, sawAny = false;
+  const d = delimiter || sniffDelimiter(text);
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQ) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; }
+        else inQ = false;
+      } else field += ch;
+    } else if (ch === '"') {
+      inQ = true; sawAny = true;
+    } else if (ch === d) {
+      row.push(field); field = ''; sawAny = true;
+    } else if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+      if (sawAny || field !== '') { row.push(field); rows.push(row); }
+      row = []; field = ''; sawAny = false;
+    } else { field += ch; sawAny = true; }
+  }
+  if (sawAny || field !== '') { row.push(field); rows.push(row); }
+  return rows;
+}
+
+// "1.234,56" | "1,234.56" | "1234.56" | "-2 000,5" | "−655" | "(655)" | "655 USD" -> Number
+// style ('dot' | 'comma') macht mehrdeutige Werte eindeutig; ohne Stil greift eine Heuristik.
+function parseNumber(raw, style) {
+  if (raw == null) return null;
+  if (typeof raw === 'number') return Number.isFinite(raw) ? raw : null;
+  let s = String(raw).trim();
+  if (!s) return null;
+  let negative = false;
+  if (/^\(.*\)$/.test(s)) { negative = true; s = s.slice(1, -1); }
+  s = s.replace(/[−–—]/g, '-').replace(/[$€£\s ']/g, '').replace(/(USD|EUR|GBP|USDT)$/i, '');
+  if (s.startsWith('-')) { negative = true; s = s.slice(1); }
+  else if (s.startsWith('+')) s = s.slice(1);
+  if (!/\d/.test(s)) return null; // "–", "USD", leer -> kein Wert (nicht 0)
+  if (style === 'comma') {
+    s = s.replace(/\./g, '').replace(',', '.');
+  } else if (style === 'dot') {
+    s = s.replace(/,/g, '');
+  } else {
+    const lastComma = s.lastIndexOf(','), lastDot = s.lastIndexOf('.');
+    if (lastComma >= 0 && lastDot >= 0) {
+      if (lastComma > lastDot) s = s.replace(/\./g, '').replace(',', '.'); // 1.234,56
+      else s = s.replace(/,/g, '');                                        // 1,234.56
+    } else if (lastComma >= 0) {
+      const parts = s.split(',');
+      if (parts[0] === '0') s = parts.join('.');                                            // "0,5" ist immer dezimal
+      else if (parts.length > 2) s = parts.join('');                                        // "1,234,567"
+      else if (parts[1] && parts[1].length === 3 && parts[0].length <= 3) s = parts.join(''); // "1,234" -> eher Tausender
+      else s = parts.join('.');
+    } else if (lastDot >= 0) {
+      const parts = s.split('.');
+      if (parts.length > 2 && parts.slice(1).every((p) => p.length === 3)) s = parts.join(''); // "1.234.567"
+      // Einzelner Punkt bleibt dezimal – TradingView exportiert Punkt-Dezimal ohne Tausendertrenner.
+    }
+  }
+  const n = Number(s);
+  if (!Number.isFinite(n)) return null;
+  return negative ? -n : n;
+}
+
+// Zeitstempel -> { y, mo, d, h, mi, s, epochIfExplicit } (naiv, TZ entscheidet der Aufrufer)
+function parseTimestamp(raw) {
+  if (raw == null) return null;
+  const s = String(raw).trim();
+  if (!s) return null;
+  // Unix-Sekunden/Millisekunden
+  if (/^\d{10}$/.test(s)) return { epochIfExplicit: Number(s) * 1000 };
+  if (/^\d{13}$/.test(s)) return { epochIfExplicit: Number(s) };
+  // ISO mit Offset/Z -> eindeutig
+  if (/[tT ]\d{2}:\d{2}.*(Z|[+-]\d{2}:?\d{2})$/.test(s)) {
+    const t = Date.parse(s.replace(' ', 'T'));
+    if (Number.isFinite(t)) return { epochIfExplicit: t };
+  }
+  // "2026-09-22 20:39:30" / "2026-09-22T20:39" / "2026-09-22"
+  let m = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+  if (m) return checkParts({ y: +m[1], mo: +m[2], d: +m[3], h: +(m[4] || 0), mi: +(m[5] || 0), s: +(m[6] || 0) });
+  // "22.09.2026 20:39:30" (deutsch) / "22.09.2026"
+  m = s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})(?:[ ,]+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
+  if (m) return checkParts({ y: +m[3], mo: +m[2], d: +m[1], h: +(m[4] || 0), mi: +(m[5] || 0), s: +(m[6] || 0) });
+  // "09/22/2026 8:39:30 PM" (US) – Tag/Monat werden getauscht, wenn nur dd/mm plausibel ist
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ ,]+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?)?$/i);
+  if (m) {
+    let h = +(m[4] || 0);
+    const ap = (m[7] || '').toUpperCase();
+    if (ap === 'PM' && h < 12) h += 12;
+    if (ap === 'AM' && h === 12) h = 0;
+    let mo = +m[1], d = +m[2];
+    if (mo > 12 && d <= 12) { const t = mo; mo = d; d = t; } // "22/09/2026" ist dd/mm
+    return checkParts({ y: +m[3], mo, d, h, mi: +(m[5] || 0), s: +(m[6] || 0) });
+  }
+  const t = Date.parse(s);
+  if (Number.isFinite(t)) return { epochIfExplicit: t };
+  return null;
+}
+
+function checkParts(p) {
+  return p.mo >= 1 && p.mo <= 12 && p.d >= 1 && p.d <= 31 && p.h < 24 && p.mi < 60 && p.s < 60 ? p : null;
+}
+
+// ---------- Header-Erkennung ----------
+
+function norm(h) {
+  return String(h || '')
+    .toLowerCase()
+    .replace(/ /g, ' ')
+    .replace(/[äöüß]/g, (c) => ({ ä: 'a', ö: 'o', ü: 'u', ß: 'ss' }[c]))
+    .replace(/[^a-z0-9%]+/g, ' ')
+    .trim();
+}
+
+const COLS = {
+  time:          ['time', 'zeit', 'datum', 'date', 'closing time', 'placing time', 'schlusszeit', 'orderzeit', 'zeitpunkt', 'fill time', 'ausfuhrungszeit'],
+  balanceBefore: ['balance before', 'guthaben vor', 'kontostand vor', 'saldo vor'],
+  balanceAfter:  ['balance after', 'guthaben nach', 'kontostand nach', 'saldo nach'],
+  realizedPnl:   ['realized p l', 'realized pnl', 'realisierter g v', 'realisierter gewinn verlust', 'realized profit loss', 'profit', 'p l', 'g v', 'gewinn verlust', 'pnl'],
+  action:        ['action', 'handlung', 'aktion', 'description', 'beschreibung', 'message', 'nachricht', 'text'],
+  symbol:        ['symbol', 'instrument', 'ticker'],
+  side:          ['side', 'seite', 'richtung', 'buy sell', 'kauf verkauf'],
+  qty:           ['qty', 'quantity', 'menge', 'anzahl', 'stuck', 'contracts', 'kontrakte', 'units', 'einheiten', 'filled qty', 'ausgefuhrte menge'],
+  price:         ['fill price', 'ausfuhrungspreis', 'price', 'preis', 'avg fill price', 'durchschnittlicher ausfuhrungspreis', 'ausgefuhrter preis'],
+  status:        ['status'],
+  type:          ['type', 'typ', 'order type', 'ordertyp'],
+  commission:    ['commission', 'kommission', 'gebuhr', 'fees', 'gebuhren'],
+};
+
+function mapHeaders(headerRow) {
+  const map = {};
+  // Prioritäten: "Closing time" schlägt "Placing time" (Ausführungszeitpunkt),
+  // "Filled Qty" schlägt die Order-Menge (Teilausführungen).
+  headerRow.forEach((h, i) => {
+    const n = norm(h);
+    if (map.time == null && (n === 'closing time' || n === 'schlusszeit')) map.time = i;
+    if (map.qty == null && (n === 'filled qty' || n === 'ausgefuhrte menge')) map.qty = i;
+  });
+  headerRow.forEach((h, i) => {
+    const n = norm(h);
+    if (!n) return;
+    for (const [key, aliases] of Object.entries(COLS)) {
+      if (map[key] != null) continue;
+      if (aliases.includes(n)) { map[key] = i; return; }
+    }
+  });
+  // Zweiter Durchgang: Wortgrenzen-Matches (z. B. "realized pnl value") –
+  // "unrealized p l" darf dabei NICHT auf "realized p l" matchen.
+  headerRow.forEach((h, i) => {
+    const n = norm(h);
+    if (!n) return;
+    const padded = ' ' + n + ' ';
+    for (const [key, aliases] of Object.entries(COLS)) {
+      if (map[key] != null) continue;
+      if (aliases.some((a) => a.length > 2 && padded.includes(' ' + a + ' '))) { map[key] = i; return; }
+    }
+  });
+  return map;
+}
+
+function classify(map, headerRow) {
+  // Positions-Tab (Take Profit/Stop Loss/Unrealized-Spalten, kein Status) ist kein Handelsverlauf
+  const posMarker = headerRow && headerRow.some((h) => {
+    const n = norm(h);
+    return /unrealized|nicht realisiert/.test(n) || n === 'take profit' || n === 'stop loss';
+  });
+  if (posMarker && map.status == null) return 'positions';
+  if (map.balanceBefore != null || map.balanceAfter != null) return 'balance';
+  if (map.symbol != null && map.side != null && map.price != null) {
+    return map.status != null ? 'orders' : 'fills';
+  }
+  if (map.symbol != null && map.qty != null && map.price != null) return 'fills';
+  return 'unknown';
+}
+
+function looksLikeHeader(row) {
+  if (!row || row.length < 2) return false;
+  const m = mapHeaders(row);
+  return Object.keys(m).length >= 2 && classify(m, row) !== 'unknown';
+}
+
+// Aus "Close long position for symbol CME_MINI:NQ1! at price 30967.50 for 1 units. Position AVG Price was 30836.50"
+function parseAction(text) {
+  if (!text) return {};
+  const s = String(text);
+  const out = {};
+  let m = s.match(/symbol\s+([A-Za-z0-9_.:!]+)/i);
+  if (m) out.symbol = m[1];
+  // Zahl muss mit Ziffer enden, sonst wird Satz-Interpunktion mitgecaptured ("price 30967.50.")
+  m = s.match(/at price\s+([0-9]+(?:[.,][0-9]+)*)/i);
+  if (m) out.price = parseNumber(m[1], 'dot'); // Action-Text ist immer englisch/punkt-dezimal
+  m = s.match(/for\s+([0-9]+(?:[.,][0-9]+)*)\s+units?/i);
+  if (m) out.qty = parseNumber(m[1], 'dot');
+  m = s.match(/\b(close|open|reverse)\b/i);
+  if (m) out.verb = m[1].toLowerCase();
+  m = s.match(/\b(long|short)\b/i);
+  if (m) out.direction = m[1].toLowerCase();
+  if (/reset|zuruckgesetzt|zurückgesetzt/i.test(s)) out.reset = true;
+  if (/deposit|withdraw|einzahlung|auszahlung|adjust/i.test(s)) out.adjustment = true;
+  return out;
+}
+
+// ---------- Haupteinstieg ----------
+
+// Zerlegt eine Datei (auch "Alle Tabs"-Export) in Tabellen-Sektionen.
+function splitSections(text) {
+  const clean = text.replace(/^﻿/, '');
+  const rows = parseCsv(clean);
+  const sections = [];
+  let current = null;
+  for (const row of rows) {
+    const nonEmpty = row.filter((c) => String(c).trim() !== '');
+    if (nonEmpty.length === 0) { current = null; continue; }
+    if (looksLikeHeader(row)) {
+      current = { header: row, map: mapHeaders(row), rows: [] };
+      current.kind = classify(current.map, row);
+      sections.push(current);
+      continue;
+    }
+    if (nonEmpty.length === 1 && row.length <= 2) {
+      // Sektionstitel wie "Handelsverlauf" -> neue Sektion beginnt
+      current = null;
+      continue;
+    }
+    if (current) current.rows.push(row);
+  }
+  return sections.filter((s) => s.rows.length > 0);
+}
+
+function cell(row, idx) {
+  return idx != null && idx < row.length ? row[idx] : null;
+}
+
+// Ergebnis: { balanceEvents:[], fills:[], warnings:[], detected:[] }
+function parseTradingViewExport(text, fileName) {
+  const out = { balanceEvents: [], fills: [], warnings: [], detected: [] };
+  const clean = String(text || '').replace(/^﻿/, '');
+  // Dezimalstil einmal pro Datei bestimmen, damit "2,875" vs. "50.000" konsistent gelesen werden
+  const style = detectNumberStyle(clean, sniffDelimiter(clean));
+  const num = (v) => parseNumber(v, style);
+  const sections = splitSections(clean);
+  if (sections.length === 0) {
+    out.warnings.push(`${fileName || 'Datei'}: keine bekannte Tabelle erkannt (weder Guthabenübersicht noch Handelsverlauf).`);
+    return out;
+  }
+  for (const sec of sections) {
+    if (sec.kind === 'balance') {
+      out.detected.push('Guthabenübersicht');
+      for (const row of sec.rows) {
+        const time = parseTimestamp(cell(row, sec.map.time));
+        const before = num(cell(row, sec.map.balanceBefore));
+        const after = num(cell(row, sec.map.balanceAfter));
+        const pnlRaw = num(cell(row, sec.map.realizedPnl));
+        const actionText = cell(row, sec.map.action);
+        if (!time || (after == null && pnlRaw == null)) continue;
+        const action = parseAction(actionText);
+        const pnl = pnlRaw != null ? pnlRaw : (after != null && before != null ? after - before : null);
+        out.balanceEvents.push({
+          time, balanceBefore: before, balanceAfter: after,
+          pnl: pnl != null ? pnl : 0,
+          actionText: actionText || '', ...action,
+        });
+      }
+    } else if (sec.kind === 'fills' || sec.kind === 'orders') {
+      out.detected.push(sec.kind === 'orders' ? 'Order-Verlauf' : 'Handelsverlauf');
+      for (const row of sec.rows) {
+        const status = norm(cell(row, sec.map.status) || '');
+        // Exakter Match: "Partially Filled"/"Teilweise ausgeführt" zählen nicht als Fill
+        if (sec.kind === 'orders' && status && !/^(filled|ausgefuhrt|executed)$/.test(status)) continue;
+        const time = parseTimestamp(cell(row, sec.map.time));
+        const qty = num(cell(row, sec.map.qty));
+        const price = num(cell(row, sec.map.price));
+        const symbol = cell(row, sec.map.symbol);
+        const sideRaw = norm(cell(row, sec.map.side) || '');
+        if (!time || !symbol || qty == null || price == null || qty === 0) continue;
+        const side = /sell|verkauf|short/.test(sideRaw) ? 'sell' : /buy|kauf|long/.test(sideRaw) ? 'buy' : null;
+        if (!side) continue;
+        out.fills.push({ time, symbol, root: symbolRoot(symbol), side, qty: Math.abs(qty), price });
+      }
+    }
+  }
+  if (out.balanceEvents.length === 0 && out.fills.length === 0) {
+    out.warnings.push(`${fileName || 'Datei'}: Tabellen erkannt (${out.detected.join(', ') || '–'}), aber keine verwertbaren Zeilen gefunden.`);
+  }
+  return out;
+}
+
+// Mehrere Dateien/Texte zusammenführen (z. B. Guthabenübersicht + Handelsverlauf separat exportiert)
+function mergeParsed(list) {
+  const out = { balanceEvents: [], fills: [], warnings: [], detected: [] };
+  for (const p of list) {
+    out.balanceEvents.push(...p.balanceEvents);
+    out.fills.push(...p.fills);
+    out.warnings.push(...p.warnings);
+    out.detected.push(...p.detected);
+  }
+  // Duplikate (gleiche Datei zweimal hochgeladen) grob entfernen
+  const seenB = new Set();
+  out.balanceEvents = out.balanceEvents.filter((e) => {
+    const k = JSON.stringify([e.time, e.balanceBefore, e.balanceAfter, e.pnl, e.actionText]);
+    if (seenB.has(k)) return false;
+    seenB.add(k); return true;
+  });
+  const seenF = new Set();
+  out.fills = out.fills.filter((f) => {
+    const k = JSON.stringify([f.time, f.symbol, f.side, f.qty, f.price]);
+    if (seenF.has(k)) return false;
+    seenF.add(k); return true;
+  });
+  out.detected = [...new Set(out.detected)];
+  return out;
+}
+
+// ===== js/engine.js =====
+// Simulations-Engine: rechnet TradingView-Paper-Trading-Daten gegen Prop-Firm-Regeln.
+//
+// Account-Konfiguration (aus js/firms.js):
+// {
+//   size, profitTarget,
+//   drawdown: { type: 'eod_trailing'|'intraday_trailing'|'static', amount,
+//               breachCheck: 'realtime'|'eod',    // wann der Bruch zählt
+//               lockFloorAt: number|null },       // absolute Obergrenze für den Floor (z. B. size), null = trailt ewig
+//   dailyLoss: { amount, onHit: 'fail'|'lock' } | null,
+//   maxContracts, maxMicros,
+//   consistency: { pct, scope: 'eval'|'payout' } | null,
+//   minDays,
+// }
+
+
+// ---------- Zeit ----------
+
+function tzOffsetMs(epoch, timeZone) {
+  const dtf = new Intl.DateTimeFormat('en-US', {
+    timeZone, hour12: false,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
+  const p = {};
+  for (const part of dtf.formatToParts(new Date(epoch))) p[part.type] = part.value;
+  const asUtc = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second);
+  return asUtc - epoch;
+}
+
+// Naive Zeit (wie im CSV) + Zeitzone des Exports -> Epoch ms
+function toEpoch(ts, timeZone) {
+  if (!ts) return null;
+  if (ts.epochIfExplicit != null) return ts.epochIfExplicit;
+  const { y, mo, d, h = 0, mi = 0, s = 0 } = ts;
+  if (y == null) return null;
+  if (timeZone === 'local') return new Date(y, mo - 1, d, h, mi, s).getTime();
+  const asUtc = Date.UTC(y, mo - 1, d, h, mi, s);
+  let epoch = asUtc - tzOffsetMs(asUtc, timeZone);
+  epoch = asUtc - tzOffsetMs(epoch, timeZone); // zweiter Durchlauf für DST-Kanten
+  return epoch;
+}
+
+function wallClock(epoch, timeZone) {
+  const dtf = new Intl.DateTimeFormat('en-CA', {
+    timeZone, hour12: false,
+    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit',
+  });
+  const p = {};
+  for (const part of dtf.formatToParts(new Date(epoch))) p[part.type] = part.value;
+  return { date: `${p.year}-${p.month}-${p.day}`, hour: +p.hour % 24 };
+}
+
+function shiftDate(dateStr, days) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const t = new Date(Date.UTC(y, m - 1, d + days));
+  return t.toISOString().slice(0, 10);
+}
+
+// CME-Handelstag: Session öffnet 18:00 New York und gehört zum NÄCHSTEN Kalendertag,
+// Schluss 17:00 New York. dayMode 'calendar' = Kalendertag in der Anzeige-Zeitzone.
+function tradingDay(epoch, dayMode = 'exchange', displayTz = 'America/New_York') {
+  if (dayMode === 'calendar') return wallClock(epoch, displayTz).date;
+  const { date, hour } = wallClock(epoch, 'America/New_York');
+  return hour >= 18 ? shiftDate(date, 1) : date;
+}
+
+// ---------- P&L aus Fills rekonstruieren (Fallback ohne Guthabenübersicht) ----------
+
+function pnlFromFills(fills) {
+  const events = [];
+  const warnings = [];
+  const pos = new Map(); // root -> { qty (signed), avg, mult }
+  const skipped = new Set();
+  const sorted = [...fills].sort((a, b) => a.epoch - b.epoch);
+  for (const f of sorted) {
+    const spec = symbolSpec(f.symbol);
+    if (!spec || spec.multiplier == null) {
+      if (spec && !skipped.has(spec.root)) { skipped.add(spec.root); }
+      continue;
+    }
+    const st = pos.get(spec.root) || { qty: 0, avg: 0 };
+    let remaining = f.qty;
+    const dir = f.side === 'buy' ? 1 : -1;
+    let pnl = 0;
+    if (st.qty !== 0 && Math.sign(st.qty) !== dir) {
+      const closeQty = Math.min(remaining, Math.abs(st.qty));
+      // Long schließen: (Preis - Avg) * Menge; Short schließen: (Avg - Preis) * Menge
+      pnl += (st.qty > 0 ? (f.price - st.avg) : (st.avg - f.price)) * closeQty * spec.multiplier;
+      st.qty += dir * closeQty;
+      remaining -= closeQty;
+      if (st.qty === 0) st.avg = 0;
+    }
+    if (remaining > 0) {
+      const newQty = st.qty + dir * remaining;
+      st.avg = st.qty === 0 ? f.price : (st.avg * Math.abs(st.qty) + f.price * remaining) / Math.abs(newQty);
+      st.qty = newQty;
+    }
+    pos.set(spec.root, st);
+    if (pnl !== 0) {
+      events.push({ epoch: f.epoch, pnl, symbol: f.symbol, actionText: `${f.side === 'buy' ? 'Buy' : 'Sell'} ${f.qty} ${spec.root} @ ${f.price}`, fromFills: true });
+    }
+  }
+  for (const root of skipped) warnings.push(`Symbol ${root}: unbekannter Multiplikator – P&L dieses Symbols wurde übersprungen.`);
+  const open = [...pos.entries()].filter(([, s]) => s.qty !== 0);
+  if (open.length) warnings.push(`Offene Position(en) am Datenende (${open.map(([r, s]) => `${s.qty > 0 ? '+' : ''}${s.qty} ${r}`).join(', ')}) – unrealisierter P&L ist nicht enthalten.`);
+  return { events, warnings };
+}
+
+// ---------- Kontrakt-Limits aus Fills ----------
+
+function contractUsage(fills) {
+  const pos = new Map(); // root -> signed qty
+  let maxTotalMinis = 0;
+  let maxSingle = { root: null, qty: 0 };
+  const skipped = new Set();
+  const sorted = [...fills].sort((a, b) => a.epoch - b.epoch);
+  for (const f of sorted) {
+    const spec = symbolSpec(f.symbol);
+    // Unbekannte Symbole (Aktien, Krypto-Spot …) nicht als Futures-Kontrakte zählen
+    if (!spec || spec.multiplier == null) {
+      if (spec) skipped.add(spec.root);
+      continue;
+    }
+    const dir = f.side === 'buy' ? 1 : -1;
+    pos.set(spec.root, (pos.get(spec.root) || 0) + dir * f.qty);
+    let total = 0;
+    for (const [root, q] of pos) {
+      const s = symbolSpec(root);
+      // Firms zählen 10 Micros = 1 Mini, unabhängig vom Notional
+      total += Math.abs(q) * (s && s.micro ? 0.1 : 1);
+      if (Math.abs(q) > maxSingle.qty) maxSingle = { root, qty: Math.abs(q) };
+    }
+    maxTotalMinis = Math.max(maxTotalMinis, total);
+  }
+  return { maxTotalMinis, maxSingle, skippedRoots: [...skipped] };
+}
+
+// ---------- Kernsimulation ----------
+
+function simulate({ account, parsed, options = {} }) {
+  const tz = options.timeZone || 'UTC';
+  const dayMode = options.dayMode || 'exchange';
+  const dd = account.drawdown;
+  const warnings = [...(parsed.warnings || [])];
+
+  // 1. Events vorbereiten
+  let fills = (parsed.fills || []).map((f) => ({ ...f, epoch: toEpoch(f.time, tz) })).filter((f) => f.epoch != null);
+  let events;
+  if ((parsed.balanceEvents || []).length > 0) {
+    events = parsed.balanceEvents
+      .map((e) => ({ ...e, epoch: toEpoch(e.time, tz) }))
+      .filter((e) => e.epoch != null);
+  } else if (fills.length > 0) {
+    const rec = pnlFromFills(fills);
+    events = rec.events;
+    warnings.push('Keine Guthabenübersicht gefunden – P&L wurde aus dem Handelsverlauf rekonstruiert (ohne Gebühren).', ...rec.warnings);
+  } else {
+    return { status: 'empty', warnings: [...warnings, 'Keine verwertbaren Daten gefunden.'] };
+  }
+  events.sort((a, b) => a.epoch - b.epoch);
+
+  // 2. Resets/Anpassungen behandeln: Simulation startet nach dem letzten Reset
+  const resetIdx = events.reduce((acc, e, i) => (e.reset ? i : acc), -1);
+  if (resetIdx >= 0 && options.ignoreResets !== true) {
+    const dropped = resetIdx + 1;
+    const resetEpoch = events[resetIdx].epoch;
+    events = events.slice(dropped);
+    fills = fills.filter((f) => f.epoch > resetEpoch); // Kontrakt-Check nicht mit Vor-Reset-Trades füttern
+    warnings.push(`Paper-Konto-Reset im Export erkannt – die ${dropped} Einträge davor wurden ignoriert. Simulation startet nach dem Reset.`);
+  }
+  const adjustments = events.filter((e) => e.adjustment && !e.reset);
+  if (adjustments.length) warnings.push(`${adjustments.length} Ein-/Auszahlung(en) im Export erkannt – sie zählen nicht als Trading-P&L.`);
+  events = events.filter((e) => !e.reset && !e.adjustment);
+
+  // 3. Zeitraum-Filter
+  if (options.rangeStart) events = events.filter((e) => e.epoch >= options.rangeStart);
+  if (options.rangeEnd) events = events.filter((e) => e.epoch <= options.rangeEnd);
+  if (options.rangeStart) fills = fills.filter((f) => f.epoch >= options.rangeStart);
+  if (options.rangeEnd) fills = fills.filter((f) => f.epoch <= options.rangeEnd);
+  if (events.length === 0) return { status: 'empty', warnings: [...warnings, 'Im gewählten Zeitraum liegen keine Trades.'] };
+
+  // 4. Simulation: Equity = Kontogröße + kumulierter Paper-P&L
+  const size = account.size;
+  const target = account.profitTarget != null ? size + account.profitTarget : null;
+  const floorCap = dd.lockFloorAt != null ? dd.lockFloorAt : Infinity;
+
+  let equity = size;
+  let watermark = size;      // Höchste gesehene Equity (Event-Granularität) für intraday_trailing
+  let eodHigh = size;        // Höchster Tagesschlussstand für eod_trailing
+  let failed = null;         // { type, epoch, day, detail }
+  let targetReachedAt = null;
+  let passed = null;         // { epoch, day }
+  const violations = [];
+  const days = [];
+  const points = [];         // { epoch, equity, floor } für den Chart
+
+  const floorNow = () => {
+    if (dd.type === 'static') return size - dd.amount;
+    if (dd.type === 'intraday_trailing') return Math.min(watermark - dd.amount, floorCap);
+    return Math.min(eodHigh - dd.amount, floorCap); // eod_trailing: Basis = höchster EOD-Stand
+  };
+
+  const addViolation = (v, hard) => {
+    violations.push({ ...v, hard });
+    if (hard && !failed) failed = v;
+  };
+
+  // Events nach Handelstag gruppieren ('local' = echte Systemzeitzone, nicht der NY-Default)
+  const displayTz = tz === 'local' ? Intl.DateTimeFormat().resolvedOptions().timeZone : tz;
+  const byDay = new Map();
+  for (const e of events) {
+    const day = tradingDay(e.epoch, dayMode, displayTz);
+    if (!byDay.has(day)) byDay.set(day, []);
+    byDay.get(day).push(e);
+  }
+  const dayKeys = [...byDay.keys()].sort();
+
+  points.push({ epoch: events[0].epoch - 1, equity, floor: floorNow() });
+
+  const consistencyDayPnl = new Map();
+  const evalCons = account.consistency && account.consistency.scope === 'eval' ? account.consistency : null;
+  // Eval-Consistency zum aktuellen Moment: bester Tag (inkl. laufendem Tag) vs. Gesamtprofit.
+  // Payout-Consistency (scope 'payout', z. B. Apex) blockt das Bestehen nicht.
+  const evalConsOkNow = (dayPnlNow, totalPnl) => {
+    if (!evalCons) return true;
+    let bestD = Math.max(0, dayPnlNow);
+    for (const v of consistencyDayPnl.values()) bestD = Math.max(bestD, v);
+    if (totalPnl <= 0 || bestD <= 0) return true;
+    return (bestD / totalPnl) * 100 <= evalCons.pct + 1e-9;
+  };
+
+  for (const day of dayKeys) {
+    const dayEvents = byDay.get(day);
+    const dayStartEquity = equity;
+    const dayFloor = floorNow(); // EOD-Trailing: Floor steht für den ganzen Tag fest
+    let dayLocked = false;
+    let dayMin = equity, dayMax = equity;
+
+    for (const e of dayEvents) {
+      equity += e.pnl;
+      dayMin = Math.min(dayMin, equity);
+      dayMax = Math.max(dayMax, equity);
+      const floor = dd.type === 'intraday_trailing' ? floorNow() : dayFloor;
+      points.push({ epoch: e.epoch, equity, floor });
+
+      // Daily Loss Limit
+      const dayPnl = equity - dayStartEquity;
+      if (account.dailyLoss && dayPnl <= -account.dailyLoss.amount && !dayLocked && !failed && !passed) {
+        dayLocked = true;
+        const hard = account.dailyLoss.onHit === 'fail';
+        addViolation({
+          type: 'daily_loss', epoch: e.epoch, day, equityAt: equity,
+          detail: `Daily Loss Limit (${fmtUsd(account.dailyLoss.amount)}) erreicht: Tages-P&L ${fmtUsd(dayPnl)}`,
+        }, hard);
+      }
+
+      // Drawdown-Bruch. Nach einem DLL-Lock wäre der Rest des Tages auf dem Firm-Konto
+      // gar nicht mehr gehandelt worden – diese Trades zählen nicht als Bruch.
+      if (!failed && !passed && !dayLocked) {
+        const breachRealtime = dd.type === 'intraday_trailing' || dd.type === 'static' || dd.breachCheck === 'realtime';
+        if (breachRealtime && equity <= floor) {
+          addViolation({
+            type: 'drawdown', epoch: e.epoch, day, equityAt: equity,
+            detail: `${ddLabel(dd)} verletzt: Equity ${fmtUsd(equity)} ≤ Limit ${fmtUsd(floor)}`,
+          }, true);
+        }
+      }
+
+      // Trailing-Watermark NACH dem Bruch-Check anheben
+      if (dd.type === 'intraday_trailing') watermark = Math.max(watermark, equity);
+
+      // Profit Target (Anzeige: erster Touch)
+      if (target != null && targetReachedAt == null && equity >= target && !failed) {
+        targetReachedAt = { epoch: e.epoch, day };
+      }
+
+      // Bestanden? Firms werten in Echtzeit: In dem Moment, in dem Equity über der
+      // Target-Balance liegt UND Mindesttage UND Eval-Consistency (inkl. laufendem Tag)
+      // gleichzeitig erfüllt sind, ist die Eval durch. Ein früherer Target-Touch allein
+      // reicht nicht – fällt die Equity zurück, muss sie erneut über das Target.
+      if (!failed && !passed && !dayLocked && target != null && equity >= target) {
+        const daysSoFar = days.length + 1; // der laufende Tag zählt mit
+        if (daysSoFar >= (account.minDays || 0) && evalConsOkNow(dayPnl, equity - size)) {
+          passed = { epoch: e.epoch, day, equityAt: equity };
+        }
+      }
+    }
+
+    // Tagesabschluss
+    const eodBalance = equity;
+    const dayPnl = eodBalance - dayStartEquity;
+    consistencyDayPnl.set(day, dayPnl);
+
+    if (dd.type === 'eod_trailing' && dd.breachCheck === 'eod' && !failed && !passed && eodBalance <= dayFloor) {
+      addViolation({
+        type: 'drawdown', epoch: dayEvents[dayEvents.length - 1].epoch, day, equityAt: eodBalance,
+        detail: `${ddLabel(dd)} verletzt: Tagesschluss ${fmtUsd(eodBalance)} ≤ Limit ${fmtUsd(dayFloor)}`,
+      }, true);
+    }
+
+    if (dd.type === 'eod_trailing') eodHigh = Math.max(eodHigh, eodBalance);
+
+    days.push({
+      day, pnl: dayPnl, eodBalance, floor: dayFloor, floorNext: floorNow(),
+      min: dayMin, max: dayMax, trades: dayEvents.length, locked: dayLocked,
+      afterFail: !!failed && failed.day !== day && dayKeys.indexOf(day) > dayKeys.indexOf(failed.day),
+      afterPass: !!passed && passed.day !== day,
+    });
+
+  }
+
+  // 5. Statistiken – nur über die Tage, die für die Eval zählen (bis Fail bzw. Pass)
+  const dayList = days.filter((d) => !d.afterFail && !d.afterPass);
+  const netPnl = equity - size;
+  const best = dayList.reduce((a, d) => (d.pnl > a.pnl ? d : a), { pnl: -Infinity });
+  const worst = dayList.reduce((a, d) => (d.pnl < a.pnl ? d : a), { pnl: Infinity });
+
+  // Knappster Moment: nur bis zum Fail; bei reinem EOD-Check zählt der Tagesschluss,
+  // Intraday-Dips unters Limit sind dort erlaubt und wären irreführend.
+  let minRoom = Infinity;
+  if (dd.type === 'eod_trailing' && dd.breachCheck === 'eod') {
+    for (const d of dayList) minRoom = Math.min(minRoom, d.eodBalance - d.floor);
+  } else {
+    const failEpoch = failed && failed.epoch != null ? failed.epoch : Infinity;
+    for (const p of points) if (p.epoch <= failEpoch) minRoom = Math.min(minRoom, p.equity - p.floor);
+  }
+  if (!Number.isFinite(minRoom)) minRoom = equity - floorNow();
+
+  const evalDayPnl = new Map(dayList.map((d) => [d.day, d.pnl]));
+  const consistency = consistencyState(evalDayPnl, netPnl, account.consistency);
+  const usage = fills.length ? contractUsage(fills) : null;
+
+  if (usage) {
+    for (const root of usage.skippedRoots || []) {
+      warnings.push(`Symbol ${root}: kein bekannter Futures-Kontrakt – zählt nicht für das Kontrakt-Limit.`);
+    }
+    if (account.maxContracts != null && usage.maxTotalMinis > account.maxContracts + 1e-9) {
+      addViolation({
+        type: 'contracts', epoch: null, day: null,
+        detail: `Kontrakt-Limit überschritten: max. ${round1(usage.maxTotalMinis)} Minis gleichzeitig (erlaubt: ${account.maxContracts})`,
+      }, false);
+    }
+  }
+
+  const status = failed ? 'failed' : passed ? 'passed' : 'ongoing';
+
+  return {
+    status, failed, passed, targetReachedAt,
+    violations, days, points, warnings,
+    stats: {
+      netPnl, endEquity: equity, floorEnd: floorNow(),
+      tradingDays: dayList.length,
+      bestDay: best.pnl === -Infinity ? null : best,
+      worstDay: worst.pnl === Infinity ? null : worst,
+      minRoom,
+      roomToFloor: equity - floorNow(),
+      distToTarget: target != null ? Math.max(0, target - equity) : null,
+      winDays: dayList.filter((d) => d.pnl > 0).length,
+      lossDays: dayList.filter((d) => d.pnl < 0).length,
+      consistency,
+      usage,
+      firstEpoch: events[0].epoch,
+      lastEpoch: events[events.length - 1].epoch,
+    },
+  };
+}
+
+// Consistency: bester Tag darf max. pct% des Gesamtprofits ausmachen.
+function consistencyState(dayPnlMap, totalPnl, rule) {
+  if (!rule) return { ok: true, applicable: false };
+  const bestDay = Math.max(0, ...dayPnlMap.values());
+  if (totalPnl <= 0 || bestDay <= 0) return { ok: true, applicable: true, bestDay, sharePct: null, rule };
+  const sharePct = (bestDay / totalPnl) * 100;
+  const ok = sharePct <= rule.pct + 1e-9;
+  // Wie viel Gesamtprofit wäre nötig, damit der beste Tag unter die Grenze fällt?
+  const neededTotal = (bestDay / rule.pct) * 100;
+  return { ok, applicable: true, bestDay, sharePct, neededTotal, rule };
+}
+
+function ddLabel(dd) {
+  if (dd.type === 'static') return 'Max Drawdown (statisch)';
+  if (dd.type === 'intraday_trailing') return 'Trailing Drawdown (Intraday)';
+  return 'Trailing Drawdown (End of Day)';
+}
+
+function fmtUsd(n) {
+  const sign = n < 0 ? '-' : '';
+  return `${sign}$${Math.abs(n).toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
+}
+
+function round1(n) { return Math.round(n * 10) / 10; }
+
+
+// ===== js/firms.js =====
+// Regel-Datenbank der Prop-Firm-Evaluations.
+// Recherchiert und gegengeprüft im September 2026 (offizielle Seiten + Help-Center,
+// quer-gecheckt mit unabhängigen Quellen). Prop Firms ändern Regeln laufend –
+// vor einem Kauf immer die offizielle Seite checken.
+//
+// drawdown.type:       'intraday_trailing' | 'eod_trailing' | 'static'
+// drawdown.breachCheck:'realtime' (Berührung intraday = Bruch) | 'eod' (zählt nur zum Tagesschluss)
+// drawdown.lockFloorAt: absolute Balance, bei der das Limit aufhört zu steigen (null = trailt ewig)
+// dailyLoss.onHit:     'fail' (Eval vorbei) | 'lock' (nur Rest des Tages gesperrt)
+// consistency.scope:   'eval' (blockt das Bestehen) | 'payout' (erst im Funded-Konto relevant)
+
+const RULES_AS_OF = 'September 2026';
+
+const FIRMS = [
+  {
+    id: 'apex',
+    name: 'Apex',
+    note: 'Apex 4.0 (seit März 2026): Einmalzahlung mit 30 Tagen Zugang, keine Mindesttage, kein Overnight (flat bis 16:59 ET), Pflicht-Bracket-Orders (jede Order braucht SL+TP). Alte 250K/300K/Static-Accounts gibt es nicht mehr; jede Größe existiert auch als „No Activation Fee“-Variante (teurer, dafür 0 $ Aktivierung).',
+    sources: [
+      'https://apextraderfunding.com/help-center/evaluation-accounts-ea/intraday-trailing-drawdown-evaluations/',
+      'https://apextraderfunding.com/help-center/eod-trailing-drawdown-accounts/eod-evaluations/',
+      'https://apextraderfunding.com/help-center/additional-helpful-items/daily-loss-limit-explained/',
+    ],
+    accounts: [
+      ...[[25, 1500, 1000, 4, 167], [50, 3000, 2000, 6, 249], [100, 6000, 3000, 8, 399], [150, 9000, 4000, 12, 599]].map(([k, target, dd, contracts, price]) => ({
+        id: `apex-${k}k-intraday`, label: `${k}K Intraday`,
+        size: k * 1000, profitTarget: target,
+        // Eval-Lock (Rithmic/WealthCharts): Threshold stoppt an der Profit-Target-Balance.
+        // Auf Tradovate trailt er in der Eval endlos. Start+100 gilt erst im PA (funded).
+        drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + target },
+        dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 50, scope: 'payout' }, minDays: 0, priceOnce: price,
+        notes: [
+          'Trailing zieht in Echtzeit mit – inkl. unrealisierter Spitzen offener Trades (der TradingView-Export sieht die nicht).',
+          'Lock an der Target-Balance gilt auf Rithmic/WealthCharts; auf Tradovate trailt die Eval endlos.',
+        ],
+      })),
+      ...[[25, 1500, 1000, 4, 500, 390], [50, 3000, 2000, 6, 1000, 490], [100, 6000, 3000, 8, 1500, 790], [150, 9000, 4000, 12, 2000, 1490]].map(([k, target, dd, contracts, dll, price]) => ({
+        id: `apex-${k}k-eod`, label: `${k}K EOD`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 50, scope: 'payout' }, minDays: 0, priceOnce: price,
+        notes: ['Limit steigt nur mit Tagesschluss-Hochs (16:59 ET), wird aber in Echtzeit geprüft.'],
+      })),
+    ],
+  },
+  {
+    id: 'topstep',
+    name: 'Topstep',
+    note: 'Trading Combine: MLL trailt nur per Tagesschluss, wird aber in Echtzeit (inkl. unrealisiertem P&L) enforced und lockt bei Breakeven. DLL ist optional (Standardwerte gezeigt) und sperrt nur den Tag. Flat bis 15:10 CT, kein Overnight.',
+    sources: [
+      'https://help.topstep.com/en/articles/8284197-trading-combine-parameters',
+      'https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit',
+      'https://help.topstep.com/en/articles/8284208-consistency-at-topstep',
+    ],
+    accounts: [
+      ...[[50, 3000, 2000, 1000, 5, 49], [100, 6000, 3000, 2000, 10, 99], [150, 9000, 4500, 3000, 15, 199]].map(([k, target, dd, dll, contracts, price]) => ({
+        id: `topstep-${k}k`, label: `${k}K Combine`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 },
+        dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 55, scope: 'eval' }, minDays: 0, priceMonthly: price,
+        notes: ['Consistency: bester Tag ≤ 55 % vom Profit (offizieller 2026-Wert; viele Quellen nennen noch 50 %) – verzögert nur das Bestehen.'],
+      })),
+      {
+        id: 'topstep-25k-static', label: '25K Static (Labs)',
+        size: 25000, profitTarget: 2000,
+        drawdown: { type: 'static', amount: 1000, breachCheck: 'realtime', lockFloorAt: null },
+        dailyLoss: null, maxContracts: null, maxMicros: null,
+        consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: 75,
+        notes: ['Topstep-Labs-Drop: statischer MLL fix bei $24.000, 90 Tage gültig, Payout-Cap $4.000 – limitiert verfügbar.'],
+      },
+      {
+        id: 'topstep-250k-freedom', label: '250K Freedom (Labs)',
+        size: 250000, profitTarget: 15000,
+        drawdown: { type: 'eod_trailing', amount: 10000, breachCheck: 'realtime', lockFloorAt: 250000 },
+        dailyLoss: null, maxContracts: null, maxMicros: null,
+        consistency: null, minDays: 0, priceOnce: 499,
+        notes: ['Limitierter Labs-Drop, 90 Tage gültig, Payout-Cap $25.000. Drawdown-Typ/Detailregeln nicht offiziell bestätigt – vor Kauf prüfen.'],
+      },
+    ],
+  },
+  {
+    id: 'mffu',
+    name: 'MyFundedFutures',
+    note: 'Lineup Sept. 2026: Rapid (Intraday-Trailing), Rapid EOD, Pro und Builder – alles Einmalzahlung. Handel 18:00–16:10 ET, flat zum Close. Die Flex-Linie ist offenbar nicht mehr kaufbar und fehlt hier.',
+    sources: [
+      'https://myfundedfutures.com/plans/rapid',
+      'https://help.myfundedfutures.com/en/articles/8348565-end-of-day-eod-drawdown-explained',
+      'https://help.myfundedfutures.com/en/articles/12802721-intraday-drawdown-explained',
+    ],
+    accounts: [
+      ...[[25, 1500, 1000, 3, 145], [50, 3000, 2000, 5, 209], [100, 6000, 3000, 8, 356], [150, 9000, 4500, 10, 463]].map(([k, target, dd, contracts, price]) => ({
+        id: `mffu-${k}k-rapid`, label: `${k}K Rapid`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 50, scope: 'eval' }, minDays: 2, priceOnce: price,
+        notes: ['Trailing folgt dem Echtzeit-Hoch inkl. unrealisiertem P&L offener Trades.'],
+      })),
+      ...[[25, 1500, 1000, 2, null], [50, 3000, 2000, 3, 209]].map(([k, target, dd, contracts, price]) => ({
+        id: `mffu-${k}k-rapid-eod`, label: `${k}K Rapid EOD`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 30, scope: 'eval' }, minDays: 4, priceOnce: price,
+        notes: ['EOD-Drawdown gegen strengere 30 %-Consistency und 4 Mindesttage getauscht.'],
+      })),
+      ...[[50, 3000, 2000, 5, 265], [100, 6000, 3000, 10, null], [150, 9000, 4500, 15, 557]].map(([k, target, dd, contracts, price]) => ({
+        id: `mffu-${k}k-pro`, label: `${k}K Pro`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 50, scope: 'eval' }, minDays: 2, priceOnce: price,
+        notes: ['Mind. 1 Trade alle 7 Tage (Inaktivitätsregel).'],
+      })),
+      ...[[25, 1500, 1000, 2, null, 105], [50, 3000, 2000, 4, 1000, 153]].map(([k, target, dd, contracts, dll, price]) => ({
+        id: `mffu-${k}k-builder`, label: `${k}K Builder`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: dll ? { amount: dll, onHit: 'lock' } : null, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 50, scope: 'payout' }, minDays: 1, priceOnce: price,
+        notes: ['Keine Consistency in der Eval – Bestehen an einem Tag möglich.'],
+      })),
+    ],
+  },
+  {
+    id: 'tradeify',
+    name: 'Tradeify',
+    note: 'Tradeify 3.0: Growth-Eval (mit DLL), Select-Eval (ohne DLL, 40 % Consistency) und Lightning (direkt sim-funded, kein Target). EOD-Trailing wird bei allen in Echtzeit geprüft. Einmalzahlung, kein Abo.',
+    sources: [
+      'https://help.tradeify.co/en/articles/10495915-growth-evaluation-accounts',
+      'https://help.tradeify.co/en/articles/12853921-select-evaluation-accounts',
+      'https://help.tradeify.co/en/articles/10495897-rules-trailing-max-drawdowns',
+    ],
+    accounts: [
+      ...[[25, 1500, 1000, 600, 1, 99], [50, 3000, 2000, 1250, 4, 149], [100, 6000, 3500, 2500, 8, 255], [150, 9000, 5000, 3750, 12, 369]].map(([k, target, dd, dll, contracts, price]) => ({
+        id: `tradeify-${k}k-growth`, label: `${k}K Growth`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: null },
+        dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 35, scope: 'payout' }, minDays: 1, priceOnce: price,
+        notes: ['Eval-Drawdown lockt nicht (Lock bei Start+100 $ erst im Funded-Konto).'],
+      })),
+      ...[[25, 1500, 1000, 1], [50, 3000, 2000, 4, 159], [100, 6000, 3000, 8], [150, 9000, 4500, 12]].map(([k, target, dd, contracts, price]) => ({
+        id: `tradeify-${k}k-select`, label: `${k}K Select`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: null },
+        dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 40, scope: 'eval' }, minDays: 3, priceOnce: price ?? null,
+        notes: ['Kein Daily Loss Limit – nur Trailing Drawdown und 40 %-Consistency.'],
+      })),
+      {
+        id: 'tradeify-300k-select', label: '300K Select',
+        size: 300000, profitTarget: 14000,
+        drawdown: { type: 'eod_trailing', amount: 8000, breachCheck: 'realtime', lockFloorAt: 300100 },
+        dailyLoss: { amount: 4000, onHit: 'lock' }, maxContracts: 16, maxMicros: 160,
+        consistency: { pct: 40, scope: 'eval' }, minDays: 3, priceOnce: null,
+        notes: ['V2 (aktuell verkauft): $8.000 DD + $4.000 DLL, 16 Minis. Limitierte Auflage, kein Reset – vor Kauf genau prüfen.'],
+      },
+      ...[[25, 1000, null, 1, 345], [50, 2000, 1250, 4, 479], [100, 4000, 2500, 8, 660], [150, 5250, 3000, 12, 796]].map(([k, dd, dll, contracts, price]) => ({
+        id: `tradeify-${k}k-lightning`, label: `${k}K Lightning`,
+        size: k * 1000, profitTarget: null,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: dll ? { amount: dll, onHit: 'lock' } : null, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 20, scope: 'payout' }, minDays: null, priceOnce: price,
+        notes: ['Direkt sim-funded: kein Profit Target, dafür Payout-Regeln (erster Payout ab 20 %-Consistency).', k >= 100 ? 'Drawdown-Höhe 2026 geändert – vor Kauf verifizieren.' : ''].filter(Boolean),
+      })),
+    ],
+  },
+  {
+    id: 'lucid',
+    name: 'Lucid',
+    note: 'Lineup Sept. 2026: LucidFlex, LucidPro und LucidDaily (Drawdown-Typ bei Daily am Checkout wählbar; Toggle gilt für Eval UND Funded). DLL ist seit Aug. 2026 optional (Werte gezeigt) und sperrt nur den Tag. Kein Overnight, Auto-Flat zum Session-Close. Einmalzahlung. LucidDirect (Instant Funding) ist hier nicht abgebildet.',
+    sources: [
+      'https://support.lucidtrading.com/en/articles/12945790-lucidflex-evaluation-account',
+      'https://support.lucidtrading.com/en/articles/12890029-lucidpro-evaluation-account',
+      'https://support.lucidtrading.com/en/articles/15996664-luciddaily-evaluation',
+    ],
+    accounts: [
+      ...[[25, 1250, 1000, 600, 2, 89], [50, 3000, 2000, 1200, 4, 146], [100, 6000, 3000, 1800, 6, 307], [150, 9000, 4500, 2700, 10, 407]].map(([k, target, dd, dll, contracts, price]) => ({
+        id: `lucid-${k}k-flex`, label: `${k}K Flex`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: price,
+        notes: ['Intraday-Dips unters Limit sind erlaubt – nur der Tagesschluss zählt.'],
+      })),
+      ...[[25, 1250, 1000, 600, 2, 135], [50, 3000, 2000, 1200, 4, 185], [100, 6000, 3000, 1800, 6, 307], [150, 9000, 4500, 2700, 10, 410]].map(([k, target, dd, dll, contracts, price]) => ({
+        id: `lucid-${k}k-pro`, label: `${k}K Pro`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 40, scope: 'payout' }, minDays: 0, priceOnce: price,
+        notes: ['Keine Consistency in der Eval – Bestehen an einem Tag möglich.'],
+      })),
+      ...[[25, 1250, 1000, 600, 2], [50, 3000, 2000, 1200, 4], [100, 6000, 3000, 1800, 6], [150, 9000, 4500, 2700, 10]].map(([k, target, dd, dll, contracts]) => ({
+        id: `lucid-${k}k-daily-eod`, label: `${k}K Daily (EOD)`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: null,
+        notes: ['Funded-Konto wechselt auf Intraday-Drawdown mit Daily-Profit-Cap und News-Regel.'],
+      })),
+      ...[[25, 1250, 1000, 600, 2], [50, 3000, 2000, 1200, 4], [100, 6000, 3000, 1800, 6], [150, 9000, 4500, 2700, 10]].map(([k, target, dd, dll, contracts]) => ({
+        id: `lucid-${k}k-daily-intraday`, label: `${k}K Daily (Intraday)`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
+        dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: null,
+        notes: ['Günstigere Daily-Variante: Trailing zieht in Echtzeit inkl. unrealisiertem P&L.'],
+      })),
+    ],
+  },
+];
+
+// ===== js/chart.js =====
+// SVG-Equity-Chart: Equity-Linie, Drawdown-Floor (Step-Linie), Profit-Target,
+// EOD-Marker, Bruch-Marker, Crosshair + Tooltip (Maus + Tastatur).
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+function el(name, attrs = {}, parent) {
+  const node = document.createElementNS(SVGNS, name);
+  for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v);
+  if (parent) parent.appendChild(node);
+  return node;
+}
+
+function niceTicks(min, max, count = 5) {
+  if (!(max > min)) { max = min + 1; }
+  const span = max - min;
+  const step0 = span / count;
+  const mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const norm = step0 / mag;
+  const step = (norm >= 5 ? 10 : norm >= 2.5 ? 5 : norm >= 1.5 ? 2.5 : norm >= 1 ? 2 : 1) * mag;
+  const ticks = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) ticks.push(v);
+  return ticks;
+}
+
+const fmtMoney = (n) => {
+  const r = Math.round(n);
+  return (r < 0 ? '-' : '') + '$' + Math.abs(r).toLocaleString('en-US');
+};
+const fmtMoneyFull = (n) => (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function fmtDateShort(epoch) {
+  const d = new Date(epoch);
+  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+}
+function fmtDateTime(epoch) {
+  const d = new Date(epoch);
+  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' +
+         d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+}
+
+// result: Ausgabe von simulate(); account: Account-Konfiguration
+function renderEquityChart(container, result, account) {
+  container.textContent = '';
+  const points = result.points;
+  if (!points || points.length < 2) return;
+
+  const width = Math.max(320, container.clientWidth || 640);
+  const height = Math.min(400, Math.max(260, Math.round(width * 0.42)));
+  const pad = { top: 16, right: 16, bottom: 28, left: 62 };
+  const iw = width - pad.left - pad.right;
+  const ih = height - pad.top - pad.bottom;
+
+  const target = account.profitTarget != null ? account.size + account.profitTarget : null;
+  const t0 = points[0].epoch, t1 = points[points.length - 1].epoch;
+  // Schleife statt Spread: große Exporte sprengen sonst das Argument-Limit von Math.min
+  let yMin = account.size, yMax = account.size;
+  for (const p of points) {
+    if (p.equity < yMin) yMin = p.equity;
+    if (p.equity > yMax) yMax = p.equity;
+    if (p.floor < yMin) yMin = p.floor;
+    if (p.floor > yMax) yMax = p.floor;
+  }
+  if (target != null) { yMin = Math.min(yMin, target); yMax = Math.max(yMax, target); }
+  const ySpan = Math.max(yMax - yMin, 100);
+  yMin -= ySpan * 0.06; yMax += ySpan * 0.06;
+
+  const x = (t) => pad.left + ((t - t0) / Math.max(1, t1 - t0)) * iw;
+  const y = (v) => pad.top + (1 - (v - yMin) / (yMax - yMin)) * ih;
+
+  const svg = el('svg', {
+    viewBox: `0 0 ${width} ${height}`, width: '100%', height,
+    role: 'img', 'aria-label': 'Equity-Kurve mit Drawdown-Limit und Profit-Target',
+    tabindex: '0', class: 'equity-chart',
+  }, container);
+
+  // Gridlines + Y-Achse
+  const yTicks = niceTicks(yMin, yMax, 5);
+  for (const v of yTicks) {
+    el('line', { x1: pad.left, x2: width - pad.right, y1: y(v), y2: y(v), class: 'grid' }, svg);
+    el('text', { x: pad.left - 8, y: y(v) + 3.5, 'text-anchor': 'end', class: 'tick' }, svg).textContent = fmtMoney(v);
+  }
+  // X-Achse: Tagesticks, Dichte nach Breite
+  const dayMs = 86400000;
+  const nDays = Math.max(1, Math.round((t1 - t0) / dayMs));
+  const maxLabels = Math.max(3, Math.floor(iw / 72));
+  const stepDays = Math.max(1, Math.ceil(nDays / maxLabels));
+  for (let t = t0; t <= t1; t += stepDays * dayMs) {
+    el('text', { x: x(t), y: height - 8, 'text-anchor': 'middle', class: 'tick' }, svg).textContent = fmtDateShort(t);
+  }
+
+  // Referenzlinien: Start, Target
+  el('line', { x1: pad.left, x2: width - pad.right, y1: y(account.size), y2: y(account.size), class: 'refline start' }, svg);
+  if (target != null && target <= yMax && target >= yMin) {
+    el('line', { x1: pad.left, x2: width - pad.right, y1: y(target), y2: y(target), class: 'refline target' }, svg);
+    el('text', { x: width - pad.right, y: y(target) - 5, 'text-anchor': 'end', class: 'reflabel target' }, svg).textContent = `Target ${fmtMoney(target)}`;
+  }
+
+  // Drawdown-Floor als Step-Linie: horizontal bis zum neuen X, dann vertikal auf den neuen Floor
+  let dFloor = `M ${x(points[0].epoch)} ${y(points[0].floor)}`;
+  for (let i = 1; i < points.length; i++) {
+    dFloor += ` H ${x(points[i].epoch)} V ${y(points[i].floor)}`;
+  }
+  el('path', { d: dFloor, class: 'floor-line', fill: 'none' }, svg);
+
+  // Equity-Fläche + Linie
+  let dEq = `M ${x(points[0].epoch)} ${y(points[0].equity)}`;
+  for (let i = 1; i < points.length; i++) dEq += ` L ${x(points[i].epoch)} ${y(points[i].equity)}`;
+  const dArea = dEq + ` L ${x(t1)} ${y(yMin)} L ${x(t0)} ${y(yMin)} Z`;
+  el('path', { d: dArea, class: 'equity-area' }, svg);
+  el('path', { d: dEq, class: 'equity-line', fill: 'none' }, svg);
+
+  // Bruch-/Pass-Marker: equityAt aus der Engine, weil mehrere Events denselben Zeitstempel teilen können
+  if (result.failed && result.failed.epoch != null) {
+    const fx = x(result.failed.epoch);
+    const fy = y(result.failed.equityAt ?? nearestPoint(points, result.failed.epoch).equity);
+    el('circle', { cx: fx, cy: fy, r: 6, class: 'fail-dot' }, svg);
+    el('circle', { cx: fx, cy: fy, r: 10, class: 'fail-ring' }, svg);
+  }
+  if (result.passed && result.passed.epoch != null) {
+    const py = y(result.passed.equityAt ?? nearestPoint(points, result.passed.epoch).equity);
+    el('circle', { cx: x(result.passed.epoch), cy: py, r: 6, class: 'pass-dot' }, svg);
+  }
+
+  // Endpunkt-Marker + Label
+  const lastP = points[points.length - 1];
+  el('circle', { cx: x(lastP.epoch), cy: y(lastP.equity), r: 4.5, class: 'end-dot' }, svg);
+
+  // ---- Crosshair + Tooltip ----
+  const cross = el('g', { class: 'crosshair', opacity: '0' }, svg);
+  const crossLine = el('line', { y1: pad.top, y2: height - pad.bottom, class: 'crosshair-line' }, cross);
+  const crossDotEq = el('circle', { r: 4.5, class: 'cross-dot equity' }, cross);
+  const crossDotFl = el('circle', { r: 4, class: 'cross-dot floor' }, cross);
+
+  const tip = document.createElement('div');
+  tip.className = 'chart-tip';
+  tip.hidden = true;
+  container.appendChild(tip);
+  container.style.position = 'relative';
+
+  let idx = -1;
+  const showIdx = (i) => {
+    idx = Math.max(0, Math.min(points.length - 1, i));
+    const p = points[idx];
+    const px = x(p.epoch);
+    cross.setAttribute('opacity', '1');
+    crossLine.setAttribute('x1', px); crossLine.setAttribute('x2', px);
+    crossDotEq.setAttribute('cx', px); crossDotEq.setAttribute('cy', y(p.equity));
+    crossDotFl.setAttribute('cx', px); crossDotFl.setAttribute('cy', y(p.floor));
+    tip.hidden = false;
+    tip.textContent = '';
+    const head = document.createElement('div');
+    head.className = 'tip-head';
+    head.textContent = fmtDateTime(p.epoch);
+    tip.appendChild(head);
+    addTipRow(tip, 'equity', 'Equity', fmtMoneyFull(p.equity));
+    addTipRow(tip, 'floor', 'Drawdown-Limit', fmtMoneyFull(p.floor));
+    addTipRow(tip, 'room', 'Luft', fmtMoneyFull(p.equity - p.floor));
+    const rect = container.getBoundingClientRect();
+    const scale = rect.width / width;
+    const tipW = tip.offsetWidth || 180;
+    let left = px * scale + 12;
+    if (left + tipW > rect.width - 8) left = px * scale - tipW - 12;
+    tip.style.left = `${Math.max(4, left)}px`;
+    tip.style.top = `${Math.max(0, y(p.equity) * scale - 60)}px`;
+  };
+  // idx bleibt beim Ausblenden erhalten, damit Pfeiltasten dort weitermachen
+  const hide = () => { cross.setAttribute('opacity', '0'); tip.hidden = true; };
+
+  svg.addEventListener('pointermove', (ev) => {
+    const rect = svg.getBoundingClientRect();
+    const px = ((ev.clientX - rect.left) / rect.width) * width;
+    const t = t0 + ((px - pad.left) / iw) * (t1 - t0);
+    showIdx(nearestIndex(points, t));
+  });
+  svg.addEventListener('pointerleave', hide);
+  // Klick fokussiert das SVG – dann nicht zum letzten Punkt springen, sondern Hover-Position halten
+  svg.addEventListener('focus', () => showIdx(idx >= 0 ? idx : points.length - 1));
+  svg.addEventListener('blur', hide);
+  svg.addEventListener('keydown', (ev) => {
+    if (ev.key === 'ArrowLeft') { showIdx((idx < 0 ? points.length - 1 : idx) - 1); ev.preventDefault(); }
+    if (ev.key === 'ArrowRight') { showIdx((idx < 0 ? points.length - 1 : idx) + 1); ev.preventDefault(); }
+  });
+
+  // Legende (2+ Serien)
+  const legend = document.createElement('div');
+  legend.className = 'chart-legend';
+  legend.append(
+    legendItem('equity', 'Equity'),
+    legendItem('floor', 'Drawdown-Limit'),
+  );
+  if (target != null) legend.append(legendItem('target', 'Profit Target'));
+  container.appendChild(legend);
+}
+
+function addTipRow(tip, kind, label, value) {
+  const row = document.createElement('div');
+  row.className = 'tip-row';
+  const key = document.createElement('span');
+  key.className = `tip-key ${kind}`;
+  const name = document.createElement('span');
+  name.className = 'tip-label';
+  name.textContent = label;
+  const val = document.createElement('span');
+  val.className = 'tip-value';
+  val.textContent = value;
+  row.append(key, name, val);
+  tip.appendChild(row);
+}
+
+function legendItem(kind, label) {
+  const item = document.createElement('span');
+  item.className = 'legend-item';
+  const key = document.createElement('span');
+  key.className = `tip-key ${kind}`;
+  const text = document.createElement('span');
+  text.textContent = label;
+  item.append(key, text);
+  return item;
+}
+
+function nearestIndex(points, t) {
+  let lo = 0, hi = points.length - 1;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (points[mid].epoch < t) lo = mid; else hi = mid;
+  }
+  return (t - points[lo].epoch) <= (points[hi].epoch - t) ? lo : hi;
+}
+function nearestPoint(points, t) { return points[nearestIndex(points, t)]; }
+
+// ===== js/demo.js =====
+// Deterministische Beispieldaten im TradingView-Exportformat („Alle Tabs“-Stil):
+// Guthabenübersicht + Handelsverlauf, konsistent zueinander. ~3 Wochen NQ/MNQ.
+
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function buildDemo() {
+  const rnd = mulberry32(20260922);
+  const balanceRows = [];
+  const fillRows = [];
+  let balance = 50000;
+  let price = 30480;
+
+  // Handelstage: 1.–18. September 2026, Mo–Fr
+  const days = [];
+  for (let d = 1; d <= 18; d++) {
+    const date = new Date(Date.UTC(2026, 8, d));
+    const wd = date.getUTCDay();
+    if (wd >= 1 && wd <= 5) days.push(d);
+  }
+
+  // Tagescharakter: Anlauf, ein böser Tag, Erholung Richtung Target
+  const bias = { 1: 0.68, 2: 0.55, 3: 0.62, 4: 0.3, 7: 0.66, 8: 0.15, 9: 0.6, 10: 0.7, 11: 0.55, 14: 0.72, 15: 0.5, 16: 0.68, 17: 0.62, 18: 0.66 };
+
+  const pad = (n) => String(n).padStart(2, '0');
+  const f2 = (n) => n.toFixed(2);
+
+  for (const d of days) {
+    const nTrades = 2 + Math.floor(rnd() * 3);
+    let minute = 13 * 60 + 35 + Math.floor(rnd() * 30);
+    for (let i = 0; i < nTrades; i++) {
+      const win = rnd() < (bias[d] ?? 0.55);
+      const qty = rnd() < 0.7 ? 1 : 2;
+      const micro = rnd() < 0.25;
+      const symbol = micro ? 'CME_MICRO:MNQ1!' : 'CME_MINI:NQ1!';
+      const mult = micro ? 2 : 20;
+      const useQty = micro ? qty * 10 : qty;
+      const long = rnd() < 0.55;
+      const points = win ? 8 + rnd() * 30 : -(7 + rnd() * 26);
+      const entry = Math.round((price + (rnd() - 0.5) * 40) * 4) / 4;
+      const exit = Math.round((entry + (long ? points : -points)) * 4) / 4;
+      const pnl = Math.round((long ? exit - entry : entry - exit) * useQty * mult * 100) / 100;
+      price = exit;
+
+      const tEntry = `2026-09-${pad(d)} ${pad(Math.floor(minute / 60))}:${pad(minute % 60)}:${pad(Math.floor(rnd() * 60))}`;
+      minute += 12 + Math.floor(rnd() * 55);
+      const tExit = `2026-09-${pad(d)} ${pad(Math.floor(minute / 60))}:${pad(minute % 60)}:${pad(Math.floor(rnd() * 60))}`;
+      minute += 6 + Math.floor(rnd() * 25);
+
+      const oid = 3200000000 + fillRows.length;
+      fillRows.push(`${symbol},${long ? 'Buy' : 'Sell'},Market,${useQty},,,${f2(entry)},Filled,,${tEntry},${tEntry},${oid},,,`);
+      fillRows.push(`${symbol},${long ? 'Sell' : 'Buy'},Market,${useQty},,,${f2(exit)},Filled,,${tExit},${tExit},${oid + 1},,,`);
+
+      const before = balance;
+      balance = Math.round((balance + pnl) * 100) / 100;
+      const action = `Close ${long ? 'long' : 'short'} position for symbol ${symbol} at price ${f2(exit)} for ${useQty} units. Position AVG Price was ${entry.toFixed(6)}, currency: USD, rate: 1.000000, point value: ${mult.toFixed(6)}`;
+      balanceRows.push(`${tExit},${f2(before)},${f2(balance)},${f2(pnl)},USD,"${action}"`);
+    }
+  }
+
+  // Format wie der echte 2026er Export ("Alle Tabs" = mehrere Dateien; hier als eine Demo-Datei kombiniert)
+  return [
+    'Balance History',
+    'Time,Balance before,Balance after,Realized PnL (value),Realized PnL (currency),Action',
+    ...balanceRows,
+    '',
+    'Order History',
+    'Symbol,Side,Type,Quantity,Limit price,Stop price,Fill price,Status,Commission,Placing time,Closing time,Order ID,Level ID,Leverage,Margin',
+    ...fillRows,
+  ].join('\n');
+}
+
+const DEMO_CSV = buildDemo();
+
+// ===== js/main.js =====
+
+
+
+
+
+const $ = (id) => document.getElementById(id);
+
+const state = {
+  firmId: null,
+  acctId: null,
+  sources: [],       // { name, parsed }
+  isDemo: false,
+  result: null,
+};
+
+// ---------- Persistenz (nur Komfort) ----------
+const store = {
+  get(k) { try { return localStorage.getItem('propreplay.' + k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem('propreplay.' + k, v); } catch { /* egal */ } },
+};
+
+// ---------- Format-Helfer ----------
+const usd = (n, digits = 0) => (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+const usdSigned = (n, digits = 0) => (n > 0 ? '+' : n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+const fmtDay = (iso) => { const [y, m, d] = iso.split('-'); return `${d}.${m}.${y.slice(2)}`; };
+
+function currentFirm() { return FIRMS.find((f) => f.id === state.firmId) || FIRMS[0]; }
+function currentAccount() {
+  const firm = currentFirm();
+  return firm.accounts.find((a) => a.id === state.acctId) || firm.accounts[0];
+}
+
+// ---------- Schritt 1: Firma + Account ----------
+
+function renderFirms() {
+  const row = $('firm-row');
+  row.textContent = '';
+  for (const firm of FIRMS.filter((f) => f.accounts.length > 0)) {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.type = 'button';
+    b.textContent = firm.name;
+    b.setAttribute('aria-pressed', String(firm.id === state.firmId));
+    b.addEventListener('click', () => {
+      state.firmId = firm.id;
+      state.acctId = firm.accounts[0]?.id || null;
+      store.set('firm', firm.id); store.set('acct', state.acctId || '');
+      renderFirms(); recompute();
+    });
+    row.appendChild(b);
+  }
+  renderAccounts();
+}
+
+function renderAccounts() {
+  const firm = currentFirm();
+  const row = $('acct-row');
+  row.textContent = '';
+  for (const a of firm.accounts) {
+    const b = document.createElement('button');
+    b.className = 'acct-card';
+    b.type = 'button';
+    b.setAttribute('aria-pressed', String(a.id === (state.acctId || firm.accounts[0].id)));
+    const name = document.createElement('span');
+    name.className = 'acct-name';
+    name.textContent = a.label;
+    const meta = document.createElement('span');
+    meta.className = 'acct-meta';
+    meta.textContent = `${shortDd(a)}${a.profitTarget != null ? ` · Target ${usd(a.profitTarget)}` : ' · kein Target (funded)'}`;
+    b.append(name, meta);
+    b.addEventListener('click', () => {
+      state.acctId = a.id;
+      store.set('acct', a.id);
+      renderAccounts(); recompute();
+    });
+    row.appendChild(b);
+  }
+  renderRulesSummary();
+}
+
+function shortDd(a) {
+  const t = a.drawdown.type;
+  const kind = t === 'static' ? 'statisch' : t === 'intraday_trailing' ? 'Intraday-Trailing' : 'EOD-Trailing';
+  return `${usd(a.drawdown.amount)} ${kind}`;
+}
+
+function renderRulesSummary() {
+  const firm = currentFirm();
+  const a = currentAccount();
+  const host = $('rules-summary');
+  host.textContent = '';
+  const kv = (k, v, sub) => {
+    const div = document.createElement('div');
+    div.className = 'rule-kv';
+    const kEl = document.createElement('div'); kEl.className = 'k'; kEl.textContent = k;
+    const vEl = document.createElement('div'); vEl.className = 'v'; vEl.textContent = v;
+    if (sub) { const s = document.createElement('small'); s.textContent = ' ' + sub; vEl.appendChild(s); }
+    div.append(kEl, vEl);
+    host.appendChild(div);
+  };
+  kv('Kontogröße', usd(a.size));
+  kv('Profit Target', a.profitTarget != null ? usd(a.profitTarget) : 'keins', a.profitTarget == null ? 'Funded-Account' : '');
+  kv(ddLabel(a.drawdown), usd(a.drawdown.amount), a.drawdown.lockFloorAt != null ? `lockt bei ${usd(a.drawdown.lockFloorAt)}` : 'trailt durchgehend');
+  kv('Daily Loss Limit', a.dailyLoss ? usd(a.dailyLoss.amount) : 'keins', a.dailyLoss ? (a.dailyLoss.onHit === 'fail' ? 'Bruch = durchgefallen' : 'Konto für den Tag gesperrt') : '');
+  kv('Kontrakte max.', a.maxContracts != null ? `${a.maxContracts} Minis` : '–', a.maxMicros != null ? `/ ${a.maxMicros} Micros` : '');
+  kv('Mindesttage', a.minDays != null ? String(a.minDays) : '–');
+  kv('Consistency', a.consistency ? `${a.consistency.pct}%` : 'keine', a.consistency ? (a.consistency.scope === 'eval' ? 'gilt in der Eval' : 'erst bei Payout') : '');
+  if (a.priceMonthly != null) kv('Preis', `${usd(a.priceMonthly)}/Monat`, 'Listenpreis');
+  else if (a.priceOnce != null) kv('Preis', `${usd(a.priceOnce)} einmalig`, 'Listenpreis, oft rabattiert');
+  if (firm.note || (a.notes && a.notes.length)) {
+    const note = document.createElement('div');
+    note.className = 'firm-note';
+    note.textContent = [firm.note, ...(a.notes || [])].filter(Boolean).join(' · ');
+    host.appendChild(note);
+  }
+  updateQuickCheckLabels();
+}
+
+// ---------- Schritt 2: Datenimport ----------
+
+function bindImport() {
+  const dz = $('dropzone');
+  const fi = $('file-input');
+  dz.addEventListener('click', () => fi.click());
+  dz.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { fi.click(); e.preventDefault(); } });
+  dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('dragover'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+  dz.addEventListener('drop', async (e) => {
+    e.preventDefault(); dz.classList.remove('dragover');
+    await readFiles([...(e.dataTransfer?.files || [])]);
+  });
+  fi.addEventListener('change', async () => { await readFiles([...fi.files]); fi.value = ''; });
+
+  $('paste-btn').addEventListener('click', () => {
+    const text = $('paste-area').value.trim();
+    if (!text) return;
+    addSource('Eingefügter Text', text);
+    $('paste-area').value = '';
+  });
+  $('demo-btn').addEventListener('click', loadDemo);
+  $('clear-btn').addEventListener('click', () => {
+    state.sources = []; state.isDemo = false;
+    recompute();
+  });
+
+  for (const id of ['tz-select', 'day-select', 'range-start', 'range-end']) {
+    $(id).addEventListener('change', () => {
+      store.set(id, $(id).value);
+      recompute();
+    });
+  }
+  const tz = store.get('tz-select'); if (tz) $('tz-select').value = tz;
+  const dm = store.get('day-select'); if (dm) $('day-select').value = dm;
+}
+
+async function readFiles(files) {
+  for (const f of files) {
+    const text = await f.text();
+    addSource(f.name, text);
+  }
+}
+
+function addSource(name, text) {
+  if (state.isDemo) { state.sources = []; state.isDemo = false; }
+  const parsed = parseTradingViewExport(text, name);
+  state.sources.push({ name, parsed });
+  recompute();
+}
+
+function loadDemo() {
+  state.sources = [{ name: 'Beispieldaten', parsed: parseTradingViewExport(DEMO_CSV, 'demo.csv') }];
+  state.isDemo = true;
+  recompute();
+}
+
+function renderImportStatus(merged) {
+  const host = $('import-status');
+  host.textContent = '';
+  $('clear-btn').hidden = state.sources.length === 0;
+  if (!state.sources.length) return;
+  for (const s of state.sources) {
+    const line = document.createElement('div');
+    const ok = s.parsed.balanceEvents.length + s.parsed.fills.length > 0;
+    line.className = ok ? 'ok' : '';
+    line.textContent = `${ok ? '✓' : '✕'} ${s.name}: ${s.parsed.balanceEvents.length} Kontobewegungen, ${s.parsed.fills.length} Fills` +
+      (s.parsed.detected.length ? ` (${s.parsed.detected.join(', ')})` : '');
+    host.appendChild(line);
+  }
+  if (state.isDemo) {
+    const note = document.createElement('div');
+    note.textContent = 'Das sind Beispieldaten zum Ausprobieren – lade deinen eigenen Export, um deine Zahlen zu sehen.';
+    host.appendChild(note);
+  }
+  void merged;
+}
+
+// ---------- Simulation + Rendering ----------
+
+function currentOptions() {
+  const opts = {
+    timeZone: $('tz-select').value,
+    dayMode: $('day-select').value,
+  };
+  // Zeitraum-Grenzen in der gewählten CSV-Zeitzone interpretieren, nicht als UTC-Mitternacht
+  const parseDay = (v) => { const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? { y: +m[1], mo: +m[2], d: +m[3] } : null; };
+  const rs = parseDay($('range-start').value || '');
+  const re = parseDay($('range-end').value || '');
+  if (rs) opts.rangeStart = toEpoch({ ...rs, h: 0, mi: 0, s: 0 }, opts.timeZone);
+  if (re) opts.rangeEnd = toEpoch({ ...re, h: 23, mi: 59, s: 59 }, opts.timeZone);
+  return opts;
+}
+
+function recompute() {
+  renderRulesSummary();
+  const merged = mergeParsed(state.sources.map((s) => s.parsed));
+  renderImportStatus(merged);
+  const root = $('result-root');
+  if (!state.sources.length) { root.hidden = true; state.result = null; renderWarnings([]); return; }
+  const account = currentAccount();
+  try {
+    const result = simulate({ account, parsed: merged, options: currentOptions() });
+    state.result = result;
+    if (result.status === 'empty') {
+      root.hidden = true;
+      renderWarnings(result.warnings);
+      return;
+    }
+    root.hidden = false;
+    renderHero(result, account);
+    renderTiles(result, account);
+    renderEquityChart($('chart-host'), result, account);
+    renderRuleCheck(result, account);
+    renderDaysTable(result, account);
+    renderWarnings(result.warnings);
+  } catch (err) {
+    root.hidden = true;
+    state.result = null;
+    renderWarnings([`Auswertung fehlgeschlagen: ${err && err.message ? err.message : err}. Prüfe die Datei oder melde das als Bug.`]);
+  }
+}
+
+function renderHero(result, account) {
+  const hero = $('result-hero');
+  hero.classList.remove('passed', 'failed', 'ongoing');
+  const v = $('verdict'), why = $('verdict-why');
+  if (result.status === 'failed') {
+    hero.classList.add('failed');
+    v.textContent = 'Account geplatzt';
+    why.textContent = `${result.failed.detail} — am ${fmtDay(result.failed.day)}. Mit diesen Trades wäre die ${currentFirm().name}-Eval hier vorbei gewesen.`;
+  } else if (result.status === 'passed') {
+    hero.classList.add('passed');
+    v.textContent = 'Eval bestanden ✓';
+    const afterDays = result.days.filter((d) => d.afterPass).length;
+    why.textContent = `Profit Target ${usd(account.profitTarget)} erreicht, alle Regeln eingehalten — bestanden am ${fmtDay(result.passed.day)}.` +
+      (afterDays ? ` Die ${afterDays} Handelstage danach zählen für die Eval nicht mehr.` : '');
+  } else {
+    hero.classList.add('ongoing');
+    v.textContent = account.profitTarget != null ? 'Läuft noch' : 'Account lebt noch';
+    const bits = [];
+    if (result.stats.distToTarget != null && result.stats.distToTarget > 0) bits.push(`noch ${usd(result.stats.distToTarget)} bis zum Target`);
+    else if (result.targetReachedAt) bits.push('Target erreicht');
+    if (!result.stats.consistency.ok && account.consistency && account.consistency.scope === 'eval') bits.push('Consistency noch nicht erfüllt');
+    if ((account.minDays || 0) > result.stats.tradingDays) bits.push(`noch ${account.minDays - result.stats.tradingDays} Handelstag(e) nötig`);
+    bits.push(`${usd(result.stats.roomToFloor)} Luft bis zum Drawdown-Limit`);
+    why.textContent = 'Kein Regelbruch bisher — ' + bits.join(', ') + '.';
+  }
+}
+
+function tile(label, value, cls = '', sub = '') {
+  const t = document.createElement('div');
+  t.className = 'tile';
+  const l = document.createElement('div'); l.className = 'label'; l.textContent = label;
+  const v = document.createElement('div'); v.className = 'value ' + cls; v.textContent = value;
+  t.append(l, v);
+  if (sub) { const s = document.createElement('div'); s.className = 'sub'; s.textContent = sub; t.appendChild(s); }
+  return t;
+}
+
+function renderTiles(result, account) {
+  const host = $('tiles');
+  host.textContent = '';
+  const st = result.stats;
+  host.append(
+    tile('Netto-P&L', usdSigned(st.netPnl), st.netPnl >= 0 ? 'pos' : 'neg', `Endstand ${usd(st.endEquity)}`),
+    tile('Luft bis Limit', usd(st.roomToFloor), st.roomToFloor < account.drawdown.amount * 0.25 ? 'neg' : '', `Limit aktuell ${usd(st.floorEnd)}`),
+    tile('Bis zum Target', st.distToTarget != null ? usd(st.distToTarget) : '–', '',
+      result.targetReachedAt ? `erreicht am ${fmtDay(result.targetReachedAt.day)}` :
+      account.profitTarget != null ? `Target ${usd(account.size + account.profitTarget)}` : 'Funded-Account ohne Target'),
+    tile('Knappster Moment', usd(st.minRoom), st.minRoom < account.drawdown.amount * 0.15 ? 'neg' : '', 'minimale Luft zum Limit'),
+    tile('Handelstage', `${st.tradingDays}`, '', `${st.winDays} grün / ${st.lossDays} rot · min. ${account.minDays ?? 0}`),
+  );
+  if (st.bestDay) host.append(tile('Bester Tag', usdSigned(st.bestDay.pnl), 'pos', fmtDay(st.bestDay.day)));
+  if (st.worstDay) host.append(tile('Schlechtester Tag', usdSigned(st.worstDay.pnl), 'neg', fmtDay(st.worstDay.day)));
+  if (st.usage) host.append(tile('Max. Kontrakte', `${Math.round(st.usage.maxTotalMinis * 10) / 10}`, '', `in Minis · erlaubt ${account.maxContracts ?? '–'}`));
+}
+
+function ruleItem(cls, name, detail) {
+  const item = document.createElement('div');
+  item.className = 'rule-item ' + cls;
+  const dot = document.createElement('span');
+  dot.className = 'dot';
+  dot.textContent = cls === 'ok' ? '✓' : cls === 'bad' ? '✕' : cls === 'warn' ? '!' : '·';
+  const text = document.createElement('div');
+  const n = document.createElement('span'); n.className = 'rule-name'; n.textContent = name + ' ';
+  const d = document.createElement('span'); d.className = 'rule-detail'; d.textContent = detail;
+  text.append(n, d);
+  item.append(dot, text);
+  return item;
+}
+
+function renderRuleCheck(result, account) {
+  const host = $('rule-check');
+  host.textContent = '';
+  const st = result.stats;
+  const ddViol = result.violations.find((v) => v.type === 'drawdown' && v.hard);
+  host.append(ruleItem(
+    ddViol ? 'bad' : 'ok',
+    ddLabel(account.drawdown),
+    ddViol ? ddViol.detail : `eingehalten – knappster Moment: ${usd(st.minRoom)} Luft`,
+  ));
+
+  if (account.dailyLoss) {
+    const dl = result.violations.filter((v) => v.type === 'daily_loss');
+    host.append(ruleItem(
+      dl.some((v) => v.hard) ? 'bad' : dl.length ? 'warn' : 'ok',
+      `Daily Loss Limit ${usd(account.dailyLoss.amount)}`,
+      dl.length ? `${dl.length}× erreicht (${dl.map((v) => fmtDay(v.day)).join(', ')})` : `eingehalten – schlechtester Tag ${st.worstDay ? usdSigned(st.worstDay.pnl) : '–'}`,
+    ));
+  } else {
+    host.append(ruleItem('na', 'Daily Loss Limit', 'dieser Account hat keins'));
+  }
+
+  if (account.profitTarget != null) {
+    host.append(ruleItem(
+      result.targetReachedAt ? 'ok' : 'na',
+      `Profit Target ${usd(account.profitTarget)}`,
+      result.targetReachedAt ? `erreicht am ${fmtDay(result.targetReachedAt.day)}` : `${usd(Math.max(0, st.netPnl))} von ${usd(account.profitTarget)} (${Math.max(0, Math.round((st.netPnl / account.profitTarget) * 100))}%)`,
+    ));
+  } else {
+    host.append(ruleItem('na', 'Profit Target', 'Funded-Account – hier zählen Payout-Regeln statt Target'));
+  }
+
+  if (account.minDays) {
+    const minOk = st.tradingDays >= account.minDays;
+    host.append(ruleItem(
+      minOk ? 'ok' : 'na',
+      `Mindestens ${account.minDays} Handelstage`,
+      minOk ? `${st.tradingDays} Tage gehandelt` : `erst ${st.tradingDays} von ${account.minDays}`,
+    ));
+  } else {
+    host.append(ruleItem('na', 'Mindesttage', `keine vorgeschrieben – ${st.tradingDays} Tage gehandelt`));
+  }
+
+  if (account.consistency) {
+    const c = st.consistency;
+    let detail;
+    if (c.sharePct == null) detail = 'noch kein Profit zu bewerten';
+    else if (c.ok) detail = `bester Tag = ${Math.round(c.sharePct)}% vom Gesamtprofit (max. ${account.consistency.pct}%)`;
+    else detail = `bester Tag = ${Math.round(c.sharePct)}% vom Profit – du brauchst insgesamt ${usd(c.neededTotal)} Profit, damit es passt`;
+    host.append(ruleItem(c.ok ? 'ok' : 'warn', `Consistency ${account.consistency.pct}%`, detail +
+      (account.consistency.scope === 'payout' ? ' (gilt erst bei Payout, nicht in der Eval)' : '')));
+  } else {
+    host.append(ruleItem('na', 'Consistency-Regel', 'dieser Account hat keine'));
+  }
+
+  if (st.usage && account.maxContracts != null) {
+    const over = result.violations.find((v) => v.type === 'contracts');
+    host.append(ruleItem(
+      over ? 'warn' : 'ok',
+      `Max. ${account.maxContracts} Kontrakte`,
+      over ? over.detail : `Spitze: ${Math.round(st.usage.maxTotalMinis * 10) / 10} Minis gleichzeitig`,
+    ));
+  } else if (account.maxContracts != null) {
+    host.append(ruleItem('na', `Max. ${account.maxContracts} Kontrakte`, 'nur prüfbar, wenn der Handelsverlauf (Fills) mit im Export ist'));
+  }
+}
+
+function renderDaysTable(result, account) {
+  const table = $('days-table');
+  table.textContent = '';
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  for (const h of ['Tag', 'Trades', 'P&L', 'EOD-Stand', 'Limit', 'Luft']) {
+    const th = document.createElement('th'); th.textContent = h; hr.appendChild(th);
+  }
+  thead.appendChild(hr);
+  const tbody = document.createElement('tbody');
+  const intraday = account.drawdown.type === 'intraday_trailing';
+  for (const d of result.days) {
+    const tr = document.createElement('tr');
+    if (d.afterFail || d.afterPass) tr.className = 'after-fail';
+    // Beim Intraday-Trailing gilt zum Tagesschluss der nachgezogene Floor, nicht der vom Tagesanfang
+    const floor = intraday ? d.floorNext : d.floor;
+    const cells = [
+      { t: fmtDay(d.day) },
+      { t: String(d.trades) },
+      { t: usdSigned(d.pnl), cls: d.pnl > 0 ? 'pos' : d.pnl < 0 ? 'neg' : '' },
+      { t: usd(d.eodBalance) },
+      { t: usd(floor) },
+      { t: usd(d.eodBalance - floor) },
+    ];
+    cells.forEach((c, i) => {
+      const td = document.createElement('td');
+      td.textContent = c.t;
+      if (c.cls) td.className = c.cls;
+      if (i === 2 && d.locked) {
+        const flag = document.createElement('span');
+        flag.className = 'flag lock';
+        flag.textContent = 'DLL';
+        td.appendChild(flag);
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  }
+  table.append(thead, tbody);
+}
+
+function renderWarnings(warnings) {
+  const host = $('warnings');
+  host.textContent = '';
+  for (const w of [...new Set(warnings || [])]) {
+    const div = document.createElement('div');
+    div.className = 'warn-item';
+    div.textContent = w;
+    host.appendChild(div);
+  }
+}
+
+// ---------- Quick-Check ----------
+
+function updateQuickCheckLabels() {
+  const a = currentAccount();
+  $('qc-hwm-label').textContent = a.drawdown.type === 'intraday_trailing'
+    ? '(höchste Equity, inkl. offener Trades)'
+    : a.drawdown.type === 'static' ? '(egal bei statischem DD)' : '(höchster Tagesschluss)';
+  $('qc-start').placeholder = String(a.size.toFixed(2));
+}
+
+function bindQuickCheck() {
+  $('qc-btn').addEventListener('click', () => {
+    const a = currentAccount();
+    const bal = parseFloat($('qc-balance').value);
+    const start = parseFloat($('qc-start').value) || a.size;
+    let hwm = parseFloat($('qc-hwm').value);
+    if (!Number.isFinite(bal)) return;
+    // Intraday-Trailing: Watermark kann nie unter der aktuellen Equity liegen.
+    // EOD-Trailing: das EOD-Hoch darf unter dem aktuellen Stand liegen (Intraday-Gewinn heute).
+    if (!Number.isFinite(hwm)) hwm = Math.max(bal, start);
+    if (a.drawdown.type === 'intraday_trailing') hwm = Math.max(hwm, bal, start);
+    else hwm = Math.max(hwm, start);
+    const equity = a.size + (bal - start);
+    const propHwm = a.size + (hwm - start);
+    let floor;
+    if (a.drawdown.type === 'static') floor = a.size - a.drawdown.amount;
+    else floor = Math.min(propHwm - a.drawdown.amount, a.drawdown.lockFloorAt != null ? a.drawdown.lockFloorAt : Infinity);
+    const room = equity - floor;
+    const target = a.profitTarget != null ? a.size + a.profitTarget : null;
+    const host = $('qc-out');
+    host.textContent = '';
+    const kv = (k, v, cls = '') => {
+      const div = document.createElement('div');
+      div.className = 'rule-kv';
+      const kEl = document.createElement('div'); kEl.className = 'k'; kEl.textContent = k;
+      const vEl = document.createElement('div'); vEl.className = 'v ' + cls; vEl.textContent = v;
+      div.append(kEl, vEl);
+      host.appendChild(div);
+    };
+    kv('Dein Stand (umgerechnet)', usd(equity, 2));
+    kv('Drawdown-Limit', usd(floor, 2));
+    kv('Luft', usd(room, 2), room <= 0 ? 'neg' : '');
+    if (target != null) kv('Bis zum Target', usd(Math.max(0, target - equity), 2));
+    if (room <= 0) kv('Status', 'Limit verletzt ✕', 'neg');
+  });
+}
+
+// ---------- Footer ----------
+
+function renderFooter() {
+  const el = $('footer-note');
+  el.textContent = '';
+  const p1 = document.createElement('span');
+  p1.textContent = `Regelstand: ${RULES_AS_OF}. Alle Angaben ohne Gewähr – Prop Firms ändern ihre Regeln ständig, check vor dem Kauf immer die offizielle Seite. `;
+  const p2 = document.createElement('span');
+  p2.textContent = 'Die Simulation rechnet auf Basis realisierter Trades (Fill-Granularität): unrealisierte Zwischenhochs/-tiefs offener Positionen sieht der TradingView-Export nicht. Beim Intraday-Trailing-Drawdown (z. B. Apex, MFFU Rapid) kann das echte Limit deshalb strenger sein, als es hier aussieht. Die Zeitstempel im Export folgen deiner Chart-Zeitzone – stell sie oben passend ein, sonst rutschen Trades in den falschen Handelstag. Keine Anlageberatung, keine Verbindung zu den genannten Firmen oder TradingView.';
+  el.append(p1, document.createElement('br'), p2);
+}
+
+// ---------- Init ----------
+
+function bindChartResize() {
+  const host = $('chart-host');
+  let lastWidth = host.clientWidth;
+  if (typeof ResizeObserver === 'undefined') return;
+  const ro = new ResizeObserver(() => {
+    const w = host.clientWidth;
+    if (Math.abs(w - lastWidth) > 1 && state.result && state.result.status !== 'empty' && !$('result-root').hidden) {
+      lastWidth = w;
+      renderEquityChart(host, state.result, currentAccount());
+    }
+  });
+  ro.observe(host);
+}
+
+function init() {
+  state.firmId = store.get('firm') || FIRMS[0].id;
+  if (!FIRMS.some((f) => f.id === state.firmId)) state.firmId = FIRMS[0].id;
+  const savedAcct = store.get('acct');
+  state.acctId = currentFirm().accounts.some((a) => a.id === savedAcct) ? savedAcct : currentFirm().accounts[0].id;
+  renderFirms();
+  bindImport();
+  bindQuickCheck();
+  bindChartResize();
+  renderFooter();
+  loadDemo(); // Seite öffnet mit Beispieldaten, klar als solche markiert
+}
+
+init();
+
+</script>
+
+</body>
+</html>
