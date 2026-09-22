@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Prop Replay</title>
+<meta name="theme-color" content="#0d0d0d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="css/app.css">
 </head>
@@ -133,5 +137,14 @@
 </div>
 
 <script type="module" src="js/main.js"></script>
+<script>
+// PWA: Service Worker nur registrieren, wo er unterstützt und sinnvoll ist
+// (auf der echten Website – nicht in Sandbox-Umgebungen, die ihn eh ablehnen).
+try {
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+} catch (e) { /* egal – App läuft auch ohne */ }
+</script>
 </body>
 </html>

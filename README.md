@@ -9,7 +9,20 @@ Tradeify oder Lucid** gelaufen wäre: Trailing Drawdown (Intraday/EOD/statisch),
 Daily Loss Limit, Profit Target, Consistency-Regel, Mindesttage und
 Kontrakt-Limits.
 
-## Benutzen
+## Website & App-Installation
+
+Die App deployt sich per GitHub Actions auf **GitHub Pages**
+(`.github/workflows/pages.yml`): bei jedem Push läuft erst die Testsuite,
+dann geht die Seite unter `https://<owner>.github.io/trading/` live.
+Voraussetzung: Das Repo ist öffentlich (GitHub Pages ist bei privaten
+Repos den Bezahl-Plänen vorbehalten).
+
+Die Seite ist eine **PWA**: Auf dem Handy „Zum Startbildschirm hinzufügen"
+bzw. am Desktop das Installieren-Symbol in der Adressleiste — dann läuft
+sie als eigene App mit Icon und funktioniert dank Service Worker auch
+offline (Network-first, Cache-Fallback).
+
+## Lokal benutzen
 
 Statische Web-App ohne Build-Schritt — einfach `index.html` über einen
 beliebigen Webserver öffnen:
