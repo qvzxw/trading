@@ -163,6 +163,61 @@ test('Consistency blockt den Pass, bis der Anteil stimmt', () => {
   assert.equal(r.stats.consistency.ok, true);
 });
 
+test('Kein Pass, wenn das Target vor Erfüllung der Mindesttage wieder abgegeben wurde', () => {
+  const account = acct({ minDays: 2 });
+  const parsed = {
+    balanceEvents: [
+      ev('2026-09-01T14:00:00Z', 3500),  // Touch an Tag 1 – Mindesttage noch nicht erfüllt
+      ev('2026-09-01T15:00:00Z', -3400), // wieder abgegeben
+      ev('2026-09-02T14:00:00Z', 100),   // Tag 2: Equity 50.200 < Target-Balance -> kein Pass
+    ],
+    fills: [], warnings: [],
+  };
+  const r = simulate({ account, parsed, options: { timeZone: 'UTC' } });
+  assert.equal(r.status, 'ongoing');
+  assert.ok(r.targetReachedAt); // Touch wird angezeigt, zählt aber nicht als Pass
+});
+
+test('Pass in Echtzeit: Intraday-Touch reicht, wenn alle Bedingungen gleichzeitig gelten', () => {
+  const account = acct({ minDays: 0 });
+  const parsed = {
+    balanceEvents: [
+      ev('2026-09-01T14:00:00Z', 3500),  // Apex-Stil: Touch = sofort bestanden
+      ev('2026-09-01T15:00:00Z', -3400), // danach egal
+    ],
+    fills: [], warnings: [],
+  };
+  const r = simulate({ account, parsed, options: { timeZone: 'UTC' } });
+  assert.equal(r.status, 'passed');
+  assert.equal(r.passed.equityAt, 53500);
+});
+
+test('Regelbruch NACH dem Pass überschreibt den Pass nicht', () => {
+  const account = acct({ minDays: 1 });
+  const parsed = {
+    balanceEvents: [
+      ev('2026-09-01T14:00:00Z', 3500),  // bestanden am Tagesende Tag 1
+      ev('2026-09-02T14:00:00Z', -3000), // wäre ein Drawdown-Bruch – zählt nicht mehr
+    ],
+    fills: [], warnings: [],
+  };
+  const r = simulate({ account, parsed, options: { timeZone: 'UTC' } });
+  assert.equal(r.status, 'passed');
+  assert.equal(r.violations.filter((v) => v.hard).length, 0);
+  assert.equal(r.days[1].afterPass, true);
+  assert.equal(r.stats.tradingDays, 1); // Post-Pass-Tage zählen nicht
+});
+
+test('contractUsage ignoriert Nicht-Futures-Symbole', () => {
+  const fills = [
+    { epoch: 1, symbol: 'NASDAQ:AAPL', side: 'buy', qty: 50, price: 200 },
+    { epoch: 2, symbol: 'CME_MINI:NQ1!', side: 'buy', qty: 2, price: 30000 },
+  ];
+  const u = contractUsage(fills);
+  assert.equal(u.maxTotalMinis, 2);
+  assert.deepEqual(u.skippedRoots, ['AAPL']);
+});
+
 test('Payout-Consistency (scope payout) blockt das Bestehen nicht', () => {
   const account = acct({ consistency: { pct: 50, scope: 'payout' }, minDays: 1 });
   const parsed = {

@@ -11,6 +11,8 @@
   --hairline: #2c2c2a;
   --ring: rgba(255, 255, 255, 0.10);
   --accent: #3987e5;
+  --accent-strong: #256abf; /* Button-Grund mit weißem Text (≥4.5:1) */
+  --accent-text: #3987e5;   /* Akzent als Kleintext auf der Surface */
   --accent-soft: rgba(57, 135, 229, 0.14);
   --good: #0ca30c;
   --good-soft: rgba(12, 163, 12, 0.14);
@@ -30,10 +32,12 @@
     --raised: #f2f1ee;
     --ink: #0b0b0b;
     --ink-2: #52514e;
-    --muted: #898781;
+    --muted: #6b6a64;
     --hairline: #e1e0d9;
     --ring: rgba(11, 11, 11, 0.10);
     --accent: #2a78d6;
+    --accent-strong: #1c5cab;
+    --accent-text: #1c5cab;
     --accent-soft: rgba(42, 120, 214, 0.10);
     --good-soft: rgba(12, 163, 12, 0.10);
     --warning-soft: rgba(250, 178, 25, 0.14);
@@ -50,10 +54,12 @@
   --raised: #f2f1ee;
   --ink: #0b0b0b;
   --ink-2: #52514e;
-  --muted: #898781;
+  --muted: #6b6a64;
   --hairline: #e1e0d9;
   --ring: rgba(11, 11, 11, 0.10);
   --accent: #2a78d6;
+  --accent-strong: #1c5cab;
+  --accent-text: #1c5cab;
   --accent-soft: rgba(42, 120, 214, 0.10);
   --good-soft: rgba(12, 163, 12, 0.10);
   --warning-soft: rgba(250, 178, 25, 0.14);
@@ -77,7 +83,6 @@ body {
 
 h1, h2, h3 { font-family: "Archivo", system-ui, sans-serif; text-wrap: balance; margin: 0; }
 
-.mono, .num { font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace; }
 
 /* ---------- Header ---------- */
 
@@ -101,7 +106,7 @@ h1, h2, h3 { font-family: "Archivo", system-ui, sans-serif; text-wrap: balance; 
 .step-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
 .step-no {
   font-family: "IBM Plex Mono", monospace; font-size: 12px; font-weight: 600;
-  color: var(--accent); letter-spacing: 0.08em;
+  color: var(--accent-text); letter-spacing: 0.08em;
 }
 .step-head h2 { font-size: 17px; font-weight: 600; }
 .step-head .hint { color: var(--muted); font-size: 13px; }
@@ -124,7 +129,7 @@ h1, h2, h3 { font-family: "Archivo", system-ui, sans-serif; text-wrap: balance; 
   border-color: var(--accent);
   background: var(--accent-soft);
 }
-.chip:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, .equity-chart:focus-visible {
+.chip:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, .equity-chart:focus-visible, .dropzone:focus-visible {
   outline: 2px solid var(--accent); outline-offset: 2px;
 }
 
@@ -154,8 +159,8 @@ h1, h2, h3 { font-family: "Archivo", system-ui, sans-serif; text-wrap: balance; 
 .rule-kv .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
 .rule-kv .v { font-size: 14px; font-weight: 600; font-family: "IBM Plex Mono", monospace; }
 .rule-kv .v small { color: var(--ink-2); font-weight: 400; font-family: system-ui, sans-serif; }
+.rule-kv .v.neg { color: var(--neg-text); }
 .firm-note { grid-column: 1 / -1; color: var(--ink-2); font-size: 13px; }
-.firm-note a { color: var(--accent); }
 
 /* ---------- Datenimport ---------- */
 
@@ -187,7 +192,7 @@ h1, h2, h3 { font-family: "Archivo", system-ui, sans-serif; text-wrap: balance; 
   border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 600; cursor: pointer;
 }
 .btn:hover { border-color: var(--muted); }
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
 .btn.ghost { background: none; }
 
 .import-status { margin-top: 12px; font-size: 13.5px; color: var(--ink-2); display: grid; gap: 4px; }
@@ -197,10 +202,11 @@ h1, h2, h3 { font-family: "Archivo", system-ui, sans-serif; text-wrap: balance; 
   display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 14px;
   border-top: 1px solid var(--hairline); padding-top: 12px; align-items: end;
 }
-.opt { display: grid; gap: 4px; font-size: 13px; color: var(--ink-2); }
+.opt { display: grid; gap: 4px; font-size: 13px; color: var(--ink-2); min-width: 0; max-width: 100%; }
 .opt select, .opt input {
   background: var(--raised); color: var(--ink);
   border: 1px solid var(--hairline); border-radius: 7px; padding: 6px 9px; font-size: 13.5px;
+  max-width: 100%;
 }
 
 /* ---------- Ergebnis ---------- */
@@ -312,7 +318,7 @@ table.days td.pos { color: var(--pos-text); }
 table.days td.neg { color: var(--neg-text); }
 table.days tr.after-fail td { opacity: 0.45; }
 table.days td .flag { font-family: system-ui, sans-serif; font-size: 11px; border-radius: 4px; padding: 1px 6px; margin-left: 6px; }
-table.days td .flag.lock { background: var(--warning-soft); color: var(--warning); }
+table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); border: 1px solid var(--warning); }
 
 /* Warnungen */
 .warnings { margin-top: 12px; display: grid; gap: 6px; }
@@ -326,7 +332,6 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--warning
 .quick-out { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 12px; }
 
 .footer-note { color: var(--muted); font-size: 12.5px; margin-top: 26px; line-height: 1.6; }
-.footer-note a { color: var(--accent); }
 
 .hidden-input { display: none; }
 

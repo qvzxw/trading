@@ -115,6 +115,73 @@ test('mergeParsed entfernt Duplikate', () => {
   assert.equal(m.balanceEvents.length, 1);
 });
 
+test('parseNumber: Platzhalter und Stil-Hints', () => {
+  assert.equal(parseNumber('USD'), null);
+  assert.equal(parseNumber('–'), null);          // En-Dash
+  assert.equal(parseNumber('1.234.567'), 1234567);
+  assert.equal(parseNumber('0,5'), 0.5);
+  assert.equal(parseNumber('2,875', 'comma'), 2.875);
+  assert.equal(parseNumber('50.000', 'comma'), 50000);
+  assert.equal(parseNumber('1,234.56', 'dot'), 1234.56);
+});
+
+test('parseTimestamp: dd/mm-Erkennung und Bereichs-Validierung', () => {
+  const dm = parseTimestamp('22/09/2026 14:30');
+  assert.equal(dm.d, 22);
+  assert.equal(dm.mo, 9);
+  assert.equal(parseTimestamp('45.13.2026'), null);
+  assert.equal(parseTimestamp('2026-13-01 10:00:00'), null);
+});
+
+test('Deutsche Datei: Dezimalstil wird pro Datei erkannt (mehrdeutiges "2,875")', () => {
+  const csv = [
+    'Zeit;Guthaben vor;Guthaben nach;Realisierter G&V;Handlung',
+    '2026-09-22 20:39:30;50.785,00;50.787,88;2,875;"Close long position for symbol CME_MINI:MNQ1! at price 24967.50 for 1 units."',
+  ].join('\n');
+  const p = parseTradingViewExport(csv, 'de.csv');
+  assert.equal(p.balanceEvents[0].pnl, 2.875);
+  assert.equal(p.balanceEvents[0].balanceAfter, 50787.88);
+});
+
+test('All-Tabs mit Titelzeile zuerst: Delimiter wird über mehrere Zeilen erkannt', () => {
+  const csv = [
+    'Guthabenübersicht',
+    'Zeit;Guthaben vor;Guthaben nach;Realisierter G&V;Handlung',
+    '2026-09-22 20:39:30;50.785,00;50.655,00;-130,00;"Close long position for symbol CME_MINI:NQ1! at price 30967.50 for 1 units."',
+  ].join('\n');
+  const p = parseTradingViewExport(csv, 'alltabs-de.csv');
+  assert.equal(p.balanceEvents.length, 1);
+  assert.equal(p.balanceEvents[0].pnl, -130);
+});
+
+test('Partially Filled zählt nicht als Fill', () => {
+  const csv = [
+    'Symbol,Side,Type,Qty,Fill Price,Status,Time',
+    'CME_MINI:NQ1!,Buy,Limit,3,30950.25,Partially Filled,2026-09-22 15:30:00',
+    'CME_MINI:NQ1!,Buy,Limit,2,30950.25,Filled,2026-09-22 15:31:00',
+  ].join('\n');
+  const p = parseTradingViewExport(csv, 'orders.csv');
+  assert.equal(p.fills.length, 1);
+  assert.equal(p.fills[0].qty, 2);
+});
+
+test('Positions-Tab wird ignoriert (keine Phantom-Fills)', () => {
+  const csv = [
+    'Symbol,Side,Qty,Avg Fill Price,Take Profit,Stop Loss',
+    'CME_MINI:NQ1!,Buy,2,30950.25,31200,30800',
+  ].join('\n');
+  const p = parseTradingViewExport(csv, 'positions.csv');
+  assert.equal(p.fills.length, 0);
+  assert.equal(p.balanceEvents.length, 0);
+});
+
+test('parseAction: Satzzeichen hinter der Zahl wird nicht mitgelesen', () => {
+  const a = parseAction('Close long position for symbol CME_MINI:NQ1! at price 30967.50, currency: USD');
+  assert.equal(a.price, 30967.5);
+  const b = parseAction('Close long position for symbol X at price 30967.50.');
+  assert.equal(b.price, 30967.5);
+});
+
 test('symbolRoot: Exchange-Prefix, Continuous, Kontraktmonate', () => {
   assert.equal(symbolRoot('CME_MINI:NQ1!'), 'NQ');
   assert.equal(symbolRoot('CME_MICRO:MNQ1!'), 'MNQ');

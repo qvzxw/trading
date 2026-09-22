@@ -63,7 +63,7 @@
       </label>
       <label class="opt">Handelstag
         <select id="day-select">
-          <option value="exchange" selected>CME-Handelstag (Schluss 17:00 New York)</option>
+          <option value="exchange" selected>CME-Handelstag (17:00 NY)</option>
           <option value="calendar">Kalendertag</option>
         </select>
       </label>
@@ -102,9 +102,10 @@
         </div>
       </div>
     </div>
-
-    <div class="warnings" id="warnings"></div>
   </div>
+
+  <!-- Außerhalb von #result-root, damit Warnungen auch bei leerem Ergebnis sichtbar sind -->
+  <div class="warnings" id="warnings"></div>
 
   <!-- Quick-Check -->
   <section class="step" id="quick-check">

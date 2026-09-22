@@ -22,7 +22,10 @@ function niceTicks(min, max, count = 5) {
   return ticks;
 }
 
-const fmtMoney = (n) => '$' + Math.round(n).toLocaleString('en-US');
+const fmtMoney = (n) => {
+  const r = Math.round(n);
+  return (r < 0 ? '-' : '') + '$' + Math.abs(r).toLocaleString('en-US');
+};
 const fmtMoneyFull = (n) => (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 function fmtDateShort(epoch) {
@@ -49,11 +52,15 @@ export function renderEquityChart(container, result, account) {
 
   const target = account.profitTarget != null ? account.size + account.profitTarget : null;
   const t0 = points[0].epoch, t1 = points[points.length - 1].epoch;
-  const values = [];
-  for (const p of points) { values.push(p.equity, p.floor); }
-  values.push(account.size);
-  if (target != null) values.push(target);
-  let yMin = Math.min(...values), yMax = Math.max(...values);
+  // Schleife statt Spread: große Exporte sprengen sonst das Argument-Limit von Math.min
+  let yMin = account.size, yMax = account.size;
+  for (const p of points) {
+    if (p.equity < yMin) yMin = p.equity;
+    if (p.equity > yMax) yMax = p.equity;
+    if (p.floor < yMin) yMin = p.floor;
+    if (p.floor > yMax) yMax = p.floor;
+  }
+  if (target != null) { yMin = Math.min(yMin, target); yMax = Math.max(yMax, target); }
   const ySpan = Math.max(yMax - yMin, 100);
   yMin -= ySpan * 0.06; yMax += ySpan * 0.06;
 
@@ -102,17 +109,16 @@ export function renderEquityChart(container, result, account) {
   el('path', { d: dArea, class: 'equity-area' }, svg);
   el('path', { d: dEq, class: 'equity-line', fill: 'none' }, svg);
 
-  // Bruch-Marker
+  // Bruch-/Pass-Marker: equityAt aus der Engine, weil mehrere Events denselben Zeitstempel teilen können
   if (result.failed && result.failed.epoch != null) {
     const fx = x(result.failed.epoch);
-    const p = nearestPoint(points, result.failed.epoch);
-    const fy = y(p.equity);
+    const fy = y(result.failed.equityAt ?? nearestPoint(points, result.failed.epoch).equity);
     el('circle', { cx: fx, cy: fy, r: 6, class: 'fail-dot' }, svg);
     el('circle', { cx: fx, cy: fy, r: 10, class: 'fail-ring' }, svg);
   }
   if (result.passed && result.passed.epoch != null) {
-    const p = nearestPoint(points, result.passed.epoch);
-    el('circle', { cx: x(result.passed.epoch), cy: y(p.equity), r: 6, class: 'pass-dot' }, svg);
+    const py = y(result.passed.equityAt ?? nearestPoint(points, result.passed.epoch).equity);
+    el('circle', { cx: x(result.passed.epoch), cy: py, r: 6, class: 'pass-dot' }, svg);
   }
 
   // Endpunkt-Marker + Label
@@ -157,7 +163,8 @@ export function renderEquityChart(container, result, account) {
     tip.style.left = `${Math.max(4, left)}px`;
     tip.style.top = `${Math.max(0, y(p.equity) * scale - 60)}px`;
   };
-  const hide = () => { cross.setAttribute('opacity', '0'); tip.hidden = true; idx = -1; };
+  // idx bleibt beim Ausblenden erhalten, damit Pfeiltasten dort weitermachen
+  const hide = () => { cross.setAttribute('opacity', '0'); tip.hidden = true; };
 
   svg.addEventListener('pointermove', (ev) => {
     const rect = svg.getBoundingClientRect();
@@ -166,7 +173,8 @@ export function renderEquityChart(container, result, account) {
     showIdx(nearestIndex(points, t));
   });
   svg.addEventListener('pointerleave', hide);
-  svg.addEventListener('focus', () => showIdx(points.length - 1));
+  // Klick fokussiert das SVG – dann nicht zum letzten Punkt springen, sondern Hover-Position halten
+  svg.addEventListener('focus', () => showIdx(idx >= 0 ? idx : points.length - 1));
   svg.addEventListener('blur', hide);
   svg.addEventListener('keydown', (ev) => {
     if (ev.key === 'ArrowLeft') { showIdx((idx < 0 ? points.length - 1 : idx) - 1); ev.preventDefault(); }

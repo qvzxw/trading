@@ -1,6 +1,6 @@
 import { FIRMS, RULES_AS_OF } from './firms.js';
 import { parseTradingViewExport, mergeParsed } from './parse.js';
-import { simulate, ddLabel } from './engine.js';
+import { simulate, ddLabel, toEpoch } from './engine.js';
 import { renderEquityChart } from './chart.js';
 import { DEMO_CSV } from './demo.js';
 
@@ -177,6 +177,7 @@ function loadDemo() {
 function renderImportStatus(merged) {
   const host = $('import-status');
   host.textContent = '';
+  $('clear-btn').hidden = state.sources.length === 0;
   if (!state.sources.length) return;
   for (const s of state.sources) {
     const line = document.createElement('div');
@@ -191,7 +192,6 @@ function renderImportStatus(merged) {
     note.textContent = 'Das sind Beispieldaten zum Ausprobieren – lade deinen eigenen Export, um deine Zahlen zu sehen.';
     host.appendChild(note);
   }
-  $('clear-btn').hidden = state.sources.length === 0;
   void merged;
 }
 
@@ -202,10 +202,12 @@ function currentOptions() {
     timeZone: $('tz-select').value,
     dayMode: $('day-select').value,
   };
-  const rs = $('range-start').value;
-  const re = $('range-end').value;
-  if (rs) opts.rangeStart = Date.parse(rs + 'T00:00:00Z');
-  if (re) opts.rangeEnd = Date.parse(re + 'T23:59:59Z');
+  // Zeitraum-Grenzen in der gewählten CSV-Zeitzone interpretieren, nicht als UTC-Mitternacht
+  const parseDay = (v) => { const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? { y: +m[1], mo: +m[2], d: +m[3] } : null; };
+  const rs = parseDay($('range-start').value || '');
+  const re = parseDay($('range-end').value || '');
+  if (rs) opts.rangeStart = toEpoch({ ...rs, h: 0, mi: 0, s: 0 }, opts.timeZone);
+  if (re) opts.rangeEnd = toEpoch({ ...re, h: 23, mi: 59, s: 59 }, opts.timeZone);
   return opts;
 }
 
@@ -214,23 +216,28 @@ function recompute() {
   const merged = mergeParsed(state.sources.map((s) => s.parsed));
   renderImportStatus(merged);
   const root = $('result-root');
-  if (!state.sources.length) { root.hidden = true; state.result = null; return; }
+  if (!state.sources.length) { root.hidden = true; state.result = null; renderWarnings([]); return; }
   const account = currentAccount();
-  const result = simulate({ account, parsed: merged, options: currentOptions() });
-  state.result = result;
-  if (result.status === 'empty') {
-    root.hidden = true;
+  try {
+    const result = simulate({ account, parsed: merged, options: currentOptions() });
+    state.result = result;
+    if (result.status === 'empty') {
+      root.hidden = true;
+      renderWarnings(result.warnings);
+      return;
+    }
+    root.hidden = false;
+    renderHero(result, account);
+    renderTiles(result, account);
+    renderEquityChart($('chart-host'), result, account);
+    renderRuleCheck(result, account);
+    renderDaysTable(result, account);
     renderWarnings(result.warnings);
-    $('warnings').hidden = false;
-    return;
+  } catch (err) {
+    root.hidden = true;
+    state.result = null;
+    renderWarnings([`Auswertung fehlgeschlagen: ${err && err.message ? err.message : err}. Prüfe die Datei oder melde das als Bug.`]);
   }
-  root.hidden = false;
-  renderHero(result, account);
-  renderTiles(result, account);
-  renderEquityChart($('chart-host'), result, account);
-  renderRuleCheck(result, account);
-  renderDaysTable(result, account);
-  renderWarnings(result.warnings);
 }
 
 function renderHero(result, account) {
@@ -244,14 +251,16 @@ function renderHero(result, account) {
   } else if (result.status === 'passed') {
     hero.classList.add('passed');
     v.textContent = 'Eval bestanden ✓';
-    why.textContent = `Profit Target ${usd(account.profitTarget)} erreicht, alle Regeln eingehalten — bestanden am ${fmtDay(result.passed.day)}.`;
+    const afterDays = result.days.filter((d) => d.afterPass).length;
+    why.textContent = `Profit Target ${usd(account.profitTarget)} erreicht, alle Regeln eingehalten — bestanden am ${fmtDay(result.passed.day)}.` +
+      (afterDays ? ` Die ${afterDays} Handelstage danach zählen für die Eval nicht mehr.` : '');
   } else {
     hero.classList.add('ongoing');
     v.textContent = account.profitTarget != null ? 'Läuft noch' : 'Account lebt noch';
     const bits = [];
     if (result.stats.distToTarget != null && result.stats.distToTarget > 0) bits.push(`noch ${usd(result.stats.distToTarget)} bis zum Target`);
     else if (result.targetReachedAt) bits.push('Target erreicht');
-    if (!result.stats.consistency.ok) bits.push('Consistency noch nicht erfüllt');
+    if (!result.stats.consistency.ok && account.consistency && account.consistency.scope === 'eval') bits.push('Consistency noch nicht erfüllt');
     if ((account.minDays || 0) > result.stats.tradingDays) bits.push(`noch ${account.minDays - result.stats.tradingDays} Handelstag(e) nötig`);
     bits.push(`${usd(result.stats.roomToFloor)} Luft bis zum Drawdown-Limit`);
     why.textContent = 'Kein Regelbruch bisher — ' + bits.join(', ') + '.';
@@ -367,7 +376,7 @@ function renderRuleCheck(result, account) {
   }
 }
 
-function renderDaysTable(result) {
+function renderDaysTable(result, account) {
   const table = $('days-table');
   table.textContent = '';
   const thead = document.createElement('thead');
@@ -377,16 +386,19 @@ function renderDaysTable(result) {
   }
   thead.appendChild(hr);
   const tbody = document.createElement('tbody');
+  const intraday = account.drawdown.type === 'intraday_trailing';
   for (const d of result.days) {
     const tr = document.createElement('tr');
-    if (d.afterFail) tr.className = 'after-fail';
+    if (d.afterFail || d.afterPass) tr.className = 'after-fail';
+    // Beim Intraday-Trailing gilt zum Tagesschluss der nachgezogene Floor, nicht der vom Tagesanfang
+    const floor = intraday ? d.floorNext : d.floor;
     const cells = [
       { t: fmtDay(d.day) },
       { t: String(d.trades) },
       { t: usdSigned(d.pnl), cls: d.pnl > 0 ? 'pos' : d.pnl < 0 ? 'neg' : '' },
       { t: usd(d.eodBalance) },
-      { t: usd(d.floor) },
-      { t: usd(d.eodBalance - d.floor) },
+      { t: usd(floor) },
+      { t: usd(d.eodBalance - floor) },
     ];
     cells.forEach((c, i) => {
       const td = document.createElement('td');
@@ -433,7 +445,11 @@ function bindQuickCheck() {
     const start = parseFloat($('qc-start').value) || a.size;
     let hwm = parseFloat($('qc-hwm').value);
     if (!Number.isFinite(bal)) return;
-    if (!Number.isFinite(hwm) || hwm < Math.max(bal, start)) hwm = Math.max(bal, start);
+    // Intraday-Trailing: Watermark kann nie unter der aktuellen Equity liegen.
+    // EOD-Trailing: das EOD-Hoch darf unter dem aktuellen Stand liegen (Intraday-Gewinn heute).
+    if (!Number.isFinite(hwm)) hwm = Math.max(bal, start);
+    if (a.drawdown.type === 'intraday_trailing') hwm = Math.max(hwm, bal, start);
+    else hwm = Math.max(hwm, start);
     const equity = a.size + (bal - start);
     const propHwm = a.size + (hwm - start);
     let floor;
@@ -473,6 +489,20 @@ function renderFooter() {
 
 // ---------- Init ----------
 
+function bindChartResize() {
+  const host = $('chart-host');
+  let lastWidth = host.clientWidth;
+  if (typeof ResizeObserver === 'undefined') return;
+  const ro = new ResizeObserver(() => {
+    const w = host.clientWidth;
+    if (Math.abs(w - lastWidth) > 1 && state.result && state.result.status !== 'empty' && !$('result-root').hidden) {
+      lastWidth = w;
+      renderEquityChart(host, state.result, currentAccount());
+    }
+  });
+  ro.observe(host);
+}
+
 function init() {
   state.firmId = store.get('firm') || FIRMS[0].id;
   if (!FIRMS.some((f) => f.id === state.firmId)) state.firmId = FIRMS[0].id;
@@ -481,6 +511,7 @@ function init() {
   renderFirms();
   bindImport();
   bindQuickCheck();
+  bindChartResize();
   renderFooter();
   loadDemo(); // Seite öffnet mit Beispieldaten, klar als solche markiert
 }

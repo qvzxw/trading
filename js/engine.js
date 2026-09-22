@@ -113,20 +113,27 @@ export function contractUsage(fills) {
   const pos = new Map(); // root -> signed qty
   let maxTotalMinis = 0;
   let maxSingle = { root: null, qty: 0 };
+  const skipped = new Set();
   const sorted = [...fills].sort((a, b) => a.epoch - b.epoch);
   for (const f of sorted) {
-    const spec = symbolSpec(f.symbol) || { root: f.symbol, miniEquiv: 1 };
+    const spec = symbolSpec(f.symbol);
+    // Unbekannte Symbole (Aktien, Krypto-Spot …) nicht als Futures-Kontrakte zählen
+    if (!spec || spec.multiplier == null) {
+      if (spec) skipped.add(spec.root);
+      continue;
+    }
     const dir = f.side === 'buy' ? 1 : -1;
     pos.set(spec.root, (pos.get(spec.root) || 0) + dir * f.qty);
     let total = 0;
     for (const [root, q] of pos) {
-      const s = symbolSpec(root) || { miniEquiv: 1 };
-      total += Math.abs(q) * (s.miniEquiv ?? 1);
+      const s = symbolSpec(root);
+      // Firms zählen 10 Micros = 1 Mini, unabhängig vom Notional
+      total += Math.abs(q) * (s && s.micro ? 0.1 : 1);
       if (Math.abs(q) > maxSingle.qty) maxSingle = { root, qty: Math.abs(q) };
     }
     maxTotalMinis = Math.max(maxTotalMinis, total);
   }
-  return { maxTotalMinis, maxSingle };
+  return { maxTotalMinis, maxSingle, skippedRoots: [...skipped] };
 }
 
 // ---------- Kernsimulation ----------
@@ -157,7 +164,9 @@ export function simulate({ account, parsed, options = {} }) {
   const resetIdx = events.reduce((acc, e, i) => (e.reset ? i : acc), -1);
   if (resetIdx >= 0 && options.ignoreResets !== true) {
     const dropped = resetIdx + 1;
+    const resetEpoch = events[resetIdx].epoch;
     events = events.slice(dropped);
+    fills = fills.filter((f) => f.epoch > resetEpoch); // Kontrakt-Check nicht mit Vor-Reset-Trades füttern
     warnings.push(`Paper-Konto-Reset im Export erkannt – die ${dropped} Einträge davor wurden ignoriert. Simulation startet nach dem Reset.`);
   }
   const adjustments = events.filter((e) => e.adjustment && !e.reset);
@@ -197,10 +206,11 @@ export function simulate({ account, parsed, options = {} }) {
     if (hard && !failed) failed = v;
   };
 
-  // Events nach Handelstag gruppieren
+  // Events nach Handelstag gruppieren ('local' = echte Systemzeitzone, nicht der NY-Default)
+  const displayTz = tz === 'local' ? Intl.DateTimeFormat().resolvedOptions().timeZone : tz;
   const byDay = new Map();
   for (const e of events) {
-    const day = tradingDay(e.epoch, dayMode, tz === 'local' ? undefined : tz);
+    const day = tradingDay(e.epoch, dayMode, displayTz);
     if (!byDay.has(day)) byDay.set(day, []);
     byDay.get(day).push(e);
   }
@@ -209,6 +219,16 @@ export function simulate({ account, parsed, options = {} }) {
   points.push({ epoch: events[0].epoch - 1, equity, floor: floorNow() });
 
   const consistencyDayPnl = new Map();
+  const evalCons = account.consistency && account.consistency.scope === 'eval' ? account.consistency : null;
+  // Eval-Consistency zum aktuellen Moment: bester Tag (inkl. laufendem Tag) vs. Gesamtprofit.
+  // Payout-Consistency (scope 'payout', z. B. Apex) blockt das Bestehen nicht.
+  const evalConsOkNow = (dayPnlNow, totalPnl) => {
+    if (!evalCons) return true;
+    let bestD = Math.max(0, dayPnlNow);
+    for (const v of consistencyDayPnl.values()) bestD = Math.max(bestD, v);
+    if (totalPnl <= 0 || bestD <= 0) return true;
+    return (bestD / totalPnl) * 100 <= evalCons.pct + 1e-9;
+  };
 
   for (const day of dayKeys) {
     const dayEvents = byDay.get(day);
@@ -226,21 +246,22 @@ export function simulate({ account, parsed, options = {} }) {
 
       // Daily Loss Limit
       const dayPnl = equity - dayStartEquity;
-      if (account.dailyLoss && dayPnl <= -account.dailyLoss.amount && !dayLocked && !failed) {
+      if (account.dailyLoss && dayPnl <= -account.dailyLoss.amount && !dayLocked && !failed && !passed) {
         dayLocked = true;
         const hard = account.dailyLoss.onHit === 'fail';
         addViolation({
-          type: 'daily_loss', epoch: e.epoch, day,
+          type: 'daily_loss', epoch: e.epoch, day, equityAt: equity,
           detail: `Daily Loss Limit (${fmtUsd(account.dailyLoss.amount)}) erreicht: Tages-P&L ${fmtUsd(dayPnl)}`,
         }, hard);
       }
 
-      // Drawdown-Bruch
-      if (!failed) {
+      // Drawdown-Bruch. Nach einem DLL-Lock wäre der Rest des Tages auf dem Firm-Konto
+      // gar nicht mehr gehandelt worden – diese Trades zählen nicht als Bruch.
+      if (!failed && !passed && !dayLocked) {
         const breachRealtime = dd.type === 'intraday_trailing' || dd.type === 'static' || dd.breachCheck === 'realtime';
         if (breachRealtime && equity <= floor) {
           addViolation({
-            type: 'drawdown', epoch: e.epoch, day,
+            type: 'drawdown', epoch: e.epoch, day, equityAt: equity,
             detail: `${ddLabel(dd)} verletzt: Equity ${fmtUsd(equity)} ≤ Limit ${fmtUsd(floor)}`,
           }, true);
         }
@@ -249,9 +270,20 @@ export function simulate({ account, parsed, options = {} }) {
       // Trailing-Watermark NACH dem Bruch-Check anheben
       if (dd.type === 'intraday_trailing') watermark = Math.max(watermark, equity);
 
-      // Profit Target
+      // Profit Target (Anzeige: erster Touch)
       if (target != null && targetReachedAt == null && equity >= target && !failed) {
         targetReachedAt = { epoch: e.epoch, day };
+      }
+
+      // Bestanden? Firms werten in Echtzeit: In dem Moment, in dem Equity über der
+      // Target-Balance liegt UND Mindesttage UND Eval-Consistency (inkl. laufendem Tag)
+      // gleichzeitig erfüllt sind, ist die Eval durch. Ein früherer Target-Touch allein
+      // reicht nicht – fällt die Equity zurück, muss sie erneut über das Target.
+      if (!failed && !passed && !dayLocked && target != null && equity >= target) {
+        const daysSoFar = days.length + 1; // der laufende Tag zählt mit
+        if (daysSoFar >= (account.minDays || 0) && evalConsOkNow(dayPnl, equity - size)) {
+          passed = { epoch: e.epoch, day, equityAt: equity };
+        }
       }
     }
 
@@ -260,9 +292,9 @@ export function simulate({ account, parsed, options = {} }) {
     const dayPnl = eodBalance - dayStartEquity;
     consistencyDayPnl.set(day, dayPnl);
 
-    if (dd.type === 'eod_trailing' && dd.breachCheck === 'eod' && !failed && eodBalance <= dayFloor) {
+    if (dd.type === 'eod_trailing' && dd.breachCheck === 'eod' && !failed && !passed && eodBalance <= dayFloor) {
       addViolation({
-        type: 'drawdown', epoch: dayEvents[dayEvents.length - 1].epoch, day,
+        type: 'drawdown', epoch: dayEvents[dayEvents.length - 1].epoch, day, equityAt: eodBalance,
         detail: `${ddLabel(dd)} verletzt: Tagesschluss ${fmtUsd(eodBalance)} ≤ Limit ${fmtUsd(dayFloor)}`,
       }, true);
     }
@@ -273,34 +305,42 @@ export function simulate({ account, parsed, options = {} }) {
       day, pnl: dayPnl, eodBalance, floor: dayFloor, floorNext: floorNow(),
       min: dayMin, max: dayMax, trades: dayEvents.length, locked: dayLocked,
       afterFail: !!failed && failed.day !== day && dayKeys.indexOf(day) > dayKeys.indexOf(failed.day),
+      afterPass: !!passed && passed.day !== day,
     });
 
-    // Bestanden? (Target + Mindesttage + ggf. Consistency, ohne vorherigen Fail)
-    // Consistency blockt das Bestehen nur, wenn sie in der Eval gilt (scope 'eval') –
-    // Payout-Consistency (z. B. Apex) ist für die Eval egal.
-    if (!failed && !passed && targetReachedAt) {
-      const tradingDaysSoFar = days.length;
-      const minDaysOk = tradingDaysSoFar >= (account.minDays || 0);
-      const evalCons = account.consistency && account.consistency.scope === 'eval' ? account.consistency : null;
-      const cons = consistencyState(consistencyDayPnl, equity - size, evalCons);
-      if (minDaysOk && cons.ok) passed = { epoch: dayEvents[dayEvents.length - 1].epoch, day };
-    }
   }
 
-  // 5. Statistiken
-  const dayList = days.filter((d) => !d.afterFail);
+  // 5. Statistiken – nur über die Tage, die für die Eval zählen (bis Fail bzw. Pass)
+  const dayList = days.filter((d) => !d.afterFail && !d.afterPass);
   const netPnl = equity - size;
-  const best = days.reduce((a, d) => (d.pnl > a.pnl ? d : a), { pnl: -Infinity });
-  const worst = days.reduce((a, d) => (d.pnl < a.pnl ? d : a), { pnl: Infinity });
-  const minRoom = Math.min(...points.map((p) => p.equity - p.floor));
-  const consistency = consistencyState(consistencyDayPnl, netPnl, account.consistency);
+  const best = dayList.reduce((a, d) => (d.pnl > a.pnl ? d : a), { pnl: -Infinity });
+  const worst = dayList.reduce((a, d) => (d.pnl < a.pnl ? d : a), { pnl: Infinity });
+
+  // Knappster Moment: nur bis zum Fail; bei reinem EOD-Check zählt der Tagesschluss,
+  // Intraday-Dips unters Limit sind dort erlaubt und wären irreführend.
+  let minRoom = Infinity;
+  if (dd.type === 'eod_trailing' && dd.breachCheck === 'eod') {
+    for (const d of dayList) minRoom = Math.min(minRoom, d.eodBalance - d.floor);
+  } else {
+    const failEpoch = failed && failed.epoch != null ? failed.epoch : Infinity;
+    for (const p of points) if (p.epoch <= failEpoch) minRoom = Math.min(minRoom, p.equity - p.floor);
+  }
+  if (!Number.isFinite(minRoom)) minRoom = equity - floorNow();
+
+  const evalDayPnl = new Map(dayList.map((d) => [d.day, d.pnl]));
+  const consistency = consistencyState(evalDayPnl, netPnl, account.consistency);
   const usage = fills.length ? contractUsage(fills) : null;
 
-  if (usage && account.maxContracts != null && usage.maxTotalMinis > account.maxContracts + 1e-9) {
-    addViolation({
-      type: 'contracts', epoch: null, day: null,
-      detail: `Kontrakt-Limit überschritten: max. ${round1(usage.maxTotalMinis)} Minis gleichzeitig (erlaubt: ${account.maxContracts})`,
-    }, false);
+  if (usage) {
+    for (const root of usage.skippedRoots || []) {
+      warnings.push(`Symbol ${root}: kein bekannter Futures-Kontrakt – zählt nicht für das Kontrakt-Limit.`);
+    }
+    if (account.maxContracts != null && usage.maxTotalMinis > account.maxContracts + 1e-9) {
+      addViolation({
+        type: 'contracts', epoch: null, day: null,
+        detail: `Kontrakt-Limit überschritten: max. ${round1(usage.maxTotalMinis)} Minis gleichzeitig (erlaubt: ${account.maxContracts})`,
+      }, false);
+    }
   }
 
   const status = failed ? 'failed' : passed ? 'passed' : 'ongoing';
@@ -310,7 +350,7 @@ export function simulate({ account, parsed, options = {} }) {
     violations, days, points, warnings,
     stats: {
       netPnl, endEquity: equity, floorEnd: floorNow(),
-      tradingDays: days.length,
+      tradingDays: dayList.length,
       bestDay: best.pnl === -Infinity ? null : best,
       worstDay: worst.pnl === Infinity ? null : worst,
       minRoom,
