@@ -1,6 +1,6 @@
 // Service Worker: Network-first mit Cache-Fallback – App bleibt offline nutzbar,
 // bekommt aber immer die frischeste Version, sobald Netz da ist.
-const CACHE = 'prop-replay-v1';
+const CACHE = 'prop-replay-v2';
 const CORE = [
   './',
   'index.html',
@@ -33,7 +33,9 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || !req.url.startsWith(self.location.origin)) return;
   e.respondWith(
-    fetch(req)
+    // 'no-cache': immer beim Server revalidieren, damit Updates sofort ankommen
+    // statt bis zu 10 Minuten im HTTP-Cache zu hängen
+    fetch(req, { cache: 'no-cache' })
       .then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put(req, copy));
