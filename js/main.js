@@ -317,7 +317,7 @@ function renderRuleCheck(result, account) {
   host.append(ruleItem(
     ddViol ? 'bad' : 'ok',
     ddLabel(account.drawdown),
-    ddViol ? ddViol.detail : `eingehalten – knappster Moment: ${usd(st.minRoom)} Luft`,
+    ddViol ? ddViol.detail.replace(`${ddLabel(account.drawdown)} verletzt: `, 'verletzt: ') : `eingehalten – knappster Moment: ${usd(st.minRoom)} Luft`,
   ));
 
   if (account.dailyLoss) {
@@ -489,6 +489,34 @@ function renderFooter() {
 
 // ---------- Init ----------
 
+// Börsenticker im Header: Auswahl der Accounts als laufendes Band
+function renderTicker() {
+  const host = $('ticker');
+  if (!host) return;
+  // Firms abwechseln, damit das Band nicht mit einer Firm anfängt und aufhört
+  const perFirm = FIRMS.map((f) =>
+    f.accounts.filter((a) => a.profitTarget != null).slice(0, 4)
+      .map((a) => `${f.name.toUpperCase()} ${a.label.toUpperCase()} — TARGET ${usd(a.profitTarget)} · DD ${usd(a.drawdown.amount)}`)
+  );
+  const sel = [];
+  for (let i = 0; i < 4; i++) for (const list of perFirm) if (list[i]) sel.push(list[i]);
+  host.textContent = '';
+  const track = document.createElement('div');
+  track.className = 'ticker-track';
+  for (let rep = 0; rep < 2; rep++) {
+    const group = document.createElement('div');
+    group.className = 'ticker-group';
+    sel.forEach((t, i) => {
+      const s = document.createElement('span');
+      s.className = 'ticker-item ' + (i % 3 === 0 ? 'up' : i % 3 === 1 ? 'down' : '');
+      s.textContent = t;
+      group.appendChild(s);
+    });
+    track.appendChild(group);
+  }
+  host.appendChild(track);
+}
+
 function bindChartResize() {
   const host = $('chart-host');
   let lastWidth = host.clientWidth;
@@ -509,6 +537,7 @@ function init() {
   const savedAcct = store.get('acct');
   state.acctId = currentFirm().accounts.some((a) => a.id === savedAcct) ? savedAcct : currentFirm().accounts[0].id;
   renderFirms();
+  renderTicker();
   bindImport();
   bindQuickCheck();
   bindChartResize();

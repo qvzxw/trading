@@ -73,6 +73,12 @@ export function renderEquityChart(container, result, account) {
     tabindex: '0', class: 'equity-chart',
   }, container);
 
+  // Gradient für die Equity-Fläche (Farben kommen aus dem CSS-Theme)
+  const defs = el('defs', {}, svg);
+  const grad = el('linearGradient', { id: 'eq-grad', x1: '0', y1: '0', x2: '0', y2: '1' }, defs);
+  el('stop', { offset: '0%', class: 'eq-grad-a' }, grad);
+  el('stop', { offset: '100%', class: 'eq-grad-b' }, grad);
+
   // Gridlines + Y-Achse
   const yTicks = niceTicks(yMin, yMax, 5);
   for (const v of yTicks) {

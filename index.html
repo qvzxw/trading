@@ -8,16 +8,17 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
 <div class="wrap">
 
   <header class="site-head">
-    <h1><span class="tick">▮</span> Prop Replay</h1>
-    <span class="sub">TradingView-Paper-Trading gegen echte Prop-Firm-Regeln laufen lassen</span>
+    <h1 class="brand"><span class="brand-a">Prop</span><span class="brand-b">Replay</span></h1>
+    <p class="sub">Dein TradingView-Paper-Trading gegen echte Prop-Firm-Regeln — wärst du gefundet oder geplatzt?</p>
   </header>
+  <div class="ticker" id="ticker" aria-hidden="true"></div>
 
   <!-- Schritt 1: Firma + Account -->
   <section class="step" id="step-firm">
@@ -41,6 +42,9 @@
     <div class="import-grid">
       <div class="dropzone" id="dropzone" role="button" tabindex="0"
            aria-label="CSV-Dateien hierher ziehen oder klicken zum Auswählen">
+        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/>
+        </svg>
         <strong>CSV-Dateien hier reinziehen</strong> oder klicken zum Auswählen
         <span class="small">„Alle Tabs“ lädt mehrere Dateien herunter – zieh sie einfach alle zusammen rein. Gebraucht wird die Guthabenübersicht (Balance History); der Order-Verlauf zusätzlich macht den Kontrakt-Check möglich. Deutsche und englische Header werden erkannt.</span>
         <input type="file" id="file-input" class="hidden-input" accept=".csv,text/csv,text/plain" multiple>
