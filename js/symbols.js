@@ -25,11 +25,11 @@ const SPECS = {
   // Metalle
   GC:  { name: 'Gold',                  multiplier: 100,    miniEquiv: 1 },
   MGC: { name: 'Micro Gold',            multiplier: 10,     miniEquiv: 0.1, micro: true },
-  SI:  { name: 'Silber',                multiplier: 5000,   miniEquiv: 1 },
-  SIL: { name: 'Micro Silber',          multiplier: 1000,   miniEquiv: 0.2, micro: true },
-  HG:  { name: 'Kupfer',                multiplier: 25000,  miniEquiv: 1 },
-  MHG: { name: 'Micro Kupfer',          multiplier: 2500,   miniEquiv: 0.1, micro: true },
-  PL:  { name: 'Platin',                multiplier: 50,     miniEquiv: 1 },
+  SI:  { name: 'Silver',                multiplier: 5000,   miniEquiv: 1 },
+  SIL: { name: 'Micro Silver',          multiplier: 1000,   miniEquiv: 0.2, micro: true },
+  HG:  { name: 'Copper',                multiplier: 25000,  miniEquiv: 1 },
+  MHG: { name: 'Micro Copper',          multiplier: 2500,   miniEquiv: 0.1, micro: true },
+  PL:  { name: 'Platinum',                multiplier: 50,     miniEquiv: 1 },
   // Zinsen
   ZB:  { name: '30Y T-Bond',            multiplier: 1000,   miniEquiv: 1 },
   ZN:  { name: '10Y T-Note',            multiplier: 1000,   miniEquiv: 1 },
@@ -47,11 +47,11 @@ const SPECS = {
   M6A: { name: 'Micro AUD',             multiplier: 10000,  miniEquiv: 0.1, micro: true },
   '6C': { name: 'Canadian Dollar',      multiplier: 100000, miniEquiv: 1 },
   // Agrar
-  ZC:  { name: 'Mais',                  multiplier: 50,     miniEquiv: 1 },
-  ZW:  { name: 'Weizen',                multiplier: 50,     miniEquiv: 1 },
-  ZS:  { name: 'Sojabohnen',            multiplier: 50,     miniEquiv: 1 },
-  ZL:  { name: 'Sojaöl',                multiplier: 600,    miniEquiv: 1 },
-  ZM:  { name: 'Sojamehl',              multiplier: 100,    miniEquiv: 1 },
+  ZC:  { name: 'Corn',                  multiplier: 50,     miniEquiv: 1 },
+  ZW:  { name: 'Wheat',                multiplier: 50,     miniEquiv: 1 },
+  ZS:  { name: 'Soybeans',            multiplier: 50,     miniEquiv: 1 },
+  ZL:  { name: 'Soybean Oil',                multiplier: 600,    miniEquiv: 1 },
+  ZM:  { name: 'Soybean Meal',              multiplier: 100,    miniEquiv: 1 },
   LE:  { name: 'Live Cattle',           multiplier: 400,    miniEquiv: 1 },
   HE:  { name: 'Lean Hogs',             multiplier: 400,    miniEquiv: 1 },
   // Krypto (CME)

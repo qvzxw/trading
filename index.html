@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -14,78 +14,118 @@
 <body>
 <div class="wrap">
 
-  <header class="site-head">
-    <h1 class="brand"><span class="brand-a">Prop</span><span class="brand-b">Replay</span></h1>
-    <p class="sub">Dein TradingView-Paper-Trading gegen echte Prop-Firm-Regeln — wärst du gefundet oder geplatzt?</p>
-  </header>
-  <div class="ticker" id="ticker" aria-hidden="true"></div>
+  <!-- ===================== SETUP PAGE ===================== -->
+  <div id="view-setup">
 
-  <!-- Schritt 1: Firma + Account -->
-  <section class="step" id="step-firm">
-    <div class="step-head">
-      <span class="step-no">01</span>
-      <h2>Prop Firm &amp; Account wählen</h2>
-      <span class="hint">Regeln der Evaluation (Challenge-Phase)</span>
-    </div>
-    <div class="firm-row" id="firm-row" role="group" aria-label="Prop Firm"></div>
-    <div class="acct-row" id="acct-row" role="group" aria-label="Account"></div>
-    <div class="rules-summary" id="rules-summary"></div>
-  </section>
+    <header class="site-head">
+      <h1 class="brand"><span class="brand-a">Prop</span><span class="brand-b">Replay</span></h1>
+      <p class="sub">Run your TradingView paper trading against real prop firm rules — would you be funded or blown?</p>
+    </header>
+    <div class="ticker" id="ticker" aria-hidden="true"></div>
 
-  <!-- Schritt 2: Daten -->
-  <section class="step" id="step-data">
-    <div class="step-head">
-      <span class="step-no">02</span>
-      <h2>TradingView-Export laden</h2>
-      <span class="hint">Papierhandel → Download-Symbol → „Daten herunterladen“</span>
-    </div>
-    <div class="import-grid">
-      <div class="dropzone" id="dropzone" role="button" tabindex="0"
-           aria-label="CSV-Dateien hierher ziehen oder klicken zum Auswählen">
-        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/>
-        </svg>
-        <strong>CSV-Dateien hier reinziehen</strong> oder klicken zum Auswählen
-        <span class="small">„Alle Tabs“ lädt mehrere Dateien herunter – zieh sie einfach alle zusammen rein. Gebraucht wird die Guthabenübersicht (Balance History); der Order-Verlauf zusätzlich macht den Kontrakt-Check möglich. Deutsche und englische Header werden erkannt.</span>
-        <input type="file" id="file-input" class="hidden-input" accept=".csv,text/csv,text/plain" multiple>
+    <section class="step" id="step-firm">
+      <div class="step-head">
+        <span class="step-no">01</span>
+        <h2>Pick your prop firm &amp; account</h2>
+        <span class="hint">Evaluation (challenge phase) rules</span>
       </div>
-      <div class="paste-box">
-        <textarea id="paste-area" placeholder="…oder CSV-Inhalt hier einfügen" aria-label="CSV-Inhalt einfügen"></textarea>
-        <div style="display:flex; gap:8px; flex-wrap:wrap">
-          <button class="btn primary" id="paste-btn">Einfügen auswerten</button>
-          <button class="btn ghost" id="demo-btn">Beispieldaten laden</button>
-          <button class="btn ghost" id="clear-btn" hidden>Daten löschen</button>
+      <div class="firm-row" id="firm-row" role="group" aria-label="Prop firm"></div>
+      <div class="acct-row" id="acct-row" role="group" aria-label="Account"></div>
+      <div class="rules-summary" id="rules-summary"></div>
+    </section>
+
+    <section class="step" id="step-data">
+      <div class="step-head">
+        <span class="step-no">02</span>
+        <h2>Load your TradingView export</h2>
+        <span class="hint">Paper Trading panel → download icon → “Export data”</span>
+      </div>
+      <div class="import-grid">
+        <div class="dropzone" id="dropzone" role="button" tabindex="0"
+             aria-label="Drop CSV files here or click to choose">
+          <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/>
+          </svg>
+          <strong>Drop your CSV files here</strong> or click to choose
+          <span class="small">“Export all tabs” downloads several files – drag them all in together. The Balance History is required; adding the Order History enables the contract-limit check. German and English headers are both recognized.</span>
+          <input type="file" id="file-input" class="hidden-input" accept=".csv,text/csv,text/plain" multiple>
+        </div>
+        <div class="paste-box">
+          <textarea id="paste-area" placeholder="…or paste CSV content here" aria-label="Paste CSV content"></textarea>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <button class="btn primary" id="paste-btn">Analyze paste</button>
+            <button class="btn ghost" id="demo-btn">Load sample data</button>
+            <button class="btn ghost" id="clear-btn" hidden>Clear data</button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="import-status" id="import-status"></div>
-    <div class="opts-row" id="opts-row">
-      <label class="opt">Zeitzone im CSV (= deine Chart-Zeitzone)
-        <select id="tz-select">
-          <option value="America/New_York" selected>New York (UTC-4/-5)</option>
-          <option value="Europe/Berlin">Berlin (UTC+1/+2)</option>
-          <option value="America/Chicago">Chicago (UTC-5/-6)</option>
-          <option value="UTC">UTC</option>
-          <option value="local">Meine Systemzeit</option>
-        </select>
-      </label>
-      <label class="opt">Handelstag
-        <select id="day-select">
-          <option value="exchange" selected>CME-Handelstag (17:00 NY)</option>
-          <option value="calendar">Kalendertag</option>
-        </select>
-      </label>
-      <label class="opt">Von
-        <input type="date" id="range-start">
-      </label>
-      <label class="opt">Bis
-        <input type="date" id="range-end">
-      </label>
-    </div>
-  </section>
+      <div class="import-status" id="import-status"></div>
+      <div class="opts-row" id="opts-row">
+        <label class="opt">CSV timezone (= your chart timezone)
+          <select id="tz-select">
+            <option value="America/New_York" selected>New York (UTC-4/-5)</option>
+            <option value="Europe/Berlin">Berlin (UTC+1/+2)</option>
+            <option value="America/Chicago">Chicago (UTC-5/-6)</option>
+            <option value="UTC">UTC</option>
+            <option value="local">My system time</option>
+          </select>
+        </label>
+        <label class="opt">Trading day
+          <select id="day-select">
+            <option value="exchange" selected>CME trading day (5:00 PM NY)</option>
+            <option value="calendar">Calendar day</option>
+          </select>
+        </label>
+        <label class="opt">From
+          <input type="date" id="range-start">
+        </label>
+        <label class="opt">To
+          <input type="date" id="range-end">
+        </label>
+      </div>
+      <div class="cta-row">
+        <button class="btn primary big" id="run-btn" disabled>Run the replay →</button>
+        <span class="cta-hint" id="run-hint"></span>
+      </div>
+    </section>
 
-  <!-- Ergebnis -->
-  <div id="result-root" hidden>
+    <div class="warnings" id="warnings"></div>
+
+    <section class="step" id="quick-check">
+      <div class="step-head">
+        <span class="step-no">✦</span>
+        <h2>Quick check without a CSV</h2>
+        <span class="hint">Where is my limit right now?</span>
+      </div>
+      <div class="quick-grid">
+        <label class="opt">Current paper balance
+          <input type="number" id="qc-balance" step="0.01" placeholder="50655.00">
+        </label>
+        <label class="opt">Highest balance so far <span id="qc-hwm-label">(EOD high)</span>
+          <input type="number" id="qc-hwm" step="0.01" placeholder="51100.00">
+        </label>
+        <label class="opt">Paper starting balance
+          <input type="number" id="qc-start" step="0.01" placeholder="50000.00">
+        </label>
+        <button class="btn primary" id="qc-btn">Calculate</button>
+      </div>
+      <div class="quick-out" id="qc-out"></div>
+    </section>
+
+  </div>
+
+  <!-- ===================== RESULTS PAGE ===================== -->
+  <div id="view-results" hidden>
+
+    <div class="results-bar">
+      <button class="btn ghost" id="back-btn">← Setup</button>
+      <span class="results-brand" aria-hidden="true">Prop<span>Replay</span></span>
+      <label class="opt ctx-opt">
+        <span class="visually-hidden">Switch account</span>
+        <select id="ctx-select" aria-label="Switch firm and account"></select>
+      </label>
+    </div>
+
     <div class="result-hero" id="result-hero">
       <span class="verdict" id="verdict"></span>
       <span class="why" id="verdict-why"></span>
@@ -94,61 +134,44 @@
     <div class="tiles" id="tiles"></div>
 
     <div class="chart-card">
-      <h3>Equity vs. Drawdown-Limit</h3>
+      <h3>Equity vs. drawdown limit</h3>
       <div class="chart-host" id="chart-host"></div>
+    </div>
+
+    <div class="chart-card">
+      <h3>P&amp;L calendar</h3>
+      <div id="calendar-host"></div>
     </div>
 
     <div class="result-cols">
       <div class="panel">
-        <h3>Regel-Check</h3>
+        <h3>Rule check</h3>
         <div class="rule-check" id="rule-check"></div>
       </div>
       <div class="panel">
-        <h3>Handelstage</h3>
+        <h3>Trading days</h3>
         <div class="table-wrap">
           <table class="days" id="days-table"></table>
         </div>
       </div>
     </div>
+
+    <div class="warnings" id="result-warnings"></div>
+
   </div>
-
-  <!-- Außerhalb von #result-root, damit Warnungen auch bei leerem Ergebnis sichtbar sind -->
-  <div class="warnings" id="warnings"></div>
-
-  <!-- Quick-Check -->
-  <section class="step" id="quick-check">
-    <div class="step-head">
-      <span class="step-no">✦</span>
-      <h2>Quick-Check ohne CSV</h2>
-      <span class="hint">Wo steht mein Limit gerade?</span>
-    </div>
-    <div class="quick-grid">
-      <label class="opt">Aktueller Kontostand (Paper)
-        <input type="number" id="qc-balance" step="0.01" placeholder="50655.00">
-      </label>
-      <label class="opt">Höchster Stand bisher <span id="qc-hwm-label">(EOD-Hoch)</span>
-        <input type="number" id="qc-hwm" step="0.01" placeholder="51100.00">
-      </label>
-      <label class="opt">Paper-Startguthaben
-        <input type="number" id="qc-start" step="0.01" placeholder="50000.00">
-      </label>
-      <button class="btn primary" id="qc-btn">Rechnen</button>
-    </div>
-    <div class="quick-out" id="qc-out"></div>
-  </section>
 
   <p class="footer-note" id="footer-note"></p>
 </div>
 
 <script type="module" src="js/main.js"></script>
 <script>
-// PWA: Service Worker nur registrieren, wo er unterstützt und sinnvoll ist
-// (auf der echten Website – nicht in Sandbox-Umgebungen, die ihn eh ablehnen).
+// PWA: register the service worker only where it is supported and useful
+// (on the real website – not in sandboxed environments that reject it anyway).
 try {
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
-} catch (e) { /* egal – App läuft auch ohne */ }
+} catch (e) { /* fine – the app works without it */ }
 </script>
 </body>
 </html>

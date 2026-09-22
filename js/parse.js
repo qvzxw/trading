@@ -281,12 +281,12 @@ export function parseTradingViewExport(text, fileName) {
   const num = (v) => parseNumber(v, style);
   const sections = splitSections(clean);
   if (sections.length === 0) {
-    out.warnings.push(`${fileName || 'Datei'}: keine bekannte Tabelle erkannt (weder Guthabenübersicht noch Handelsverlauf).`);
+    out.warnings.push(`${fileName || 'File'}: no known table recognized (neither balance history nor trade history).`);
     return out;
   }
   for (const sec of sections) {
     if (sec.kind === 'balance') {
-      out.detected.push('Guthabenübersicht');
+      out.detected.push('Balance History');
       for (const row of sec.rows) {
         const time = parseTimestamp(cell(row, sec.map.time));
         const before = num(cell(row, sec.map.balanceBefore));
@@ -303,7 +303,7 @@ export function parseTradingViewExport(text, fileName) {
         });
       }
     } else if (sec.kind === 'fills' || sec.kind === 'orders') {
-      out.detected.push(sec.kind === 'orders' ? 'Order-Verlauf' : 'Handelsverlauf');
+      out.detected.push(sec.kind === 'orders' ? 'Order History' : 'Trade History');
       for (const row of sec.rows) {
         const status = norm(cell(row, sec.map.status) || '');
         // Exakter Match: "Partially Filled"/"Teilweise ausgeführt" zählen nicht als Fill
@@ -321,7 +321,7 @@ export function parseTradingViewExport(text, fileName) {
     }
   }
   if (out.balanceEvents.length === 0 && out.fills.length === 0) {
-    out.warnings.push(`${fileName || 'Datei'}: Tabellen erkannt (${out.detected.join(', ') || '–'}), aber keine verwertbaren Zeilen gefunden.`);
+    out.warnings.push(`${fileName || 'File'}: tables recognized (${out.detected.join(', ') || '–'}) but no usable rows found.`);
   }
   return out;
 }

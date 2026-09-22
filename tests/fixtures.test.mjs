@@ -13,7 +13,7 @@ const ordersCsv = readFileSync(new URL('order-history-2026.csv', dir), 'utf8');
 test('Echter 2026-Export: Balance History wird vollständig geparst', () => {
   const p = parseTradingViewExport(balanceCsv, 'balance.csv');
   assert.ok(p.balanceEvents.length >= 40, `nur ${p.balanceEvents.length} Events`);
-  assert.ok(p.detected.includes('Guthabenübersicht'));
+  assert.ok(p.detected.includes('Balance History'));
   // Erste Datenzeile: -31.25 auf MES-Short-Close
   const e = p.balanceEvents[0];
   assert.equal(e.pnl, -31.25);

@@ -1,8 +1,8 @@
 {
   "name": "Prop Replay",
   "short_name": "Prop Replay",
-  "description": "TradingView-Paper-Trading gegen echte Prop-Firm-Regeln simulieren – Apex, Topstep, MyFundedFutures, Tradeify, Lucid.",
-  "lang": "de",
+  "description": "Simulate your TradingView paper trading against real prop firm rules – Apex, Topstep, MyFundedFutures, Tradeify, Lucid.",
+  "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

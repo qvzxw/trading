@@ -101,9 +101,9 @@ export function pnlFromFills(fills) {
       events.push({ epoch: f.epoch, pnl, symbol: f.symbol, actionText: `${f.side === 'buy' ? 'Buy' : 'Sell'} ${f.qty} ${spec.root} @ ${f.price}`, fromFills: true });
     }
   }
-  for (const root of skipped) warnings.push(`Symbol ${root}: unbekannter Multiplikator – P&L dieses Symbols wurde übersprungen.`);
+  for (const root of skipped) warnings.push(`Symbol ${root}: unknown multiplier – this symbol's P&L was skipped.`);
   const open = [...pos.entries()].filter(([, s]) => s.qty !== 0);
-  if (open.length) warnings.push(`Offene Position(en) am Datenende (${open.map(([r, s]) => `${s.qty > 0 ? '+' : ''}${s.qty} ${r}`).join(', ')}) – unrealisierter P&L ist nicht enthalten.`);
+  if (open.length) warnings.push(`Open position(s) at end of data (${open.map(([r, s]) => `${s.qty > 0 ? '+' : ''}${s.qty} ${r}`).join(', ')}) – unrealized P&L not included.`);
   return { events, warnings };
 }
 
@@ -154,9 +154,9 @@ export function simulate({ account, parsed, options = {} }) {
   } else if (fills.length > 0) {
     const rec = pnlFromFills(fills);
     events = rec.events;
-    warnings.push('Keine Guthabenübersicht gefunden – P&L wurde aus dem Handelsverlauf rekonstruiert (ohne Gebühren).', ...rec.warnings);
+    warnings.push('No balance history found – P&L reconstructed from the order history (fees not included).', ...rec.warnings);
   } else {
-    return { status: 'empty', warnings: [...warnings, 'Keine verwertbaren Daten gefunden.'] };
+    return { status: 'empty', warnings: [...warnings, 'No usable data found.'] };
   }
   events.sort((a, b) => a.epoch - b.epoch);
 
@@ -167,10 +167,10 @@ export function simulate({ account, parsed, options = {} }) {
     const resetEpoch = events[resetIdx].epoch;
     events = events.slice(dropped);
     fills = fills.filter((f) => f.epoch > resetEpoch); // Kontrakt-Check nicht mit Vor-Reset-Trades füttern
-    warnings.push(`Paper-Konto-Reset im Export erkannt – die ${dropped} Einträge davor wurden ignoriert. Simulation startet nach dem Reset.`);
+    warnings.push(`Paper account reset detected in the export – the ${dropped} entries before it were ignored. The simulation starts after the reset.`);
   }
   const adjustments = events.filter((e) => e.adjustment && !e.reset);
-  if (adjustments.length) warnings.push(`${adjustments.length} Ein-/Auszahlung(en) im Export erkannt – sie zählen nicht als Trading-P&L.`);
+  if (adjustments.length) warnings.push(`${adjustments.length} deposit(s)/withdrawal(s) detected in the export – they don't count as trading P&L.`);
   events = events.filter((e) => !e.reset && !e.adjustment);
 
   // 3. Zeitraum-Filter
@@ -178,7 +178,7 @@ export function simulate({ account, parsed, options = {} }) {
   if (options.rangeEnd) events = events.filter((e) => e.epoch <= options.rangeEnd);
   if (options.rangeStart) fills = fills.filter((f) => f.epoch >= options.rangeStart);
   if (options.rangeEnd) fills = fills.filter((f) => f.epoch <= options.rangeEnd);
-  if (events.length === 0) return { status: 'empty', warnings: [...warnings, 'Im gewählten Zeitraum liegen keine Trades.'] };
+  if (events.length === 0) return { status: 'empty', warnings: [...warnings, 'No trades in the selected date range.'] };
 
   // 4. Simulation: Equity = Kontogröße + kumulierter Paper-P&L
   const size = account.size;
@@ -251,7 +251,7 @@ export function simulate({ account, parsed, options = {} }) {
         const hard = account.dailyLoss.onHit === 'fail';
         addViolation({
           type: 'daily_loss', epoch: e.epoch, day, equityAt: equity,
-          detail: `Daily Loss Limit (${fmtUsd(account.dailyLoss.amount)}) erreicht: Tages-P&L ${fmtUsd(dayPnl)}`,
+          detail: `Daily loss limit (${fmtUsd(account.dailyLoss.amount)}) hit: day P&L ${fmtUsd(dayPnl)}`,
         }, hard);
       }
 
@@ -262,7 +262,7 @@ export function simulate({ account, parsed, options = {} }) {
         if (breachRealtime && equity <= floor) {
           addViolation({
             type: 'drawdown', epoch: e.epoch, day, equityAt: equity,
-            detail: `${ddLabel(dd)} verletzt: Equity ${fmtUsd(equity)} ≤ Limit ${fmtUsd(floor)}`,
+            detail: `${ddLabel(dd)} breached: equity ${fmtUsd(equity)} ≤ limit ${fmtUsd(floor)}`,
           }, true);
         }
       }
@@ -295,7 +295,7 @@ export function simulate({ account, parsed, options = {} }) {
     if (dd.type === 'eod_trailing' && dd.breachCheck === 'eod' && !failed && !passed && eodBalance <= dayFloor) {
       addViolation({
         type: 'drawdown', epoch: dayEvents[dayEvents.length - 1].epoch, day, equityAt: eodBalance,
-        detail: `${ddLabel(dd)} verletzt: Tagesschluss ${fmtUsd(eodBalance)} ≤ Limit ${fmtUsd(dayFloor)}`,
+        detail: `${ddLabel(dd)} breached: EOD close ${fmtUsd(eodBalance)} ≤ limit ${fmtUsd(dayFloor)}`,
       }, true);
     }
 
@@ -333,12 +333,12 @@ export function simulate({ account, parsed, options = {} }) {
 
   if (usage) {
     for (const root of usage.skippedRoots || []) {
-      warnings.push(`Symbol ${root}: kein bekannter Futures-Kontrakt – zählt nicht für das Kontrakt-Limit.`);
+      warnings.push(`Symbol ${root}: not a known futures contract – doesn't count toward the contract limit.`);
     }
     if (account.maxContracts != null && usage.maxTotalMinis > account.maxContracts + 1e-9) {
       addViolation({
         type: 'contracts', epoch: null, day: null,
-        detail: `Kontrakt-Limit überschritten: max. ${round1(usage.maxTotalMinis)} Minis gleichzeitig (erlaubt: ${account.maxContracts})`,
+        detail: `Contract limit exceeded: max ${round1(usage.maxTotalMinis)} minis at once (allowed: ${account.maxContracts})`,
       }, false);
     }
   }
@@ -379,9 +379,9 @@ export function consistencyState(dayPnlMap, totalPnl, rule) {
 }
 
 function ddLabel(dd) {
-  if (dd.type === 'static') return 'Max Drawdown (statisch)';
-  if (dd.type === 'intraday_trailing') return 'Trailing Drawdown (Intraday)';
-  return 'Trailing Drawdown (End of Day)';
+  if (dd.type === 'static') return 'Max drawdown (static)';
+  if (dd.type === 'intraday_trailing') return 'Trailing drawdown (intraday)';
+  return 'Trailing drawdown (end of day)';
 }
 
 function fmtUsd(n) {

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -463,6 +463,110 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
   border-radius: 10px; padding: 9px 13px; font-size: 13px; color: var(--ink);
 }
 
+/* CTA-Reihe (Setup → Ergebnis) */
+.cta-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px;
+  margin-top: 18px; border-top: 1px solid var(--hairline); padding-top: 16px;
+}
+.btn.big { font-size: 16px; padding: 13px 26px; border-radius: 12px; }
+.btn.primary:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; transform: none; filter: none; }
+.cta-hint { color: var(--muted); font-size: 13px; font-family: "IBM Plex Mono", monospace; }
+
+/* Results-Topbar */
+.results-bar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding-block: 22px 4px;
+}
+.results-brand {
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: 0.02em;
+  margin-right: auto;
+}
+.results-brand span {
+  background: linear-gradient(92deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.ctx-opt { min-width: 0; }
+.ctx-opt select { max-width: min(320px, 70vw); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* P&L-Kalender */
+.cal-month { margin-top: 6px; }
+.cal-month + .cal-month { margin-top: 22px; }
+.cal-month-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 10px; }
+.cal-month-head h4 {
+  font-family: "Chakra Petch", system-ui, sans-serif; font-size: 15px; font-weight: 600;
+  margin: 0; letter-spacing: 0.02em;
+}
+.cal-month-total { font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 14px; }
+.cal-month-total.pos { color: var(--pos-text); }
+.cal-month-total.neg { color: var(--neg-text); }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(72px, 0.8fr);
+  gap: 7px;
+}
+.cal-dow {
+  color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+  padding-inline: 4px;
+}
+.cal-cell {
+  border: 1px solid var(--hairline);
+  background: var(--inset);
+  border-radius: 10px;
+  min-height: 64px;
+  padding: 7px 9px;
+  display: grid; gap: 2px; align-content: start;
+  position: relative;
+  min-width: 0;
+}
+.cal-cell .d { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; color: var(--muted); }
+.cal-cell .p { font-family: "IBM Plex Mono", monospace; font-size: 13.5px; font-weight: 600; }
+.cal-cell.pos .p { color: var(--pos-text); }
+.cal-cell.neg .p { color: var(--neg-text); }
+.cal-cell .t { font-size: 10px; color: var(--muted); }
+.cal-cell.pos {
+  background: color-mix(in srgb, var(--good) var(--heatpc, 12%), var(--inset));
+  border-color: color-mix(in srgb, var(--good) 35%, var(--hairline));
+}
+.cal-cell.neg {
+  background: color-mix(in srgb, var(--critical) var(--heatpc, 12%), var(--inset));
+  border-color: color-mix(in srgb, var(--critical) 35%, var(--hairline));
+}
+.cal-cell.off { opacity: 0.45; }
+.cal-cell.out { border: none; background: none; min-height: 0; }
+.cal-cell.empty { opacity: 0.35; }
+.cal-cell.blown { border: 1.5px solid var(--critical); box-shadow: 0 0 16px var(--critical-glow); }
+.cal-cell.passday { border: 1.5px solid var(--good); box-shadow: 0 0 16px var(--good-glow); }
+.flagchip {
+  position: absolute; top: 6px; right: 7px;
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-size: 8.5px; font-weight: 700; letter-spacing: 0.08em;
+  padding: 1px 5px; border-radius: 4px; color: #fff;
+}
+.flagchip.bad { background: var(--critical); }
+.flagchip.good { background: var(--good); }
+.cal-wtotal {
+  display: grid; place-items: center;
+  border: 1px dashed var(--hairline); border-radius: 10px;
+  font-family: "IBM Plex Mono", monospace; font-size: 12.5px; font-weight: 600;
+  color: var(--muted); min-height: 64px;
+}
+.cal-wtotal.pos { color: var(--pos-text); border-color: color-mix(in srgb, var(--good) 35%, var(--hairline)); }
+.cal-wtotal.neg { color: var(--neg-text); border-color: color-mix(in srgb, var(--critical) 35%, var(--hairline)); }
+.cal-wtotal.off { opacity: 0.45; }
+@media (max-width: 560px) {
+  .cal-grid { gap: 4px; grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(52px, 0.8fr); }
+  .cal-cell { min-height: 52px; padding: 5px 6px; border-radius: 8px; }
+  .cal-cell .p { font-size: 11px; }
+  .cal-cell .t { display: none; }
+  .cal-wtotal { font-size: 10.5px; min-height: 52px; }
+  .flagchip { display: none; }
+}
+
 /* Quick-Check */
 .quick-grid { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: end; }
 .quick-out { display: flex; flex-wrap: wrap; gap: 12px 30px; margin-top: 14px; }
@@ -481,78 +585,118 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
 <body>
 <div class="wrap">
 
-  <header class="site-head">
-    <h1 class="brand"><span class="brand-a">Prop</span><span class="brand-b">Replay</span></h1>
-    <p class="sub">Dein TradingView-Paper-Trading gegen echte Prop-Firm-Regeln — wärst du gefundet oder geplatzt?</p>
-  </header>
-  <div class="ticker" id="ticker" aria-hidden="true"></div>
+  <!-- ===================== SETUP PAGE ===================== -->
+  <div id="view-setup">
 
-  <!-- Schritt 1: Firma + Account -->
-  <section class="step" id="step-firm">
-    <div class="step-head">
-      <span class="step-no">01</span>
-      <h2>Prop Firm &amp; Account wählen</h2>
-      <span class="hint">Regeln der Evaluation (Challenge-Phase)</span>
-    </div>
-    <div class="firm-row" id="firm-row" role="group" aria-label="Prop Firm"></div>
-    <div class="acct-row" id="acct-row" role="group" aria-label="Account"></div>
-    <div class="rules-summary" id="rules-summary"></div>
-  </section>
+    <header class="site-head">
+      <h1 class="brand"><span class="brand-a">Prop</span><span class="brand-b">Replay</span></h1>
+      <p class="sub">Run your TradingView paper trading against real prop firm rules — would you be funded or blown?</p>
+    </header>
+    <div class="ticker" id="ticker" aria-hidden="true"></div>
 
-  <!-- Schritt 2: Daten -->
-  <section class="step" id="step-data">
-    <div class="step-head">
-      <span class="step-no">02</span>
-      <h2>TradingView-Export laden</h2>
-      <span class="hint">Papierhandel → Download-Symbol → „Daten herunterladen“</span>
-    </div>
-    <div class="import-grid">
-      <div class="dropzone" id="dropzone" role="button" tabindex="0"
-           aria-label="CSV-Dateien hierher ziehen oder klicken zum Auswählen">
-        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/>
-        </svg>
-        <strong>CSV-Dateien hier reinziehen</strong> oder klicken zum Auswählen
-        <span class="small">„Alle Tabs“ lädt mehrere Dateien herunter – zieh sie einfach alle zusammen rein. Gebraucht wird die Guthabenübersicht (Balance History); der Order-Verlauf zusätzlich macht den Kontrakt-Check möglich. Deutsche und englische Header werden erkannt.</span>
-        <input type="file" id="file-input" class="hidden-input" accept=".csv,text/csv,text/plain" multiple>
+    <section class="step" id="step-firm">
+      <div class="step-head">
+        <span class="step-no">01</span>
+        <h2>Pick your prop firm &amp; account</h2>
+        <span class="hint">Evaluation (challenge phase) rules</span>
       </div>
-      <div class="paste-box">
-        <textarea id="paste-area" placeholder="…oder CSV-Inhalt hier einfügen" aria-label="CSV-Inhalt einfügen"></textarea>
-        <div style="display:flex; gap:8px; flex-wrap:wrap">
-          <button class="btn primary" id="paste-btn">Einfügen auswerten</button>
-          <button class="btn ghost" id="demo-btn">Beispieldaten laden</button>
-          <button class="btn ghost" id="clear-btn" hidden>Daten löschen</button>
+      <div class="firm-row" id="firm-row" role="group" aria-label="Prop firm"></div>
+      <div class="acct-row" id="acct-row" role="group" aria-label="Account"></div>
+      <div class="rules-summary" id="rules-summary"></div>
+    </section>
+
+    <section class="step" id="step-data">
+      <div class="step-head">
+        <span class="step-no">02</span>
+        <h2>Load your TradingView export</h2>
+        <span class="hint">Paper Trading panel → download icon → “Export data”</span>
+      </div>
+      <div class="import-grid">
+        <div class="dropzone" id="dropzone" role="button" tabindex="0"
+             aria-label="Drop CSV files here or click to choose">
+          <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/>
+          </svg>
+          <strong>Drop your CSV files here</strong> or click to choose
+          <span class="small">“Export all tabs” downloads several files – drag them all in together. The Balance History is required; adding the Order History enables the contract-limit check. German and English headers are both recognized.</span>
+          <input type="file" id="file-input" class="hidden-input" accept=".csv,text/csv,text/plain" multiple>
+        </div>
+        <div class="paste-box">
+          <textarea id="paste-area" placeholder="…or paste CSV content here" aria-label="Paste CSV content"></textarea>
+          <div style="display:flex; gap:8px; flex-wrap:wrap">
+            <button class="btn primary" id="paste-btn">Analyze paste</button>
+            <button class="btn ghost" id="demo-btn">Load sample data</button>
+            <button class="btn ghost" id="clear-btn" hidden>Clear data</button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="import-status" id="import-status"></div>
-    <div class="opts-row" id="opts-row">
-      <label class="opt">Zeitzone im CSV (= deine Chart-Zeitzone)
-        <select id="tz-select">
-          <option value="America/New_York" selected>New York (UTC-4/-5)</option>
-          <option value="Europe/Berlin">Berlin (UTC+1/+2)</option>
-          <option value="America/Chicago">Chicago (UTC-5/-6)</option>
-          <option value="UTC">UTC</option>
-          <option value="local">Meine Systemzeit</option>
-        </select>
-      </label>
-      <label class="opt">Handelstag
-        <select id="day-select">
-          <option value="exchange" selected>CME-Handelstag (17:00 NY)</option>
-          <option value="calendar">Kalendertag</option>
-        </select>
-      </label>
-      <label class="opt">Von
-        <input type="date" id="range-start">
-      </label>
-      <label class="opt">Bis
-        <input type="date" id="range-end">
-      </label>
-    </div>
-  </section>
+      <div class="import-status" id="import-status"></div>
+      <div class="opts-row" id="opts-row">
+        <label class="opt">CSV timezone (= your chart timezone)
+          <select id="tz-select">
+            <option value="America/New_York" selected>New York (UTC-4/-5)</option>
+            <option value="Europe/Berlin">Berlin (UTC+1/+2)</option>
+            <option value="America/Chicago">Chicago (UTC-5/-6)</option>
+            <option value="UTC">UTC</option>
+            <option value="local">My system time</option>
+          </select>
+        </label>
+        <label class="opt">Trading day
+          <select id="day-select">
+            <option value="exchange" selected>CME trading day (5:00 PM NY)</option>
+            <option value="calendar">Calendar day</option>
+          </select>
+        </label>
+        <label class="opt">From
+          <input type="date" id="range-start">
+        </label>
+        <label class="opt">To
+          <input type="date" id="range-end">
+        </label>
+      </div>
+      <div class="cta-row">
+        <button class="btn primary big" id="run-btn" disabled>Run the replay →</button>
+        <span class="cta-hint" id="run-hint"></span>
+      </div>
+    </section>
 
-  <!-- Ergebnis -->
-  <div id="result-root" hidden>
+    <div class="warnings" id="warnings"></div>
+
+    <section class="step" id="quick-check">
+      <div class="step-head">
+        <span class="step-no">✦</span>
+        <h2>Quick check without a CSV</h2>
+        <span class="hint">Where is my limit right now?</span>
+      </div>
+      <div class="quick-grid">
+        <label class="opt">Current paper balance
+          <input type="number" id="qc-balance" step="0.01" placeholder="50655.00">
+        </label>
+        <label class="opt">Highest balance so far <span id="qc-hwm-label">(EOD high)</span>
+          <input type="number" id="qc-hwm" step="0.01" placeholder="51100.00">
+        </label>
+        <label class="opt">Paper starting balance
+          <input type="number" id="qc-start" step="0.01" placeholder="50000.00">
+        </label>
+        <button class="btn primary" id="qc-btn">Calculate</button>
+      </div>
+      <div class="quick-out" id="qc-out"></div>
+    </section>
+
+  </div>
+
+  <!-- ===================== RESULTS PAGE ===================== -->
+  <div id="view-results" hidden>
+
+    <div class="results-bar">
+      <button class="btn ghost" id="back-btn">← Setup</button>
+      <span class="results-brand" aria-hidden="true">Prop<span>Replay</span></span>
+      <label class="opt ctx-opt">
+        <span class="visually-hidden">Switch account</span>
+        <select id="ctx-select" aria-label="Switch firm and account"></select>
+      </label>
+    </div>
+
     <div class="result-hero" id="result-hero">
       <span class="verdict" id="verdict"></span>
       <span class="why" id="verdict-why"></span>
@@ -561,48 +705,31 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
     <div class="tiles" id="tiles"></div>
 
     <div class="chart-card">
-      <h3>Equity vs. Drawdown-Limit</h3>
+      <h3>Equity vs. drawdown limit</h3>
       <div class="chart-host" id="chart-host"></div>
+    </div>
+
+    <div class="chart-card">
+      <h3>P&amp;L calendar</h3>
+      <div id="calendar-host"></div>
     </div>
 
     <div class="result-cols">
       <div class="panel">
-        <h3>Regel-Check</h3>
+        <h3>Rule check</h3>
         <div class="rule-check" id="rule-check"></div>
       </div>
       <div class="panel">
-        <h3>Handelstage</h3>
+        <h3>Trading days</h3>
         <div class="table-wrap">
           <table class="days" id="days-table"></table>
         </div>
       </div>
     </div>
+
+    <div class="warnings" id="result-warnings"></div>
+
   </div>
-
-  <!-- Außerhalb von #result-root, damit Warnungen auch bei leerem Ergebnis sichtbar sind -->
-  <div class="warnings" id="warnings"></div>
-
-  <!-- Quick-Check -->
-  <section class="step" id="quick-check">
-    <div class="step-head">
-      <span class="step-no">✦</span>
-      <h2>Quick-Check ohne CSV</h2>
-      <span class="hint">Wo steht mein Limit gerade?</span>
-    </div>
-    <div class="quick-grid">
-      <label class="opt">Aktueller Kontostand (Paper)
-        <input type="number" id="qc-balance" step="0.01" placeholder="50655.00">
-      </label>
-      <label class="opt">Höchster Stand bisher <span id="qc-hwm-label">(EOD-Hoch)</span>
-        <input type="number" id="qc-hwm" step="0.01" placeholder="51100.00">
-      </label>
-      <label class="opt">Paper-Startguthaben
-        <input type="number" id="qc-start" step="0.01" placeholder="50000.00">
-      </label>
-      <button class="btn primary" id="qc-btn">Rechnen</button>
-    </div>
-    <div class="quick-out" id="qc-out"></div>
-  </section>
 
   <p class="footer-note" id="footer-note"></p>
 </div>
@@ -636,11 +763,11 @@ const SPECS = {
   // Metalle
   GC:  { name: 'Gold',                  multiplier: 100,    miniEquiv: 1 },
   MGC: { name: 'Micro Gold',            multiplier: 10,     miniEquiv: 0.1, micro: true },
-  SI:  { name: 'Silber',                multiplier: 5000,   miniEquiv: 1 },
-  SIL: { name: 'Micro Silber',          multiplier: 1000,   miniEquiv: 0.2, micro: true },
-  HG:  { name: 'Kupfer',                multiplier: 25000,  miniEquiv: 1 },
-  MHG: { name: 'Micro Kupfer',          multiplier: 2500,   miniEquiv: 0.1, micro: true },
-  PL:  { name: 'Platin',                multiplier: 50,     miniEquiv: 1 },
+  SI:  { name: 'Silver',                multiplier: 5000,   miniEquiv: 1 },
+  SIL: { name: 'Micro Silver',          multiplier: 1000,   miniEquiv: 0.2, micro: true },
+  HG:  { name: 'Copper',                multiplier: 25000,  miniEquiv: 1 },
+  MHG: { name: 'Micro Copper',          multiplier: 2500,   miniEquiv: 0.1, micro: true },
+  PL:  { name: 'Platinum',                multiplier: 50,     miniEquiv: 1 },
   // Zinsen
   ZB:  { name: '30Y T-Bond',            multiplier: 1000,   miniEquiv: 1 },
   ZN:  { name: '10Y T-Note',            multiplier: 1000,   miniEquiv: 1 },
@@ -658,11 +785,11 @@ const SPECS = {
   M6A: { name: 'Micro AUD',             multiplier: 10000,  miniEquiv: 0.1, micro: true },
   '6C': { name: 'Canadian Dollar',      multiplier: 100000, miniEquiv: 1 },
   // Agrar
-  ZC:  { name: 'Mais',                  multiplier: 50,     miniEquiv: 1 },
-  ZW:  { name: 'Weizen',                multiplier: 50,     miniEquiv: 1 },
-  ZS:  { name: 'Sojabohnen',            multiplier: 50,     miniEquiv: 1 },
-  ZL:  { name: 'Sojaöl',                multiplier: 600,    miniEquiv: 1 },
-  ZM:  { name: 'Sojamehl',              multiplier: 100,    miniEquiv: 1 },
+  ZC:  { name: 'Corn',                  multiplier: 50,     miniEquiv: 1 },
+  ZW:  { name: 'Wheat',                multiplier: 50,     miniEquiv: 1 },
+  ZS:  { name: 'Soybeans',            multiplier: 50,     miniEquiv: 1 },
+  ZL:  { name: 'Soybean Oil',                multiplier: 600,    miniEquiv: 1 },
+  ZM:  { name: 'Soybean Meal',              multiplier: 100,    miniEquiv: 1 },
   LE:  { name: 'Live Cattle',           multiplier: 400,    miniEquiv: 1 },
   HE:  { name: 'Lean Hogs',             multiplier: 400,    miniEquiv: 1 },
   // Krypto (CME)
@@ -975,12 +1102,12 @@ function parseTradingViewExport(text, fileName) {
   const num = (v) => parseNumber(v, style);
   const sections = splitSections(clean);
   if (sections.length === 0) {
-    out.warnings.push(`${fileName || 'Datei'}: keine bekannte Tabelle erkannt (weder Guthabenübersicht noch Handelsverlauf).`);
+    out.warnings.push(`${fileName || 'File'}: no known table recognized (neither balance history nor trade history).`);
     return out;
   }
   for (const sec of sections) {
     if (sec.kind === 'balance') {
-      out.detected.push('Guthabenübersicht');
+      out.detected.push('Balance History');
       for (const row of sec.rows) {
         const time = parseTimestamp(cell(row, sec.map.time));
         const before = num(cell(row, sec.map.balanceBefore));
@@ -997,7 +1124,7 @@ function parseTradingViewExport(text, fileName) {
         });
       }
     } else if (sec.kind === 'fills' || sec.kind === 'orders') {
-      out.detected.push(sec.kind === 'orders' ? 'Order-Verlauf' : 'Handelsverlauf');
+      out.detected.push(sec.kind === 'orders' ? 'Order History' : 'Trade History');
       for (const row of sec.rows) {
         const status = norm(cell(row, sec.map.status) || '');
         // Exakter Match: "Partially Filled"/"Teilweise ausgeführt" zählen nicht als Fill
@@ -1015,7 +1142,7 @@ function parseTradingViewExport(text, fileName) {
     }
   }
   if (out.balanceEvents.length === 0 && out.fills.length === 0) {
-    out.warnings.push(`${fileName || 'Datei'}: Tabellen erkannt (${out.detected.join(', ') || '–'}), aber keine verwertbaren Zeilen gefunden.`);
+    out.warnings.push(`${fileName || 'File'}: tables recognized (${out.detected.join(', ') || '–'}) but no usable rows found.`);
   }
   return out;
 }
@@ -1149,9 +1276,9 @@ function pnlFromFills(fills) {
       events.push({ epoch: f.epoch, pnl, symbol: f.symbol, actionText: `${f.side === 'buy' ? 'Buy' : 'Sell'} ${f.qty} ${spec.root} @ ${f.price}`, fromFills: true });
     }
   }
-  for (const root of skipped) warnings.push(`Symbol ${root}: unbekannter Multiplikator – P&L dieses Symbols wurde übersprungen.`);
+  for (const root of skipped) warnings.push(`Symbol ${root}: unknown multiplier – this symbol's P&L was skipped.`);
   const open = [...pos.entries()].filter(([, s]) => s.qty !== 0);
-  if (open.length) warnings.push(`Offene Position(en) am Datenende (${open.map(([r, s]) => `${s.qty > 0 ? '+' : ''}${s.qty} ${r}`).join(', ')}) – unrealisierter P&L ist nicht enthalten.`);
+  if (open.length) warnings.push(`Open position(s) at end of data (${open.map(([r, s]) => `${s.qty > 0 ? '+' : ''}${s.qty} ${r}`).join(', ')}) – unrealized P&L not included.`);
   return { events, warnings };
 }
 
@@ -1202,9 +1329,9 @@ function simulate({ account, parsed, options = {} }) {
   } else if (fills.length > 0) {
     const rec = pnlFromFills(fills);
     events = rec.events;
-    warnings.push('Keine Guthabenübersicht gefunden – P&L wurde aus dem Handelsverlauf rekonstruiert (ohne Gebühren).', ...rec.warnings);
+    warnings.push('No balance history found – P&L reconstructed from the order history (fees not included).', ...rec.warnings);
   } else {
-    return { status: 'empty', warnings: [...warnings, 'Keine verwertbaren Daten gefunden.'] };
+    return { status: 'empty', warnings: [...warnings, 'No usable data found.'] };
   }
   events.sort((a, b) => a.epoch - b.epoch);
 
@@ -1215,10 +1342,10 @@ function simulate({ account, parsed, options = {} }) {
     const resetEpoch = events[resetIdx].epoch;
     events = events.slice(dropped);
     fills = fills.filter((f) => f.epoch > resetEpoch); // Kontrakt-Check nicht mit Vor-Reset-Trades füttern
-    warnings.push(`Paper-Konto-Reset im Export erkannt – die ${dropped} Einträge davor wurden ignoriert. Simulation startet nach dem Reset.`);
+    warnings.push(`Paper account reset detected in the export – the ${dropped} entries before it were ignored. The simulation starts after the reset.`);
   }
   const adjustments = events.filter((e) => e.adjustment && !e.reset);
-  if (adjustments.length) warnings.push(`${adjustments.length} Ein-/Auszahlung(en) im Export erkannt – sie zählen nicht als Trading-P&L.`);
+  if (adjustments.length) warnings.push(`${adjustments.length} deposit(s)/withdrawal(s) detected in the export – they don't count as trading P&L.`);
   events = events.filter((e) => !e.reset && !e.adjustment);
 
   // 3. Zeitraum-Filter
@@ -1226,7 +1353,7 @@ function simulate({ account, parsed, options = {} }) {
   if (options.rangeEnd) events = events.filter((e) => e.epoch <= options.rangeEnd);
   if (options.rangeStart) fills = fills.filter((f) => f.epoch >= options.rangeStart);
   if (options.rangeEnd) fills = fills.filter((f) => f.epoch <= options.rangeEnd);
-  if (events.length === 0) return { status: 'empty', warnings: [...warnings, 'Im gewählten Zeitraum liegen keine Trades.'] };
+  if (events.length === 0) return { status: 'empty', warnings: [...warnings, 'No trades in the selected date range.'] };
 
   // 4. Simulation: Equity = Kontogröße + kumulierter Paper-P&L
   const size = account.size;
@@ -1299,7 +1426,7 @@ function simulate({ account, parsed, options = {} }) {
         const hard = account.dailyLoss.onHit === 'fail';
         addViolation({
           type: 'daily_loss', epoch: e.epoch, day, equityAt: equity,
-          detail: `Daily Loss Limit (${fmtUsd(account.dailyLoss.amount)}) erreicht: Tages-P&L ${fmtUsd(dayPnl)}`,
+          detail: `Daily loss limit (${fmtUsd(account.dailyLoss.amount)}) hit: day P&L ${fmtUsd(dayPnl)}`,
         }, hard);
       }
 
@@ -1310,7 +1437,7 @@ function simulate({ account, parsed, options = {} }) {
         if (breachRealtime && equity <= floor) {
           addViolation({
             type: 'drawdown', epoch: e.epoch, day, equityAt: equity,
-            detail: `${ddLabel(dd)} verletzt: Equity ${fmtUsd(equity)} ≤ Limit ${fmtUsd(floor)}`,
+            detail: `${ddLabel(dd)} breached: equity ${fmtUsd(equity)} ≤ limit ${fmtUsd(floor)}`,
           }, true);
         }
       }
@@ -1343,7 +1470,7 @@ function simulate({ account, parsed, options = {} }) {
     if (dd.type === 'eod_trailing' && dd.breachCheck === 'eod' && !failed && !passed && eodBalance <= dayFloor) {
       addViolation({
         type: 'drawdown', epoch: dayEvents[dayEvents.length - 1].epoch, day, equityAt: eodBalance,
-        detail: `${ddLabel(dd)} verletzt: Tagesschluss ${fmtUsd(eodBalance)} ≤ Limit ${fmtUsd(dayFloor)}`,
+        detail: `${ddLabel(dd)} breached: EOD close ${fmtUsd(eodBalance)} ≤ limit ${fmtUsd(dayFloor)}`,
       }, true);
     }
 
@@ -1381,12 +1508,12 @@ function simulate({ account, parsed, options = {} }) {
 
   if (usage) {
     for (const root of usage.skippedRoots || []) {
-      warnings.push(`Symbol ${root}: kein bekannter Futures-Kontrakt – zählt nicht für das Kontrakt-Limit.`);
+      warnings.push(`Symbol ${root}: not a known futures contract – doesn't count toward the contract limit.`);
     }
     if (account.maxContracts != null && usage.maxTotalMinis > account.maxContracts + 1e-9) {
       addViolation({
         type: 'contracts', epoch: null, day: null,
-        detail: `Kontrakt-Limit überschritten: max. ${round1(usage.maxTotalMinis)} Minis gleichzeitig (erlaubt: ${account.maxContracts})`,
+        detail: `Contract limit exceeded: max ${round1(usage.maxTotalMinis)} minis at once (allowed: ${account.maxContracts})`,
       }, false);
     }
   }
@@ -1427,9 +1554,9 @@ function consistencyState(dayPnlMap, totalPnl, rule) {
 }
 
 function ddLabel(dd) {
-  if (dd.type === 'static') return 'Max Drawdown (statisch)';
-  if (dd.type === 'intraday_trailing') return 'Trailing Drawdown (Intraday)';
-  return 'Trailing Drawdown (End of Day)';
+  if (dd.type === 'static') return 'Max drawdown (static)';
+  if (dd.type === 'intraday_trailing') return 'Trailing drawdown (intraday)';
+  return 'Trailing drawdown (end of day)';
 }
 
 function fmtUsd(n) {
@@ -1458,7 +1585,7 @@ const FIRMS = [
   {
     id: 'apex',
     name: 'Apex',
-    note: 'Apex 4.0 (seit März 2026): Einmalzahlung mit 30 Tagen Zugang, keine Mindesttage, kein Overnight (flat bis 16:59 ET), Pflicht-Bracket-Orders (jede Order braucht SL+TP). Alte 250K/300K/Static-Accounts gibt es nicht mehr; jede Größe existiert auch als „No Activation Fee“-Variante (teurer, dafür 0 $ Aktivierung).',
+    note: 'Apex 4.0 (since March 2026): one-time fee with 30 days of access, no minimum days, no overnight (flat by 4:59 PM ET), mandatory bracket orders (every order needs SL+TP). The old 250K/300K/static accounts are gone; every size also exists as a “No Activation Fee” variant (pricier, but $0 activation).',
     sources: [
       'https://apextraderfunding.com/help-center/evaluation-accounts-ea/intraday-trailing-drawdown-evaluations/',
       'https://apextraderfunding.com/help-center/eod-trailing-drawdown-accounts/eod-evaluations/',
@@ -1474,8 +1601,8 @@ const FIRMS = [
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'payout' }, minDays: 0, priceOnce: price,
         notes: [
-          'Trailing zieht in Echtzeit mit – inkl. unrealisierter Spitzen offener Trades (der TradingView-Export sieht die nicht).',
-          'Lock an der Target-Balance gilt auf Rithmic/WealthCharts; auf Tradovate trailt die Eval endlos.',
+          'The trailing threshold moves in real time – including unrealized peaks of open trades (which the TradingView export cannot see).',
+          'The lock at the target balance applies on Rithmic/WealthCharts; on Tradovate the eval trails forever.',
         ],
       })),
       ...[[25, 1500, 1000, 4, 500, 390], [50, 3000, 2000, 6, 1000, 490], [100, 6000, 3000, 8, 1500, 790], [150, 9000, 4000, 12, 2000, 1490]].map(([k, target, dd, contracts, dll, price]) => ({
@@ -1484,14 +1611,14 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'payout' }, minDays: 0, priceOnce: price,
-        notes: ['Limit steigt nur mit Tagesschluss-Hochs (16:59 ET), wird aber in Echtzeit geprüft.'],
+        notes: ['The limit only rises with end-of-day closing highs (4:59 PM ET) but is enforced in real time.'],
       })),
     ],
   },
   {
     id: 'topstep',
     name: 'Topstep',
-    note: 'Trading Combine: MLL trailt nur per Tagesschluss, wird aber in Echtzeit (inkl. unrealisiertem P&L) enforced und lockt bei Breakeven. DLL ist optional (Standardwerte gezeigt) und sperrt nur den Tag. Flat bis 15:10 CT, kein Overnight.',
+    note: 'Trading Combine: the MLL trails end-of-day only, but is enforced in real time (incl. unrealized P&L) and locks at breakeven. The DLL is optional (defaults shown) and only locks the day. Flat by 3:10 PM CT, no overnight.',
     sources: [
       'https://help.topstep.com/en/articles/8284197-trading-combine-parameters',
       'https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit',
@@ -1504,7 +1631,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 55, scope: 'eval' }, minDays: 0, priceMonthly: price,
-        notes: ['Consistency: bester Tag ≤ 55 % vom Profit (offizieller 2026-Wert; viele Quellen nennen noch 50 %) – verzögert nur das Bestehen.'],
+        notes: ['Consistency: best day ≤ 55% of profit (official 2026 value; many sources still say 50%) – only delays passing.'],
       })),
       {
         id: 'topstep-25k-static', label: '25K Static (Labs)',
@@ -1512,7 +1639,7 @@ const FIRMS = [
         drawdown: { type: 'static', amount: 1000, breachCheck: 'realtime', lockFloorAt: null },
         dailyLoss: null, maxContracts: null, maxMicros: null,
         consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: 75,
-        notes: ['Topstep-Labs-Drop: statischer MLL fix bei $24.000, 90 Tage gültig, Payout-Cap $4.000 – limitiert verfügbar.'],
+        notes: ['Topstep Labs drop: static MLL fixed at $24,000, valid for 90 days, $4,000 payout cap – limited availability.'],
       },
       {
         id: 'topstep-250k-freedom', label: '250K Freedom (Labs)',
@@ -1520,14 +1647,14 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: 10000, breachCheck: 'realtime', lockFloorAt: 250000 },
         dailyLoss: null, maxContracts: null, maxMicros: null,
         consistency: null, minDays: 0, priceOnce: 499,
-        notes: ['Limitierter Labs-Drop, 90 Tage gültig, Payout-Cap $25.000. Drawdown-Typ/Detailregeln nicht offiziell bestätigt – vor Kauf prüfen.'],
+        notes: ['Limited Labs drop, valid for 90 days, $25,000 payout cap. Drawdown type/details not officially confirmed – verify before buying.'],
       },
     ],
   },
   {
     id: 'mffu',
     name: 'MyFundedFutures',
-    note: 'Lineup Sept. 2026: Rapid (Intraday-Trailing), Rapid EOD, Pro und Builder – alles Einmalzahlung. Handel 18:00–16:10 ET, flat zum Close. Die Flex-Linie ist offenbar nicht mehr kaufbar und fehlt hier.',
+    note: 'Lineup as of Sept 2026: Rapid (intraday trailing), Rapid EOD, Pro and Builder – all one-time purchases. Trading 6:00 PM–4:10 PM ET, flat at close. The Flex line is apparently no longer for sale and is not listed here.',
     sources: [
       'https://myfundedfutures.com/plans/rapid',
       'https://help.myfundedfutures.com/en/articles/8348565-end-of-day-eod-drawdown-explained',
@@ -1540,7 +1667,7 @@ const FIRMS = [
         drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 2, priceOnce: price,
-        notes: ['Trailing folgt dem Echtzeit-Hoch inkl. unrealisiertem P&L offener Trades.'],
+        notes: ['The trailing threshold follows the real-time high including unrealized P&L of open trades.'],
       })),
       ...[[25, 1500, 1000, 2, null], [50, 3000, 2000, 3, 209]].map(([k, target, dd, contracts, price]) => ({
         id: `mffu-${k}k-rapid-eod`, label: `${k}K Rapid EOD`,
@@ -1548,7 +1675,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 30, scope: 'eval' }, minDays: 4, priceOnce: price,
-        notes: ['EOD-Drawdown gegen strengere 30 %-Consistency und 4 Mindesttage getauscht.'],
+        notes: ['EOD drawdown traded against a stricter 30% consistency rule and 4 minimum days.'],
       })),
       ...[[50, 3000, 2000, 5, 265], [100, 6000, 3000, 10, null], [150, 9000, 4500, 15, 557]].map(([k, target, dd, contracts, price]) => ({
         id: `mffu-${k}k-pro`, label: `${k}K Pro`,
@@ -1556,7 +1683,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 2, priceOnce: price,
-        notes: ['Mind. 1 Trade alle 7 Tage (Inaktivitätsregel).'],
+        notes: ['At least one trade every 7 days (inactivity rule).'],
       })),
       ...[[25, 1500, 1000, 2, null, 105], [50, 3000, 2000, 4, 1000, 153]].map(([k, target, dd, contracts, dll, price]) => ({
         id: `mffu-${k}k-builder`, label: `${k}K Builder`,
@@ -1564,14 +1691,14 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: dll ? { amount: dll, onHit: 'lock' } : null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'payout' }, minDays: 1, priceOnce: price,
-        notes: ['Keine Consistency in der Eval – Bestehen an einem Tag möglich.'],
+        notes: ['No consistency rule during the eval – a one-day pass is possible.'],
       })),
     ],
   },
   {
     id: 'tradeify',
     name: 'Tradeify',
-    note: 'Tradeify 3.0: Growth-Eval (mit DLL), Select-Eval (ohne DLL, 40 % Consistency) und Lightning (direkt sim-funded, kein Target). EOD-Trailing wird bei allen in Echtzeit geprüft. Einmalzahlung, kein Abo.',
+    note: 'Tradeify 3.0: Growth eval (with DLL), Select eval (no DLL, 40% consistency) and Lightning (straight to sim-funded, no target). EOD trailing is enforced in real time on all of them. One-time purchase, no subscription.',
     sources: [
       'https://help.tradeify.co/en/articles/10495915-growth-evaluation-accounts',
       'https://help.tradeify.co/en/articles/12853921-select-evaluation-accounts',
@@ -1584,7 +1711,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: null },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 35, scope: 'payout' }, minDays: 1, priceOnce: price,
-        notes: ['Eval-Drawdown lockt nicht (Lock bei Start+100 $ erst im Funded-Konto).'],
+        notes: ['The eval drawdown never locks (the start+$100 lock applies only once funded).'],
       })),
       ...[[25, 1500, 1000, 1], [50, 3000, 2000, 4, 159], [100, 6000, 3000, 8], [150, 9000, 4500, 12]].map(([k, target, dd, contracts, price]) => ({
         id: `tradeify-${k}k-select`, label: `${k}K Select`,
@@ -1592,7 +1719,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: null },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 40, scope: 'eval' }, minDays: 3, priceOnce: price ?? null,
-        notes: ['Kein Daily Loss Limit – nur Trailing Drawdown und 40 %-Consistency.'],
+        notes: ['No daily loss limit – only the trailing drawdown and the 40% consistency rule.'],
       })),
       {
         id: 'tradeify-300k-select', label: '300K Select',
@@ -1600,7 +1727,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: 8000, breachCheck: 'realtime', lockFloorAt: 300100 },
         dailyLoss: { amount: 4000, onHit: 'lock' }, maxContracts: 16, maxMicros: 160,
         consistency: { pct: 40, scope: 'eval' }, minDays: 3, priceOnce: null,
-        notes: ['V2 (aktuell verkauft): $8.000 DD + $4.000 DLL, 16 Minis. Limitierte Auflage, kein Reset – vor Kauf genau prüfen.'],
+        notes: ['V2 (currently sold): $8,000 DD + $4,000 DLL, 16 minis. Limited release, no resets – double-check before buying.'],
       },
       ...[[25, 1000, null, 1, 345], [50, 2000, 1250, 4, 479], [100, 4000, 2500, 8, 660], [150, 5250, 3000, 12, 796]].map(([k, dd, dll, contracts, price]) => ({
         id: `tradeify-${k}k-lightning`, label: `${k}K Lightning`,
@@ -1608,14 +1735,14 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: dll ? { amount: dll, onHit: 'lock' } : null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 20, scope: 'payout' }, minDays: null, priceOnce: price,
-        notes: ['Direkt sim-funded: kein Profit Target, dafür Payout-Regeln (erster Payout ab 20 %-Consistency).', k >= 100 ? 'Drawdown-Höhe 2026 geändert – vor Kauf verifizieren.' : ''].filter(Boolean),
+        notes: ['Straight to sim-funded: no profit target, payout rules instead (first payout at 20% consistency).', k >= 100 ? 'Drawdown amount changed during 2026 – verify before buying.' : ''].filter(Boolean),
       })),
     ],
   },
   {
     id: 'lucid',
     name: 'Lucid',
-    note: 'Lineup Sept. 2026: LucidFlex, LucidPro und LucidDaily (Drawdown-Typ bei Daily am Checkout wählbar; Toggle gilt für Eval UND Funded). DLL ist seit Aug. 2026 optional (Werte gezeigt) und sperrt nur den Tag. Kein Overnight, Auto-Flat zum Session-Close. Einmalzahlung. LucidDirect (Instant Funding) ist hier nicht abgebildet.',
+    note: 'Lineup as of Sept 2026: LucidFlex, LucidPro and LucidDaily (drawdown type picked at checkout on Daily; the toggle applies to eval AND funded). The DLL is optional since Aug 2026 (values shown) and only locks the day. No overnight, auto-flat at session close. One-time purchase. LucidDirect (instant funding) is not covered here.',
     sources: [
       'https://support.lucidtrading.com/en/articles/12945790-lucidflex-evaluation-account',
       'https://support.lucidtrading.com/en/articles/12890029-lucidpro-evaluation-account',
@@ -1628,7 +1755,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: price,
-        notes: ['Intraday-Dips unters Limit sind erlaubt – nur der Tagesschluss zählt.'],
+        notes: ['Intraday dips below the limit are allowed – only the daily close counts.'],
       })),
       ...[[25, 1250, 1000, 600, 2, 135], [50, 3000, 2000, 1200, 4, 185], [100, 6000, 3000, 1800, 6, 307], [150, 9000, 4500, 2700, 10, 410]].map(([k, target, dd, dll, contracts, price]) => ({
         id: `lucid-${k}k-pro`, label: `${k}K Pro`,
@@ -1636,7 +1763,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 40, scope: 'payout' }, minDays: 0, priceOnce: price,
-        notes: ['Keine Consistency in der Eval – Bestehen an einem Tag möglich.'],
+        notes: ['No consistency rule during the eval – a one-day pass is possible.'],
       })),
       ...[[25, 1250, 1000, 600, 2], [50, 3000, 2000, 1200, 4], [100, 6000, 3000, 1800, 6], [150, 9000, 4500, 2700, 10]].map(([k, target, dd, dll, contracts]) => ({
         id: `lucid-${k}k-daily-eod`, label: `${k}K Daily (EOD)`,
@@ -1644,7 +1771,7 @@ const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: null,
-        notes: ['Funded-Konto wechselt auf Intraday-Drawdown mit Daily-Profit-Cap und News-Regel.'],
+        notes: ['The funded account switches to an intraday drawdown with a daily profit cap and a news rule.'],
       })),
       ...[[25, 1250, 1000, 600, 2], [50, 3000, 2000, 1200, 4], [100, 6000, 3000, 1800, 6], [150, 9000, 4500, 2700, 10]].map(([k, target, dd, dll, contracts]) => ({
         id: `lucid-${k}k-daily-intraday`, label: `${k}K Daily (Intraday)`,
@@ -1652,7 +1779,7 @@ const FIRMS = [
         drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: null,
-        notes: ['Günstigere Daily-Variante: Trailing zieht in Echtzeit inkl. unrealisiertem P&L.'],
+        notes: ['The cheaper Daily variant: trailing moves in real time incl. unrealized P&L.'],
       })),
     ],
   },
@@ -1691,12 +1818,12 @@ const fmtMoneyFull = (n) => (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleStrin
 
 function fmtDateShort(epoch) {
   const d = new Date(epoch);
-  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+  return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
 }
 function fmtDateTime(epoch) {
   const d = new Date(epoch);
-  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' +
-         d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) + ', ' +
+         d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
 // result: Ausgabe von simulate(); account: Account-Konfiguration
@@ -1730,7 +1857,7 @@ function renderEquityChart(container, result, account) {
 
   const svg = el('svg', {
     viewBox: `0 0 ${width} ${height}`, width: '100%', height,
-    role: 'img', 'aria-label': 'Equity-Kurve mit Drawdown-Limit und Profit-Target',
+    role: 'img', 'aria-label': 'Equity curve with drawdown limit and profit target',
     tabindex: '0', class: 'equity-chart',
   }, container);
 
@@ -1820,8 +1947,8 @@ function renderEquityChart(container, result, account) {
     head.textContent = fmtDateTime(p.epoch);
     tip.appendChild(head);
     addTipRow(tip, 'equity', 'Equity', fmtMoneyFull(p.equity));
-    addTipRow(tip, 'floor', 'Drawdown-Limit', fmtMoneyFull(p.floor));
-    addTipRow(tip, 'room', 'Luft', fmtMoneyFull(p.equity - p.floor));
+    addTipRow(tip, 'floor', 'Drawdown limit', fmtMoneyFull(p.floor));
+    addTipRow(tip, 'room', 'Room', fmtMoneyFull(p.equity - p.floor));
     const rect = container.getBoundingClientRect();
     const scale = rect.width / width;
     const tipW = tip.offsetWidth || 180;
@@ -1853,9 +1980,9 @@ function renderEquityChart(container, result, account) {
   legend.className = 'chart-legend';
   legend.append(
     legendItem('equity', 'Equity'),
-    legendItem('floor', 'Drawdown-Limit'),
+    legendItem('floor', 'Drawdown limit'),
   );
-  if (target != null) legend.append(legendItem('target', 'Profit Target'));
+  if (target != null) legend.append(legendItem('target', 'Profit target'));
   container.appendChild(legend);
 }
 
@@ -1983,6 +2110,7 @@ const DEMO_CSV = buildDemo();
 
 
 
+
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -1991,18 +2119,19 @@ const state = {
   sources: [],       // { name, parsed }
   isDemo: false,
   result: null,
+  view: 'setup',
 };
 
-// ---------- Persistenz (nur Komfort) ----------
+// ---------- Persistence (convenience only) ----------
 const store = {
   get(k) { try { return localStorage.getItem('propreplay.' + k); } catch { return null; } },
-  set(k, v) { try { localStorage.setItem('propreplay.' + k, v); } catch { /* egal */ } },
+  set(k, v) { try { localStorage.setItem('propreplay.' + k, v); } catch { /* fine */ } },
 };
 
-// ---------- Format-Helfer ----------
-const usd = (n, digits = 0) => (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits });
-const usdSigned = (n, digits = 0) => (n > 0 ? '+' : n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('de-DE', { minimumFractionDigits: digits, maximumFractionDigits: digits });
-const fmtDay = (iso) => { const [y, m, d] = iso.split('-'); return `${d}.${m}.${y.slice(2)}`; };
+// ---------- Formatting ----------
+const usd = (n, digits = 0) => (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+const usdSigned = (n, digits = 0) => (n > 0 ? '+' : n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+const fmtDay = (iso) => { const [y, m, d] = iso.split('-'); return `${m}/${d}/${y.slice(2)}`; };
 
 function currentFirm() { return FIRMS.find((f) => f.id === state.firmId) || FIRMS[0]; }
 function currentAccount() {
@@ -2010,7 +2139,38 @@ function currentAccount() {
   return firm.accounts.find((a) => a.id === state.acctId) || firm.accounts[0];
 }
 
-// ---------- Schritt 1: Firma + Account ----------
+// ---------- Views ----------
+
+function showView(view) {
+  state.view = view;
+  $('view-setup').hidden = view !== 'setup';
+  $('view-results').hidden = view !== 'results';
+  const hash = view === 'results' ? '#results' : '';
+  if (location.hash !== hash) {
+    try { history.pushState(null, '', location.pathname + location.search + hash); } catch { /* fine */ }
+  }
+  window.scrollTo(0, 0);
+}
+
+function goToResults() {
+  if (!state.result || state.result.status === 'empty') return;
+  renderResults();
+  showView('results');
+}
+
+window.addEventListener('hashchange', () => {
+  if (location.hash === '#results' && state.result && state.result.status !== 'empty') {
+    renderResults();
+    showView('results');
+  } else {
+    showView('setup');
+  }
+});
+window.addEventListener('popstate', () => {
+  if (location.hash !== '#results') showView('setup');
+});
+
+// ---------- Step 1: firm + account ----------
 
 function renderFirms() {
   const row = $('firm-row');
@@ -2046,7 +2206,7 @@ function renderAccounts() {
     name.textContent = a.label;
     const meta = document.createElement('span');
     meta.className = 'acct-meta';
-    meta.textContent = `${shortDd(a)}${a.profitTarget != null ? ` · Target ${usd(a.profitTarget)}` : ' · kein Target (funded)'}`;
+    meta.textContent = `${shortDd(a)}${a.profitTarget != null ? ` · target ${usd(a.profitTarget)}` : ' · no target (funded)'}`;
     b.append(name, meta);
     b.addEventListener('click', () => {
       state.acctId = a.id;
@@ -2060,7 +2220,7 @@ function renderAccounts() {
 
 function shortDd(a) {
   const t = a.drawdown.type;
-  const kind = t === 'static' ? 'statisch' : t === 'intraday_trailing' ? 'Intraday-Trailing' : 'EOD-Trailing';
+  const kind = t === 'static' ? 'static' : t === 'intraday_trailing' ? 'intraday trailing' : 'EOD trailing';
   return `${usd(a.drawdown.amount)} ${kind}`;
 }
 
@@ -2078,15 +2238,15 @@ function renderRulesSummary() {
     div.append(kEl, vEl);
     host.appendChild(div);
   };
-  kv('Kontogröße', usd(a.size));
-  kv('Profit Target', a.profitTarget != null ? usd(a.profitTarget) : 'keins', a.profitTarget == null ? 'Funded-Account' : '');
-  kv(ddLabel(a.drawdown), usd(a.drawdown.amount), a.drawdown.lockFloorAt != null ? `lockt bei ${usd(a.drawdown.lockFloorAt)}` : 'trailt durchgehend');
-  kv('Daily Loss Limit', a.dailyLoss ? usd(a.dailyLoss.amount) : 'keins', a.dailyLoss ? (a.dailyLoss.onHit === 'fail' ? 'Bruch = durchgefallen' : 'Konto für den Tag gesperrt') : '');
-  kv('Kontrakte max.', a.maxContracts != null ? `${a.maxContracts} Minis` : '–', a.maxMicros != null ? `/ ${a.maxMicros} Micros` : '');
-  kv('Mindesttage', a.minDays != null ? String(a.minDays) : '–');
-  kv('Consistency', a.consistency ? `${a.consistency.pct}%` : 'keine', a.consistency ? (a.consistency.scope === 'eval' ? 'gilt in der Eval' : 'erst bei Payout') : '');
-  if (a.priceMonthly != null) kv('Preis', `${usd(a.priceMonthly)}/Monat`, 'Listenpreis');
-  else if (a.priceOnce != null) kv('Preis', `${usd(a.priceOnce)} einmalig`, 'Listenpreis, oft rabattiert');
+  kv('Account size', usd(a.size));
+  kv('Profit target', a.profitTarget != null ? usd(a.profitTarget) : 'none', a.profitTarget == null ? 'funded account' : '');
+  kv(ddLabel(a.drawdown), usd(a.drawdown.amount), a.drawdown.lockFloorAt != null ? `locks at ${usd(a.drawdown.lockFloorAt)}` : 'trails indefinitely');
+  kv('Daily loss limit', a.dailyLoss ? usd(a.dailyLoss.amount) : 'none', a.dailyLoss ? (a.dailyLoss.onHit === 'fail' ? 'hit = eval failed' : 'locks the day only') : '');
+  kv('Max contracts', a.maxContracts != null ? `${a.maxContracts} minis` : '–', a.maxMicros != null ? `/ ${a.maxMicros} micros` : '');
+  kv('Min. trading days', a.minDays != null ? String(a.minDays) : '–');
+  kv('Consistency', a.consistency ? `${a.consistency.pct}%` : 'none', a.consistency ? (a.consistency.scope === 'eval' ? 'applies during the eval' : 'payout stage only') : '');
+  if (a.priceMonthly != null) kv('Price', `${usd(a.priceMonthly)}/month`, 'list price');
+  else if (a.priceOnce != null) kv('Price', `${usd(a.priceOnce)} one-time`, 'list price, often discounted');
   if (firm.note || (a.notes && a.notes.length)) {
     const note = document.createElement('div');
     note.className = 'firm-note';
@@ -2096,7 +2256,35 @@ function renderRulesSummary() {
   updateQuickCheckLabels();
 }
 
-// ---------- Schritt 2: Datenimport ----------
+// ---------- Exchange-style ticker ----------
+
+function renderTicker() {
+  const host = $('ticker');
+  if (!host) return;
+  const perFirm = FIRMS.map((f) =>
+    f.accounts.filter((a) => a.profitTarget != null).slice(0, 4)
+      .map((a) => `${f.name.toUpperCase()} ${a.label.toUpperCase()} — TARGET ${usd(a.profitTarget)} · DD ${usd(a.drawdown.amount)}`)
+  );
+  const sel = [];
+  for (let i = 0; i < 4; i++) for (const list of perFirm) if (list[i]) sel.push(list[i]);
+  host.textContent = '';
+  const track = document.createElement('div');
+  track.className = 'ticker-track';
+  for (let rep = 0; rep < 2; rep++) {
+    const group = document.createElement('div');
+    group.className = 'ticker-group';
+    sel.forEach((t, i) => {
+      const s = document.createElement('span');
+      s.className = 'ticker-item ' + (i % 3 === 0 ? 'up' : i % 3 === 1 ? 'down' : '');
+      s.textContent = t;
+      group.appendChild(s);
+    });
+    track.appendChild(group);
+  }
+  host.appendChild(track);
+}
+
+// ---------- Step 2: data import ----------
 
 function bindImport() {
   const dz = $('dropzone');
@@ -2114,14 +2302,16 @@ function bindImport() {
   $('paste-btn').addEventListener('click', () => {
     const text = $('paste-area').value.trim();
     if (!text) return;
-    addSource('Eingefügter Text', text);
+    addSource('Pasted text', text);
     $('paste-area').value = '';
   });
-  $('demo-btn').addEventListener('click', loadDemo);
+  $('demo-btn').addEventListener('click', () => { loadDemo(); goToResults(); });
   $('clear-btn').addEventListener('click', () => {
     state.sources = []; state.isDemo = false;
     recompute();
   });
+  $('run-btn').addEventListener('click', goToResults);
+  $('back-btn').addEventListener('click', () => showView('setup'));
 
   for (const id of ['tz-select', 'day-select', 'range-start', 'range-end']) {
     $(id).addEventListener('change', () => {
@@ -2131,29 +2321,43 @@ function bindImport() {
   }
   const tz = store.get('tz-select'); if (tz) $('tz-select').value = tz;
   const dm = store.get('day-select'); if (dm) $('day-select').value = dm;
+
+  $('ctx-select').addEventListener('change', () => {
+    const [firmId, acctId] = $('ctx-select').value.split('|');
+    if (!FIRMS.some((f) => f.id === firmId && f.accounts.some((a) => a.id === acctId))) return;
+    state.firmId = firmId;
+    state.acctId = acctId;
+    store.set('firm', firmId); store.set('acct', acctId);
+    renderFirms();
+    recompute();
+  });
 }
 
 async function readFiles(files) {
+  let added = false;
   for (const f of files) {
     const text = await f.text();
-    addSource(f.name, text);
+    addSource(f.name, text, { deferNav: true });
+    added = true;
   }
+  if (added) goToResults();
 }
 
-function addSource(name, text) {
+function addSource(name, text, opts = {}) {
   if (state.isDemo) { state.sources = []; state.isDemo = false; }
   const parsed = parseTradingViewExport(text, name);
   state.sources.push({ name, parsed });
   recompute();
+  if (!opts.deferNav) goToResults();
 }
 
 function loadDemo() {
-  state.sources = [{ name: 'Beispieldaten', parsed: parseTradingViewExport(DEMO_CSV, 'demo.csv') }];
+  state.sources = [{ name: 'Sample data', parsed: parseTradingViewExport(DEMO_CSV, 'demo.csv') }];
   state.isDemo = true;
   recompute();
 }
 
-function renderImportStatus(merged) {
+function renderImportStatus() {
   const host = $('import-status');
   host.textContent = '';
   $('clear-btn').hidden = state.sources.length === 0;
@@ -2162,60 +2366,103 @@ function renderImportStatus(merged) {
     const line = document.createElement('div');
     const ok = s.parsed.balanceEvents.length + s.parsed.fills.length > 0;
     line.className = ok ? 'ok' : '';
-    line.textContent = `${ok ? '✓' : '✕'} ${s.name}: ${s.parsed.balanceEvents.length} Kontobewegungen, ${s.parsed.fills.length} Fills` +
+    line.textContent = `${ok ? '✓' : '✕'} ${s.name}: ${s.parsed.balanceEvents.length} balance events, ${s.parsed.fills.length} fills` +
       (s.parsed.detected.length ? ` (${s.parsed.detected.join(', ')})` : '');
     host.appendChild(line);
   }
   if (state.isDemo) {
     const note = document.createElement('div');
-    note.textContent = 'Das sind Beispieldaten zum Ausprobieren – lade deinen eigenen Export, um deine Zahlen zu sehen.';
+    note.textContent = 'This is sample data to play with – load your own export to see your numbers.';
     host.appendChild(note);
   }
-  void merged;
 }
 
-// ---------- Simulation + Rendering ----------
+// ---------- Simulation + rendering ----------
 
 function currentOptions() {
   const opts = {
     timeZone: $('tz-select').value,
     dayMode: $('day-select').value,
   };
-  // Zeitraum-Grenzen in der gewählten CSV-Zeitzone interpretieren, nicht als UTC-Mitternacht
-  const parseDay = (v) => { const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? { y: +m[1], mo: +m[2], d: +m[3] } : null; };
-  const rs = parseDay($('range-start').value || '');
-  const re = parseDay($('range-end').value || '');
+  // Range bounds are interpreted in the chosen CSV timezone, not as UTC midnight
+  const parseDayInput = (v) => { const m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/); return m ? { y: +m[1], mo: +m[2], d: +m[3] } : null; };
+  const rs = parseDayInput($('range-start').value || '');
+  const re = parseDayInput($('range-end').value || '');
   if (rs) opts.rangeStart = toEpoch({ ...rs, h: 0, mi: 0, s: 0 }, opts.timeZone);
   if (re) opts.rangeEnd = toEpoch({ ...re, h: 23, mi: 59, s: 59 }, opts.timeZone);
   return opts;
 }
 
+function updateRunCta() {
+  const btn = $('run-btn');
+  const hint = $('run-hint');
+  const ready = !!state.result && state.result.status !== 'empty';
+  btn.disabled = !ready;
+  btn.textContent = state.isDemo ? 'View sample results →' : 'Run the replay →';
+  hint.textContent = ready
+    ? `${currentFirm().name} ${currentAccount().label} · ${state.result.days.length} trading days loaded`
+    : 'Load a CSV export (or the sample data) first.';
+}
+
 function recompute() {
   renderRulesSummary();
   const merged = mergeParsed(state.sources.map((s) => s.parsed));
-  renderImportStatus(merged);
-  const root = $('result-root');
-  if (!state.sources.length) { root.hidden = true; state.result = null; renderWarnings([]); return; }
+  renderImportStatus();
+  if (!state.sources.length) {
+    state.result = null;
+    renderWarnings([]);
+    updateRunCta();
+    if (state.view === 'results') showView('setup');
+    return;
+  }
   const account = currentAccount();
   try {
     const result = simulate({ account, parsed: merged, options: currentOptions() });
     state.result = result;
     if (result.status === 'empty') {
-      root.hidden = true;
       renderWarnings(result.warnings);
+      updateRunCta();
+      if (state.view === 'results') showView('setup');
       return;
     }
-    root.hidden = false;
-    renderHero(result, account);
-    renderTiles(result, account);
-    renderEquityChart($('chart-host'), result, account);
-    renderRuleCheck(result, account);
-    renderDaysTable(result, account);
     renderWarnings(result.warnings);
+    updateRunCta();
+    if (state.view === 'results') renderResults();
   } catch (err) {
-    root.hidden = true;
     state.result = null;
-    renderWarnings([`Auswertung fehlgeschlagen: ${err && err.message ? err.message : err}. Prüfe die Datei oder melde das als Bug.`]);
+    renderWarnings([`Evaluation failed: ${err && err.message ? err.message : err}. Check the file or report this as a bug.`]);
+    updateRunCta();
+    if (state.view === 'results') showView('setup');
+  }
+}
+
+function renderResults() {
+  const result = state.result;
+  if (!result || result.status === 'empty') return;
+  const account = currentAccount();
+  renderContextSelect();
+  renderHero(result, account);
+  renderTiles(result, account);
+  renderEquityChart($('chart-host'), result, account);
+  renderCalendar($('calendar-host'), result);
+  renderRuleCheck(result, account);
+  renderDaysTable(result, account);
+}
+
+function renderContextSelect() {
+  const sel = $('ctx-select');
+  sel.textContent = '';
+  for (const f of FIRMS.filter((x) => x.accounts.length > 0)) {
+    const og = document.createElement('optgroup');
+    og.label = f.name;
+    for (const a of f.accounts) {
+      const o = document.createElement('option');
+      o.value = `${f.id}|${a.id}`;
+      o.textContent = `${f.name} · ${a.label}`;
+      if (f.id === state.firmId && a.id === currentAccount().id) o.selected = true;
+      og.appendChild(o);
+    }
+    sel.appendChild(og);
   }
 }
 
@@ -2225,24 +2472,24 @@ function renderHero(result, account) {
   const v = $('verdict'), why = $('verdict-why');
   if (result.status === 'failed') {
     hero.classList.add('failed');
-    v.textContent = 'Account geplatzt';
-    why.textContent = `${result.failed.detail} — am ${fmtDay(result.failed.day)}. Mit diesen Trades wäre die ${currentFirm().name}-Eval hier vorbei gewesen.`;
+    v.textContent = 'Account blown';
+    why.textContent = `${result.failed.detail} — on ${fmtDay(result.failed.day)}. With these trades, the ${currentFirm().name} eval would have ended right here.`;
   } else if (result.status === 'passed') {
     hero.classList.add('passed');
-    v.textContent = 'Eval bestanden ✓';
+    v.textContent = 'Eval passed ✓';
     const afterDays = result.days.filter((d) => d.afterPass).length;
-    why.textContent = `Profit Target ${usd(account.profitTarget)} erreicht, alle Regeln eingehalten — bestanden am ${fmtDay(result.passed.day)}.` +
-      (afterDays ? ` Die ${afterDays} Handelstage danach zählen für die Eval nicht mehr.` : '');
+    why.textContent = `Profit target ${usd(account.profitTarget)} reached, every rule respected — passed on ${fmtDay(result.passed.day)}.` +
+      (afterDays ? ` The ${afterDays} trading day(s) after that no longer count for the eval.` : '');
   } else {
     hero.classList.add('ongoing');
-    v.textContent = account.profitTarget != null ? 'Läuft noch' : 'Account lebt noch';
+    v.textContent = account.profitTarget != null ? 'Still running' : 'Account still alive';
     const bits = [];
-    if (result.stats.distToTarget != null && result.stats.distToTarget > 0) bits.push(`noch ${usd(result.stats.distToTarget)} bis zum Target`);
-    else if (result.targetReachedAt) bits.push('Target erreicht');
-    if (!result.stats.consistency.ok && account.consistency && account.consistency.scope === 'eval') bits.push('Consistency noch nicht erfüllt');
-    if ((account.minDays || 0) > result.stats.tradingDays) bits.push(`noch ${account.minDays - result.stats.tradingDays} Handelstag(e) nötig`);
-    bits.push(`${usd(result.stats.roomToFloor)} Luft bis zum Drawdown-Limit`);
-    why.textContent = 'Kein Regelbruch bisher — ' + bits.join(', ') + '.';
+    if (result.stats.distToTarget != null && result.stats.distToTarget > 0) bits.push(`${usd(result.stats.distToTarget)} to go to the target`);
+    else if (result.targetReachedAt) bits.push('target reached');
+    if (!result.stats.consistency.ok && account.consistency && account.consistency.scope === 'eval') bits.push('consistency not met yet');
+    if ((account.minDays || 0) > result.stats.tradingDays) bits.push(`${account.minDays - result.stats.tradingDays} more trading day(s) needed`);
+    bits.push(`${usd(result.stats.roomToFloor)} of room to the drawdown limit`);
+    why.textContent = 'No rule broken so far — ' + bits.join(', ') + '.';
   }
 }
 
@@ -2261,17 +2508,17 @@ function renderTiles(result, account) {
   host.textContent = '';
   const st = result.stats;
   host.append(
-    tile('Netto-P&L', usdSigned(st.netPnl), st.netPnl >= 0 ? 'pos' : 'neg', `Endstand ${usd(st.endEquity)}`),
-    tile('Luft bis Limit', usd(st.roomToFloor), st.roomToFloor < account.drawdown.amount * 0.25 ? 'neg' : '', `Limit aktuell ${usd(st.floorEnd)}`),
-    tile('Bis zum Target', st.distToTarget != null ? usd(st.distToTarget) : '–', '',
-      result.targetReachedAt ? `erreicht am ${fmtDay(result.targetReachedAt.day)}` :
-      account.profitTarget != null ? `Target ${usd(account.size + account.profitTarget)}` : 'Funded-Account ohne Target'),
-    tile('Knappster Moment', usd(st.minRoom), st.minRoom < account.drawdown.amount * 0.15 ? 'neg' : '', 'minimale Luft zum Limit'),
-    tile('Handelstage', `${st.tradingDays}`, '', `${st.winDays} grün / ${st.lossDays} rot · min. ${account.minDays ?? 0}`),
+    tile('Net P&L', usdSigned(st.netPnl), st.netPnl >= 0 ? 'pos' : 'neg', `ending balance ${usd(st.endEquity)}`),
+    tile('Room to limit', usd(st.roomToFloor), st.roomToFloor < account.drawdown.amount * 0.25 ? 'neg' : '', `limit now ${usd(st.floorEnd)}`),
+    tile('To target', st.distToTarget != null ? usd(st.distToTarget) : '–', '',
+      result.targetReachedAt ? `reached on ${fmtDay(result.targetReachedAt.day)}` :
+      account.profitTarget != null ? `target ${usd(account.size + account.profitTarget)}` : 'funded account, no target'),
+    tile('Closest call', usd(st.minRoom), st.minRoom < account.drawdown.amount * 0.15 ? 'neg' : '', 'minimum room to the limit'),
+    tile('Trading days', `${st.tradingDays}`, '', `${st.winDays} green / ${st.lossDays} red · min ${account.minDays ?? 0}`),
   );
-  if (st.bestDay) host.append(tile('Bester Tag', usdSigned(st.bestDay.pnl), 'pos', fmtDay(st.bestDay.day)));
-  if (st.worstDay) host.append(tile('Schlechtester Tag', usdSigned(st.worstDay.pnl), 'neg', fmtDay(st.worstDay.day)));
-  if (st.usage) host.append(tile('Max. Kontrakte', `${Math.round(st.usage.maxTotalMinis * 10) / 10}`, '', `in Minis · erlaubt ${account.maxContracts ?? '–'}`));
+  if (st.bestDay) host.append(tile('Best day', usdSigned(st.bestDay.pnl), 'pos', fmtDay(st.bestDay.day)));
+  if (st.worstDay) host.append(tile('Worst day', usdSigned(st.worstDay.pnl), 'neg', fmtDay(st.worstDay.day)));
+  if (st.usage) host.append(tile('Max contracts', `${Math.round(st.usage.maxTotalMinis * 10) / 10}`, '', `in minis · allowed ${account.maxContracts ?? '–'}`));
 }
 
 function ruleItem(cls, name, detail) {
@@ -2296,62 +2543,62 @@ function renderRuleCheck(result, account) {
   host.append(ruleItem(
     ddViol ? 'bad' : 'ok',
     ddLabel(account.drawdown),
-    ddViol ? ddViol.detail.replace(`${ddLabel(account.drawdown)} verletzt: `, 'verletzt: ') : `eingehalten – knappster Moment: ${usd(st.minRoom)} Luft`,
+    ddViol ? ddViol.detail.replace(`${ddLabel(account.drawdown)} breached: `, 'breached: ') : `respected – closest call: ${usd(st.minRoom)} of room`,
   ));
 
   if (account.dailyLoss) {
     const dl = result.violations.filter((v) => v.type === 'daily_loss');
     host.append(ruleItem(
       dl.some((v) => v.hard) ? 'bad' : dl.length ? 'warn' : 'ok',
-      `Daily Loss Limit ${usd(account.dailyLoss.amount)}`,
-      dl.length ? `${dl.length}× erreicht (${dl.map((v) => fmtDay(v.day)).join(', ')})` : `eingehalten – schlechtester Tag ${st.worstDay ? usdSigned(st.worstDay.pnl) : '–'}`,
+      `Daily loss limit ${usd(account.dailyLoss.amount)}`,
+      dl.length ? `hit ${dl.length}× (${dl.map((v) => fmtDay(v.day)).join(', ')})` : `respected – worst day ${st.worstDay ? usdSigned(st.worstDay.pnl) : '–'}`,
     ));
   } else {
-    host.append(ruleItem('na', 'Daily Loss Limit', 'dieser Account hat keins'));
+    host.append(ruleItem('na', 'Daily loss limit', 'this account has none'));
   }
 
   if (account.profitTarget != null) {
     host.append(ruleItem(
       result.targetReachedAt ? 'ok' : 'na',
-      `Profit Target ${usd(account.profitTarget)}`,
-      result.targetReachedAt ? `erreicht am ${fmtDay(result.targetReachedAt.day)}` : `${usd(Math.max(0, st.netPnl))} von ${usd(account.profitTarget)} (${Math.max(0, Math.round((st.netPnl / account.profitTarget) * 100))}%)`,
+      `Profit target ${usd(account.profitTarget)}`,
+      result.targetReachedAt ? `reached on ${fmtDay(result.targetReachedAt.day)}` : `${usd(Math.max(0, st.netPnl))} of ${usd(account.profitTarget)} (${Math.max(0, Math.round((st.netPnl / account.profitTarget) * 100))}%)`,
     ));
   } else {
-    host.append(ruleItem('na', 'Profit Target', 'Funded-Account – hier zählen Payout-Regeln statt Target'));
+    host.append(ruleItem('na', 'Profit target', 'funded account – payout rules apply instead of a target'));
   }
 
   if (account.minDays) {
     const minOk = st.tradingDays >= account.minDays;
     host.append(ruleItem(
       minOk ? 'ok' : 'na',
-      `Mindestens ${account.minDays} Handelstage`,
-      minOk ? `${st.tradingDays} Tage gehandelt` : `erst ${st.tradingDays} von ${account.minDays}`,
+      `At least ${account.minDays} trading days`,
+      minOk ? `${st.tradingDays} days traded` : `only ${st.tradingDays} of ${account.minDays}`,
     ));
   } else {
-    host.append(ruleItem('na', 'Mindesttage', `keine vorgeschrieben – ${st.tradingDays} Tage gehandelt`));
+    host.append(ruleItem('na', 'Minimum days', `none required – ${st.tradingDays} days traded`));
   }
 
   if (account.consistency) {
     const c = st.consistency;
     let detail;
-    if (c.sharePct == null) detail = 'noch kein Profit zu bewerten';
-    else if (c.ok) detail = `bester Tag = ${Math.round(c.sharePct)}% vom Gesamtprofit (max. ${account.consistency.pct}%)`;
-    else detail = `bester Tag = ${Math.round(c.sharePct)}% vom Profit – du brauchst insgesamt ${usd(c.neededTotal)} Profit, damit es passt`;
+    if (c.sharePct == null) detail = 'no profit to assess yet';
+    else if (c.ok) detail = `best day = ${Math.round(c.sharePct)}% of total profit (max ${account.consistency.pct}%)`;
+    else detail = `best day = ${Math.round(c.sharePct)}% of profit – you need ${usd(c.neededTotal)} total profit for it to fit`;
     host.append(ruleItem(c.ok ? 'ok' : 'warn', `Consistency ${account.consistency.pct}%`, detail +
-      (account.consistency.scope === 'payout' ? ' (gilt erst bei Payout, nicht in der Eval)' : '')));
+      (account.consistency.scope === 'payout' ? ' (payout stage only, not in the eval)' : '')));
   } else {
-    host.append(ruleItem('na', 'Consistency-Regel', 'dieser Account hat keine'));
+    host.append(ruleItem('na', 'Consistency rule', 'this account has none'));
   }
 
   if (st.usage && account.maxContracts != null) {
     const over = result.violations.find((v) => v.type === 'contracts');
     host.append(ruleItem(
       over ? 'warn' : 'ok',
-      `Max. ${account.maxContracts} Kontrakte`,
-      over ? over.detail : `Spitze: ${Math.round(st.usage.maxTotalMinis * 10) / 10} Minis gleichzeitig`,
+      `Max ${account.maxContracts} contracts`,
+      over ? over.detail : `peak: ${Math.round(st.usage.maxTotalMinis * 10) / 10} minis at once`,
     ));
   } else if (account.maxContracts != null) {
-    host.append(ruleItem('na', `Max. ${account.maxContracts} Kontrakte`, 'nur prüfbar, wenn der Handelsverlauf (Fills) mit im Export ist'));
+    host.append(ruleItem('na', `Max ${account.maxContracts} contracts`, 'only checkable when the order history (fills) is part of the export'));
   }
 }
 
@@ -2360,7 +2607,7 @@ function renderDaysTable(result, account) {
   table.textContent = '';
   const thead = document.createElement('thead');
   const hr = document.createElement('tr');
-  for (const h of ['Tag', 'Trades', 'P&L', 'EOD-Stand', 'Limit', 'Luft']) {
+  for (const h of ['Day', 'Trades', 'P&L', 'EOD balance', 'Limit', 'Room']) {
     const th = document.createElement('th'); th.textContent = h; hr.appendChild(th);
   }
   thead.appendChild(hr);
@@ -2369,7 +2616,7 @@ function renderDaysTable(result, account) {
   for (const d of result.days) {
     const tr = document.createElement('tr');
     if (d.afterFail || d.afterPass) tr.className = 'after-fail';
-    // Beim Intraday-Trailing gilt zum Tagesschluss der nachgezogene Floor, nicht der vom Tagesanfang
+    // With intraday trailing, the trailed floor applies at day end, not the day-open one
     const floor = intraday ? d.floorNext : d.floor;
     const cells = [
       { t: fmtDay(d.day) },
@@ -2397,23 +2644,26 @@ function renderDaysTable(result, account) {
 }
 
 function renderWarnings(warnings) {
-  const host = $('warnings');
-  host.textContent = '';
-  for (const w of [...new Set(warnings || [])]) {
-    const div = document.createElement('div');
-    div.className = 'warn-item';
-    div.textContent = w;
-    host.appendChild(div);
+  for (const id of ['warnings', 'result-warnings']) {
+    const host = $(id);
+    if (!host) continue;
+    host.textContent = '';
+    for (const w of [...new Set(warnings || [])]) {
+      const div = document.createElement('div');
+      div.className = 'warn-item';
+      div.textContent = w;
+      host.appendChild(div);
+    }
   }
 }
 
-// ---------- Quick-Check ----------
+// ---------- Quick check ----------
 
 function updateQuickCheckLabels() {
   const a = currentAccount();
   $('qc-hwm-label').textContent = a.drawdown.type === 'intraday_trailing'
-    ? '(höchste Equity, inkl. offener Trades)'
-    : a.drawdown.type === 'static' ? '(egal bei statischem DD)' : '(höchster Tagesschluss)';
+    ? '(highest equity incl. open trades)'
+    : a.drawdown.type === 'static' ? '(irrelevant with static DD)' : '(highest EOD close)';
   $('qc-start').placeholder = String(a.size.toFixed(2));
 }
 
@@ -2424,8 +2674,8 @@ function bindQuickCheck() {
     const start = parseFloat($('qc-start').value) || a.size;
     let hwm = parseFloat($('qc-hwm').value);
     if (!Number.isFinite(bal)) return;
-    // Intraday-Trailing: Watermark kann nie unter der aktuellen Equity liegen.
-    // EOD-Trailing: das EOD-Hoch darf unter dem aktuellen Stand liegen (Intraday-Gewinn heute).
+    // Intraday trailing: the watermark can never sit below current equity.
+    // EOD trailing: the EOD high may sit below today's balance (intraday gain).
     if (!Number.isFinite(hwm)) hwm = Math.max(bal, start);
     if (a.drawdown.type === 'intraday_trailing') hwm = Math.max(hwm, bal, start);
     else hwm = Math.max(hwm, start);
@@ -2446,11 +2696,11 @@ function bindQuickCheck() {
       div.append(kEl, vEl);
       host.appendChild(div);
     };
-    kv('Dein Stand (umgerechnet)', usd(equity, 2));
-    kv('Drawdown-Limit', usd(floor, 2));
-    kv('Luft', usd(room, 2), room <= 0 ? 'neg' : '');
-    if (target != null) kv('Bis zum Target', usd(Math.max(0, target - equity), 2));
-    if (room <= 0) kv('Status', 'Limit verletzt ✕', 'neg');
+    kv('Your balance (mapped)', usd(equity, 2));
+    kv('Drawdown limit', usd(floor, 2));
+    kv('Room', usd(room, 2), room <= 0 ? 'neg' : '');
+    if (target != null) kv('To target', usd(Math.max(0, target - equity), 2));
+    if (room <= 0) kv('Status', 'Limit breached ✕', 'neg');
   });
 }
 
@@ -2460,41 +2710,13 @@ function renderFooter() {
   const el = $('footer-note');
   el.textContent = '';
   const p1 = document.createElement('span');
-  p1.textContent = `Regelstand: ${RULES_AS_OF}. Alle Angaben ohne Gewähr – Prop Firms ändern ihre Regeln ständig, check vor dem Kauf immer die offizielle Seite. `;
+  p1.textContent = `Rules as of ${RULES_AS_OF}. No guarantees – prop firms change their rules all the time, always check the official site before buying. `;
   const p2 = document.createElement('span');
-  p2.textContent = 'Die Simulation rechnet auf Basis realisierter Trades (Fill-Granularität): unrealisierte Zwischenhochs/-tiefs offener Positionen sieht der TradingView-Export nicht. Beim Intraday-Trailing-Drawdown (z. B. Apex, MFFU Rapid) kann das echte Limit deshalb strenger sein, als es hier aussieht. Die Zeitstempel im Export folgen deiner Chart-Zeitzone – stell sie oben passend ein, sonst rutschen Trades in den falschen Handelstag. Keine Anlageberatung, keine Verbindung zu den genannten Firmen oder TradingView.';
+  p2.textContent = 'The simulation runs on realized trades (fill granularity): unrealized highs/lows of open positions are invisible to the TradingView export. With intraday trailing drawdowns (e.g. Apex, MFFU Rapid) the real limit can therefore be stricter than it looks here. Export timestamps follow your chart timezone – set it correctly above, or trades land on the wrong trading day. Not financial advice; not affiliated with any of these firms or TradingView.';
   el.append(p1, document.createElement('br'), p2);
 }
 
-// ---------- Init ----------
-
-// Börsenticker im Header: Auswahl der Accounts als laufendes Band
-function renderTicker() {
-  const host = $('ticker');
-  if (!host) return;
-  // Firms abwechseln, damit das Band nicht mit einer Firm anfängt und aufhört
-  const perFirm = FIRMS.map((f) =>
-    f.accounts.filter((a) => a.profitTarget != null).slice(0, 4)
-      .map((a) => `${f.name.toUpperCase()} ${a.label.toUpperCase()} — TARGET ${usd(a.profitTarget)} · DD ${usd(a.drawdown.amount)}`)
-  );
-  const sel = [];
-  for (let i = 0; i < 4; i++) for (const list of perFirm) if (list[i]) sel.push(list[i]);
-  host.textContent = '';
-  const track = document.createElement('div');
-  track.className = 'ticker-track';
-  for (let rep = 0; rep < 2; rep++) {
-    const group = document.createElement('div');
-    group.className = 'ticker-group';
-    sel.forEach((t, i) => {
-      const s = document.createElement('span');
-      s.className = 'ticker-item ' + (i % 3 === 0 ? 'up' : i % 3 === 1 ? 'down' : '');
-      s.textContent = t;
-      group.appendChild(s);
-    });
-    track.appendChild(group);
-  }
-  host.appendChild(track);
-}
+// ---------- Chart resize ----------
 
 function bindChartResize() {
   const host = $('chart-host');
@@ -2502,7 +2724,7 @@ function bindChartResize() {
   if (typeof ResizeObserver === 'undefined') return;
   const ro = new ResizeObserver(() => {
     const w = host.clientWidth;
-    if (Math.abs(w - lastWidth) > 1 && state.result && state.result.status !== 'empty' && !$('result-root').hidden) {
+    if (Math.abs(w - lastWidth) > 1 && state.result && state.result.status !== 'empty' && state.view === 'results') {
       lastWidth = w;
       renderEquityChart(host, state.result, currentAccount());
     }
@@ -2510,9 +2732,11 @@ function bindChartResize() {
   ro.observe(host);
 }
 
+// ---------- Init ----------
+
 function init() {
   state.firmId = store.get('firm') || FIRMS[0].id;
-  if (!FIRMS.some((f) => f.id === state.firmId)) state.firmId = FIRMS[0].id;
+  if (!FIRMS.some((f) => f.id === state.firmId && f.accounts.length)) state.firmId = FIRMS[0].id;
   const savedAcct = store.get('acct');
   state.acctId = currentFirm().accounts.some((a) => a.id === savedAcct) ? savedAcct : currentFirm().accounts[0].id;
   renderFirms();
@@ -2521,7 +2745,11 @@ function init() {
   bindQuickCheck();
   bindChartResize();
   renderFooter();
-  loadDemo(); // Seite öffnet mit Beispieldaten, klar als solche markiert
+  loadDemo(); // the page opens with sample data preloaded, clearly labeled
+  if (location.hash === '#results') {
+    // deep link straight to the sample results
+    goToResults();
+  }
 }
 
 init();

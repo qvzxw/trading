@@ -241,7 +241,7 @@ test('Reset im Export: nur Daten nach dem letzten Reset zählen', () => {
   const r = simulate({ account, parsed, options: { timeZone: 'UTC' } });
   assert.equal(r.status, 'ongoing');
   assert.equal(r.stats.netPnl, 500);
-  assert.ok(r.warnings.some((w) => w.includes('Reset')));
+  assert.ok(r.warnings.some((w) => /reset/i.test(w)));
 });
 
 test('pnlFromFills: Long-Roundtrip in NQ ergibt Punkte × 20 $', () => {

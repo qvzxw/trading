@@ -30,12 +30,12 @@ const fmtMoneyFull = (n) => (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleStrin
 
 function fmtDateShort(epoch) {
   const d = new Date(epoch);
-  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' });
+  return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
 }
 function fmtDateTime(epoch) {
   const d = new Date(epoch);
-  return d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' +
-         d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) + ', ' +
+         d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
 // result: Ausgabe von simulate(); account: Account-Konfiguration
@@ -69,7 +69,7 @@ export function renderEquityChart(container, result, account) {
 
   const svg = el('svg', {
     viewBox: `0 0 ${width} ${height}`, width: '100%', height,
-    role: 'img', 'aria-label': 'Equity-Kurve mit Drawdown-Limit und Profit-Target',
+    role: 'img', 'aria-label': 'Equity curve with drawdown limit and profit target',
     tabindex: '0', class: 'equity-chart',
   }, container);
 
@@ -159,8 +159,8 @@ export function renderEquityChart(container, result, account) {
     head.textContent = fmtDateTime(p.epoch);
     tip.appendChild(head);
     addTipRow(tip, 'equity', 'Equity', fmtMoneyFull(p.equity));
-    addTipRow(tip, 'floor', 'Drawdown-Limit', fmtMoneyFull(p.floor));
-    addTipRow(tip, 'room', 'Luft', fmtMoneyFull(p.equity - p.floor));
+    addTipRow(tip, 'floor', 'Drawdown limit', fmtMoneyFull(p.floor));
+    addTipRow(tip, 'room', 'Room', fmtMoneyFull(p.equity - p.floor));
     const rect = container.getBoundingClientRect();
     const scale = rect.width / width;
     const tipW = tip.offsetWidth || 180;
@@ -192,9 +192,9 @@ export function renderEquityChart(container, result, account) {
   legend.className = 'chart-legend';
   legend.append(
     legendItem('equity', 'Equity'),
-    legendItem('floor', 'Drawdown-Limit'),
+    legendItem('floor', 'Drawdown limit'),
   );
-  if (target != null) legend.append(legendItem('target', 'Profit Target'));
+  if (target != null) legend.append(legendItem('target', 'Profit target'));
   container.appendChild(legend);
 }
 

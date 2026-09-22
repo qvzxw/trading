@@ -47,7 +47,7 @@ test('Guthabenübersicht (englische Header) wird erkannt', () => {
   assert.equal(p.balanceEvents[0].pnl, -130);
   assert.equal(p.balanceEvents[0].symbol, 'CME_MINI:NQ1!');
   assert.equal(p.balanceEvents[0].qty, 1);
-  assert.ok(p.detected.includes('Guthabenübersicht'));
+  assert.ok(p.detected.includes('Balance History'));
 });
 
 test('Guthabenübersicht (deutsche Header, Semikolon, Dezimalkomma)', () => {

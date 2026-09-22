@@ -15,7 +15,7 @@ export const FIRMS = [
   {
     id: 'apex',
     name: 'Apex',
-    note: 'Apex 4.0 (seit März 2026): Einmalzahlung mit 30 Tagen Zugang, keine Mindesttage, kein Overnight (flat bis 16:59 ET), Pflicht-Bracket-Orders (jede Order braucht SL+TP). Alte 250K/300K/Static-Accounts gibt es nicht mehr; jede Größe existiert auch als „No Activation Fee“-Variante (teurer, dafür 0 $ Aktivierung).',
+    note: 'Apex 4.0 (since March 2026): one-time fee with 30 days of access, no minimum days, no overnight (flat by 4:59 PM ET), mandatory bracket orders (every order needs SL+TP). The old 250K/300K/static accounts are gone; every size also exists as a “No Activation Fee” variant (pricier, but $0 activation).',
     sources: [
       'https://apextraderfunding.com/help-center/evaluation-accounts-ea/intraday-trailing-drawdown-evaluations/',
       'https://apextraderfunding.com/help-center/eod-trailing-drawdown-accounts/eod-evaluations/',
@@ -31,8 +31,8 @@ export const FIRMS = [
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'payout' }, minDays: 0, priceOnce: price,
         notes: [
-          'Trailing zieht in Echtzeit mit – inkl. unrealisierter Spitzen offener Trades (der TradingView-Export sieht die nicht).',
-          'Lock an der Target-Balance gilt auf Rithmic/WealthCharts; auf Tradovate trailt die Eval endlos.',
+          'The trailing threshold moves in real time – including unrealized peaks of open trades (which the TradingView export cannot see).',
+          'The lock at the target balance applies on Rithmic/WealthCharts; on Tradovate the eval trails forever.',
         ],
       })),
       ...[[25, 1500, 1000, 4, 500, 390], [50, 3000, 2000, 6, 1000, 490], [100, 6000, 3000, 8, 1500, 790], [150, 9000, 4000, 12, 2000, 1490]].map(([k, target, dd, contracts, dll, price]) => ({
@@ -41,14 +41,14 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'payout' }, minDays: 0, priceOnce: price,
-        notes: ['Limit steigt nur mit Tagesschluss-Hochs (16:59 ET), wird aber in Echtzeit geprüft.'],
+        notes: ['The limit only rises with end-of-day closing highs (4:59 PM ET) but is enforced in real time.'],
       })),
     ],
   },
   {
     id: 'topstep',
     name: 'Topstep',
-    note: 'Trading Combine: MLL trailt nur per Tagesschluss, wird aber in Echtzeit (inkl. unrealisiertem P&L) enforced und lockt bei Breakeven. DLL ist optional (Standardwerte gezeigt) und sperrt nur den Tag. Flat bis 15:10 CT, kein Overnight.',
+    note: 'Trading Combine: the MLL trails end-of-day only, but is enforced in real time (incl. unrealized P&L) and locks at breakeven. The DLL is optional (defaults shown) and only locks the day. Flat by 3:10 PM CT, no overnight.',
     sources: [
       'https://help.topstep.com/en/articles/8284197-trading-combine-parameters',
       'https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit',
@@ -61,7 +61,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 55, scope: 'eval' }, minDays: 0, priceMonthly: price,
-        notes: ['Consistency: bester Tag ≤ 55 % vom Profit (offizieller 2026-Wert; viele Quellen nennen noch 50 %) – verzögert nur das Bestehen.'],
+        notes: ['Consistency: best day ≤ 55% of profit (official 2026 value; many sources still say 50%) – only delays passing.'],
       })),
       {
         id: 'topstep-25k-static', label: '25K Static (Labs)',
@@ -69,7 +69,7 @@ export const FIRMS = [
         drawdown: { type: 'static', amount: 1000, breachCheck: 'realtime', lockFloorAt: null },
         dailyLoss: null, maxContracts: null, maxMicros: null,
         consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: 75,
-        notes: ['Topstep-Labs-Drop: statischer MLL fix bei $24.000, 90 Tage gültig, Payout-Cap $4.000 – limitiert verfügbar.'],
+        notes: ['Topstep Labs drop: static MLL fixed at $24,000, valid for 90 days, $4,000 payout cap – limited availability.'],
       },
       {
         id: 'topstep-250k-freedom', label: '250K Freedom (Labs)',
@@ -77,14 +77,14 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: 10000, breachCheck: 'realtime', lockFloorAt: 250000 },
         dailyLoss: null, maxContracts: null, maxMicros: null,
         consistency: null, minDays: 0, priceOnce: 499,
-        notes: ['Limitierter Labs-Drop, 90 Tage gültig, Payout-Cap $25.000. Drawdown-Typ/Detailregeln nicht offiziell bestätigt – vor Kauf prüfen.'],
+        notes: ['Limited Labs drop, valid for 90 days, $25,000 payout cap. Drawdown type/details not officially confirmed – verify before buying.'],
       },
     ],
   },
   {
     id: 'mffu',
     name: 'MyFundedFutures',
-    note: 'Lineup Sept. 2026: Rapid (Intraday-Trailing), Rapid EOD, Pro und Builder – alles Einmalzahlung. Handel 18:00–16:10 ET, flat zum Close. Die Flex-Linie ist offenbar nicht mehr kaufbar und fehlt hier.',
+    note: 'Lineup as of Sept 2026: Rapid (intraday trailing), Rapid EOD, Pro and Builder – all one-time purchases. Trading 6:00 PM–4:10 PM ET, flat at close. The Flex line is apparently no longer for sale and is not listed here.',
     sources: [
       'https://myfundedfutures.com/plans/rapid',
       'https://help.myfundedfutures.com/en/articles/8348565-end-of-day-eod-drawdown-explained',
@@ -97,7 +97,7 @@ export const FIRMS = [
         drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 2, priceOnce: price,
-        notes: ['Trailing folgt dem Echtzeit-Hoch inkl. unrealisiertem P&L offener Trades.'],
+        notes: ['The trailing threshold follows the real-time high including unrealized P&L of open trades.'],
       })),
       ...[[25, 1500, 1000, 2, null], [50, 3000, 2000, 3, 209]].map(([k, target, dd, contracts, price]) => ({
         id: `mffu-${k}k-rapid-eod`, label: `${k}K Rapid EOD`,
@@ -105,7 +105,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 30, scope: 'eval' }, minDays: 4, priceOnce: price,
-        notes: ['EOD-Drawdown gegen strengere 30 %-Consistency und 4 Mindesttage getauscht.'],
+        notes: ['EOD drawdown traded against a stricter 30% consistency rule and 4 minimum days.'],
       })),
       ...[[50, 3000, 2000, 5, 265], [100, 6000, 3000, 10, null], [150, 9000, 4500, 15, 557]].map(([k, target, dd, contracts, price]) => ({
         id: `mffu-${k}k-pro`, label: `${k}K Pro`,
@@ -113,7 +113,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 2, priceOnce: price,
-        notes: ['Mind. 1 Trade alle 7 Tage (Inaktivitätsregel).'],
+        notes: ['At least one trade every 7 days (inactivity rule).'],
       })),
       ...[[25, 1500, 1000, 2, null, 105], [50, 3000, 2000, 4, 1000, 153]].map(([k, target, dd, contracts, dll, price]) => ({
         id: `mffu-${k}k-builder`, label: `${k}K Builder`,
@@ -121,14 +121,14 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: dll ? { amount: dll, onHit: 'lock' } : null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'payout' }, minDays: 1, priceOnce: price,
-        notes: ['Keine Consistency in der Eval – Bestehen an einem Tag möglich.'],
+        notes: ['No consistency rule during the eval – a one-day pass is possible.'],
       })),
     ],
   },
   {
     id: 'tradeify',
     name: 'Tradeify',
-    note: 'Tradeify 3.0: Growth-Eval (mit DLL), Select-Eval (ohne DLL, 40 % Consistency) und Lightning (direkt sim-funded, kein Target). EOD-Trailing wird bei allen in Echtzeit geprüft. Einmalzahlung, kein Abo.',
+    note: 'Tradeify 3.0: Growth eval (with DLL), Select eval (no DLL, 40% consistency) and Lightning (straight to sim-funded, no target). EOD trailing is enforced in real time on all of them. One-time purchase, no subscription.',
     sources: [
       'https://help.tradeify.co/en/articles/10495915-growth-evaluation-accounts',
       'https://help.tradeify.co/en/articles/12853921-select-evaluation-accounts',
@@ -141,7 +141,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: null },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 35, scope: 'payout' }, minDays: 1, priceOnce: price,
-        notes: ['Eval-Drawdown lockt nicht (Lock bei Start+100 $ erst im Funded-Konto).'],
+        notes: ['The eval drawdown never locks (the start+$100 lock applies only once funded).'],
       })),
       ...[[25, 1500, 1000, 1], [50, 3000, 2000, 4, 159], [100, 6000, 3000, 8], [150, 9000, 4500, 12]].map(([k, target, dd, contracts, price]) => ({
         id: `tradeify-${k}k-select`, label: `${k}K Select`,
@@ -149,7 +149,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: null },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 40, scope: 'eval' }, minDays: 3, priceOnce: price ?? null,
-        notes: ['Kein Daily Loss Limit – nur Trailing Drawdown und 40 %-Consistency.'],
+        notes: ['No daily loss limit – only the trailing drawdown and the 40% consistency rule.'],
       })),
       {
         id: 'tradeify-300k-select', label: '300K Select',
@@ -157,7 +157,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: 8000, breachCheck: 'realtime', lockFloorAt: 300100 },
         dailyLoss: { amount: 4000, onHit: 'lock' }, maxContracts: 16, maxMicros: 160,
         consistency: { pct: 40, scope: 'eval' }, minDays: 3, priceOnce: null,
-        notes: ['V2 (aktuell verkauft): $8.000 DD + $4.000 DLL, 16 Minis. Limitierte Auflage, kein Reset – vor Kauf genau prüfen.'],
+        notes: ['V2 (currently sold): $8,000 DD + $4,000 DLL, 16 minis. Limited release, no resets – double-check before buying.'],
       },
       ...[[25, 1000, null, 1, 345], [50, 2000, 1250, 4, 479], [100, 4000, 2500, 8, 660], [150, 5250, 3000, 12, 796]].map(([k, dd, dll, contracts, price]) => ({
         id: `tradeify-${k}k-lightning`, label: `${k}K Lightning`,
@@ -165,14 +165,14 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: dll ? { amount: dll, onHit: 'lock' } : null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 20, scope: 'payout' }, minDays: null, priceOnce: price,
-        notes: ['Direkt sim-funded: kein Profit Target, dafür Payout-Regeln (erster Payout ab 20 %-Consistency).', k >= 100 ? 'Drawdown-Höhe 2026 geändert – vor Kauf verifizieren.' : ''].filter(Boolean),
+        notes: ['Straight to sim-funded: no profit target, payout rules instead (first payout at 20% consistency).', k >= 100 ? 'Drawdown amount changed during 2026 – verify before buying.' : ''].filter(Boolean),
       })),
     ],
   },
   {
     id: 'lucid',
     name: 'Lucid',
-    note: 'Lineup Sept. 2026: LucidFlex, LucidPro und LucidDaily (Drawdown-Typ bei Daily am Checkout wählbar; Toggle gilt für Eval UND Funded). DLL ist seit Aug. 2026 optional (Werte gezeigt) und sperrt nur den Tag. Kein Overnight, Auto-Flat zum Session-Close. Einmalzahlung. LucidDirect (Instant Funding) ist hier nicht abgebildet.',
+    note: 'Lineup as of Sept 2026: LucidFlex, LucidPro and LucidDaily (drawdown type picked at checkout on Daily; the toggle applies to eval AND funded). The DLL is optional since Aug 2026 (values shown) and only locks the day. No overnight, auto-flat at session close. One-time purchase. LucidDirect (instant funding) is not covered here.',
     sources: [
       'https://support.lucidtrading.com/en/articles/12945790-lucidflex-evaluation-account',
       'https://support.lucidtrading.com/en/articles/12890029-lucidpro-evaluation-account',
@@ -185,7 +185,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: price,
-        notes: ['Intraday-Dips unters Limit sind erlaubt – nur der Tagesschluss zählt.'],
+        notes: ['Intraday dips below the limit are allowed – only the daily close counts.'],
       })),
       ...[[25, 1250, 1000, 600, 2, 135], [50, 3000, 2000, 1200, 4, 185], [100, 6000, 3000, 1800, 6, 307], [150, 9000, 4500, 2700, 10, 410]].map(([k, target, dd, dll, contracts, price]) => ({
         id: `lucid-${k}k-pro`, label: `${k}K Pro`,
@@ -193,7 +193,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 40, scope: 'payout' }, minDays: 0, priceOnce: price,
-        notes: ['Keine Consistency in der Eval – Bestehen an einem Tag möglich.'],
+        notes: ['No consistency rule during the eval – a one-day pass is possible.'],
       })),
       ...[[25, 1250, 1000, 600, 2], [50, 3000, 2000, 1200, 4], [100, 6000, 3000, 1800, 6], [150, 9000, 4500, 2700, 10]].map(([k, target, dd, dll, contracts]) => ({
         id: `lucid-${k}k-daily-eod`, label: `${k}K Daily (EOD)`,
@@ -201,7 +201,7 @@ export const FIRMS = [
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'eod', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: null,
-        notes: ['Funded-Konto wechselt auf Intraday-Drawdown mit Daily-Profit-Cap und News-Regel.'],
+        notes: ['The funded account switches to an intraday drawdown with a daily profit cap and a news rule.'],
       })),
       ...[[25, 1250, 1000, 600, 2], [50, 3000, 2000, 1200, 4], [100, 6000, 3000, 1800, 6], [150, 9000, 4500, 2700, 10]].map(([k, target, dd, dll, contracts]) => ({
         id: `lucid-${k}k-daily-intraday`, label: `${k}K Daily (Intraday)`,
@@ -209,7 +209,7 @@ export const FIRMS = [
         drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
         dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: null,
-        notes: ['Günstigere Daily-Variante: Trailing zieht in Echtzeit inkl. unrealisiertem P&L.'],
+        notes: ['The cheaper Daily variant: trailing moves in real time incl. unrealized P&L.'],
       })),
     ],
   },
