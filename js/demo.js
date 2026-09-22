@@ -54,23 +54,25 @@ function buildDemo() {
       const tExit = `2026-09-${pad(d)} ${pad(Math.floor(minute / 60))}:${pad(minute % 60)}:${pad(Math.floor(rnd() * 60))}`;
       minute += 6 + Math.floor(rnd() * 25);
 
-      fillRows.push(`${symbol},${long ? 'Buy' : 'Sell'},${useQty},${f2(entry)},${tEntry}`);
-      fillRows.push(`${symbol},${long ? 'Sell' : 'Buy'},${useQty},${f2(exit)},${tExit}`);
+      const oid = 3200000000 + fillRows.length;
+      fillRows.push(`${symbol},${long ? 'Buy' : 'Sell'},Market,${useQty},,,${f2(entry)},Filled,,${tEntry},${tEntry},${oid},,,`);
+      fillRows.push(`${symbol},${long ? 'Sell' : 'Buy'},Market,${useQty},,,${f2(exit)},Filled,,${tExit},${tExit},${oid + 1},,,`);
 
       const before = balance;
       balance = Math.round((balance + pnl) * 100) / 100;
-      const action = `Close ${long ? 'long' : 'short'} position for symbol ${symbol} at price ${f2(exit)} for ${useQty} units. Position AVG Price was ${f2(entry)}`;
-      balanceRows.push(`${tExit},${f2(before)},${f2(balance)},${f2(pnl)},"${action}"`);
+      const action = `Close ${long ? 'long' : 'short'} position for symbol ${symbol} at price ${f2(exit)} for ${useQty} units. Position AVG Price was ${entry.toFixed(6)}, currency: USD, rate: 1.000000, point value: ${mult.toFixed(6)}`;
+      balanceRows.push(`${tExit},${f2(before)},${f2(balance)},${f2(pnl)},USD,"${action}"`);
     }
   }
 
+  // Format wie der echte 2026er Export ("Alle Tabs" = mehrere Dateien; hier als eine Demo-Datei kombiniert)
   return [
-    'Guthabenübersicht',
-    'Time,Balance Before,Balance After,Realized P&L,Action',
+    'Balance History',
+    'Time,Balance before,Balance after,Realized PnL (value),Realized PnL (currency),Action',
     ...balanceRows,
     '',
-    'Handelsverlauf',
-    'Symbol,Side,Qty,Fill Price,Time',
+    'Order History',
+    'Symbol,Side,Type,Quantity,Limit price,Stop price,Fill price,Status,Commission,Placing time,Closing time,Order ID,Level ID,Leverage,Margin',
     ...fillRows,
   ].join('\n');
 }

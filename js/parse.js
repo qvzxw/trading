@@ -122,8 +122,8 @@ function norm(h) {
 
 const COLS = {
   time:          ['time', 'zeit', 'datum', 'date', 'closing time', 'placing time', 'schlusszeit', 'orderzeit', 'zeitpunkt', 'fill time', 'ausfuhrungszeit'],
-  balanceBefore: ['balance before', 'guthaben vor', 'kontostand vor'],
-  balanceAfter:  ['balance after', 'guthaben nach', 'kontostand nach'],
+  balanceBefore: ['balance before', 'guthaben vor', 'kontostand vor', 'saldo vor'],
+  balanceAfter:  ['balance after', 'guthaben nach', 'kontostand nach', 'saldo nach'],
   realizedPnl:   ['realized p l', 'realized pnl', 'realisierter g v', 'realisierter gewinn verlust', 'realized profit loss', 'profit', 'p l', 'g v', 'gewinn verlust', 'pnl'],
   action:        ['action', 'handlung', 'aktion', 'description', 'beschreibung', 'message', 'nachricht', 'text'],
   symbol:        ['symbol', 'instrument', 'ticker'],
@@ -137,6 +137,11 @@ const COLS = {
 
 function mapHeaders(headerRow) {
   const map = {};
+  // "Closing time" schlägt "Placing time": bei gefüllten Orders ist das der Ausführungszeitpunkt.
+  headerRow.forEach((h, i) => {
+    const n = norm(h);
+    if (map.time == null && (n === 'closing time' || n === 'schlusszeit')) map.time = i;
+  });
   headerRow.forEach((h, i) => {
     const n = norm(h);
     if (!n) return;

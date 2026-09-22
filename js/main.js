@@ -467,7 +467,7 @@ function renderFooter() {
   const p1 = document.createElement('span');
   p1.textContent = `Regelstand: ${RULES_AS_OF}. Alle Angaben ohne Gewähr – Prop Firms ändern ihre Regeln ständig, check vor dem Kauf immer die offizielle Seite. `;
   const p2 = document.createElement('span');
-  p2.textContent = 'Die Simulation rechnet auf Basis realisierter Trades (Fill-Granularität): unrealisierte Zwischenhochs/-tiefs offener Positionen sieht der TradingView-Export nicht. Beim Intraday-Trailing-Drawdown (z. B. Apex) kann das echte Limit deshalb strenger sein, als es hier aussieht. Keine Anlageberatung, keine Verbindung zu den genannten Firmen oder TradingView.';
+  p2.textContent = 'Die Simulation rechnet auf Basis realisierter Trades (Fill-Granularität): unrealisierte Zwischenhochs/-tiefs offener Positionen sieht der TradingView-Export nicht. Beim Intraday-Trailing-Drawdown (z. B. Apex, MFFU Rapid) kann das echte Limit deshalb strenger sein, als es hier aussieht. Die Zeitstempel im Export folgen deiner Chart-Zeitzone – stell sie oben passend ein, sonst rutschen Trades in den falschen Handelstag. Keine Anlageberatung, keine Verbindung zu den genannten Firmen oder TradingView.';
   el.append(p1, document.createElement('br'), p2);
 }
 

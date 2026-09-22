@@ -37,8 +37,8 @@
     <div class="import-grid">
       <div class="dropzone" id="dropzone" role="button" tabindex="0"
            aria-label="CSV-Dateien hierher ziehen oder klicken zum Auswählen">
-        <strong>CSV hier reinziehen</strong> oder klicken zum Auswählen
-        <span class="small">Am besten „Alle Tabs“ exportieren – erkannt werden Guthabenübersicht, Handelsverlauf und Order-Verlauf (deutsch oder englisch). Mehrere Dateien gehen auch.</span>
+        <strong>CSV-Dateien hier reinziehen</strong> oder klicken zum Auswählen
+        <span class="small">„Alle Tabs“ lädt mehrere Dateien herunter – zieh sie einfach alle zusammen rein. Gebraucht wird die Guthabenübersicht (Balance History); der Order-Verlauf zusätzlich macht den Kontrakt-Check möglich. Deutsche und englische Header werden erkannt.</span>
         <input type="file" id="file-input" class="hidden-input" accept=".csv,text/csv,text/plain" multiple>
       </div>
       <div class="paste-box">
@@ -52,12 +52,12 @@
     </div>
     <div class="import-status" id="import-status"></div>
     <div class="opts-row" id="opts-row">
-      <label class="opt">Zeitzone im CSV
+      <label class="opt">Zeitzone im CSV (= deine Chart-Zeitzone)
         <select id="tz-select">
-          <option value="UTC" selected>UTC (TradingView-Standard)</option>
-          <option value="Europe/Berlin">Europe/Berlin</option>
-          <option value="America/New_York">America/New York</option>
-          <option value="America/Chicago">America/Chicago</option>
+          <option value="America/New_York" selected>New York (UTC-4/-5)</option>
+          <option value="Europe/Berlin">Berlin (UTC+1/+2)</option>
+          <option value="America/Chicago">Chicago (UTC-5/-6)</option>
+          <option value="UTC">UTC</option>
           <option value="local">Meine Systemzeit</option>
         </select>
       </label>

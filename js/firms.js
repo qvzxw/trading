@@ -15,22 +15,27 @@ export const FIRMS = [
   {
     id: 'apex',
     name: 'Apex',
-    note: 'Apex 4.0 (seit März 2026): Einmalzahlung mit 30 Tagen Zugang, keine Mindesttage, kein Overnight (flat bis 16:59 ET). Die alten 250K/300K/Static-Accounts werden nicht mehr verkauft.',
+    note: 'Apex 4.0 (seit März 2026): Einmalzahlung mit 30 Tagen Zugang, keine Mindesttage, kein Overnight (flat bis 16:59 ET), Pflicht-Bracket-Orders (jede Order braucht SL+TP). Alte 250K/300K/Static-Accounts gibt es nicht mehr; jede Größe existiert auch als „No Activation Fee“-Variante (teurer, dafür 0 $ Aktivierung).',
     sources: [
       'https://apextraderfunding.com/help-center/evaluation-accounts-ea/intraday-trailing-drawdown-evaluations/',
       'https://apextraderfunding.com/help-center/eod-trailing-drawdown-accounts/eod-evaluations/',
       'https://apextraderfunding.com/help-center/additional-helpful-items/daily-loss-limit-explained/',
     ],
     accounts: [
-      ...[[25, 1500, 1000, 4, 199], [50, 3000, 2000, 6, 249], [100, 6000, 3000, 8, 399], [150, 9000, 4000, 12, 599]].map(([k, target, dd, contracts, price]) => ({
+      ...[[25, 1500, 1000, 4, 167], [50, 3000, 2000, 6, 249], [100, 6000, 3000, 8, 399], [150, 9000, 4000, 12, 599]].map(([k, target, dd, contracts, price]) => ({
         id: `apex-${k}k-intraday`, label: `${k}K Intraday`,
         size: k * 1000, profitTarget: target,
-        drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
+        // Eval-Lock (Rithmic/WealthCharts): Threshold stoppt an der Profit-Target-Balance.
+        // Auf Tradovate trailt er in der Eval endlos. Start+100 gilt erst im PA (funded).
+        drawdown: { type: 'intraday_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + target },
         dailyLoss: null, maxContracts: contracts, maxMicros: contracts * 10,
         consistency: { pct: 50, scope: 'payout' }, minDays: 0, priceOnce: price,
-        notes: ['Trailing zieht in Echtzeit mit – inkl. unrealisierter Spitzen offener Trades (der TradingView-Export sieht die nicht).'],
+        notes: [
+          'Trailing zieht in Echtzeit mit – inkl. unrealisierter Spitzen offener Trades (der TradingView-Export sieht die nicht).',
+          'Lock an der Target-Balance gilt auf Rithmic/WealthCharts; auf Tradovate trailt die Eval endlos.',
+        ],
       })),
-      ...[[25, 1500, 1000, 4, 500, 390], [50, 3000, 2000, 6, 1000, 450], [100, 6000, 3000, 8, 1500, 590], [150, 9000, 4000, 12, 2000, 1090]].map(([k, target, dd, contracts, dll, price]) => ({
+      ...[[25, 1500, 1000, 4, 500, 390], [50, 3000, 2000, 6, 1000, 490], [100, 6000, 3000, 8, 1500, 790], [150, 9000, 4000, 12, 2000, 1490]].map(([k, target, dd, contracts, dll, price]) => ({
         id: `apex-${k}k-eod`, label: `${k}K EOD`,
         size: k * 1000, profitTarget: target,
         drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 + 100 },
@@ -49,14 +54,32 @@ export const FIRMS = [
       'https://help.topstep.com/en/articles/8284204-what-is-the-maximum-loss-limit',
       'https://help.topstep.com/en/articles/8284208-consistency-at-topstep',
     ],
-    accounts: [[50, 3000, 2000, 1000, 5, 49], [100, 6000, 3000, 2000, 10, 99], [150, 9000, 4500, 3000, 15, 199]].map(([k, target, dd, dll, contracts, price]) => ({
-      id: `topstep-${k}k`, label: `${k}K Combine`,
-      size: k * 1000, profitTarget: target,
-      drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 },
-      dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
-      consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceMonthly: price,
-      notes: ['Consistency: bester Tag ≤ 50 % vom Profit (Topstep kommuniziert 2026 teils 55 %) – verzögert nur das Bestehen.'],
-    })),
+    accounts: [
+      ...[[50, 3000, 2000, 1000, 5, 49], [100, 6000, 3000, 2000, 10, 99], [150, 9000, 4500, 3000, 15, 199]].map(([k, target, dd, dll, contracts, price]) => ({
+        id: `topstep-${k}k`, label: `${k}K Combine`,
+        size: k * 1000, profitTarget: target,
+        drawdown: { type: 'eod_trailing', amount: dd, breachCheck: 'realtime', lockFloorAt: k * 1000 },
+        dailyLoss: { amount: dll, onHit: 'lock' }, maxContracts: contracts, maxMicros: contracts * 10,
+        consistency: { pct: 55, scope: 'eval' }, minDays: 0, priceMonthly: price,
+        notes: ['Consistency: bester Tag ≤ 55 % vom Profit (offizieller 2026-Wert; viele Quellen nennen noch 50 %) – verzögert nur das Bestehen.'],
+      })),
+      {
+        id: 'topstep-25k-static', label: '25K Static (Labs)',
+        size: 25000, profitTarget: 2000,
+        drawdown: { type: 'static', amount: 1000, breachCheck: 'realtime', lockFloorAt: null },
+        dailyLoss: null, maxContracts: null, maxMicros: null,
+        consistency: { pct: 50, scope: 'eval' }, minDays: 0, priceOnce: 75,
+        notes: ['Topstep-Labs-Drop: statischer MLL fix bei $24.000, 90 Tage gültig, Payout-Cap $4.000 – limitiert verfügbar.'],
+      },
+      {
+        id: 'topstep-250k-freedom', label: '250K Freedom (Labs)',
+        size: 250000, profitTarget: 15000,
+        drawdown: { type: 'eod_trailing', amount: 10000, breachCheck: 'realtime', lockFloorAt: 250000 },
+        dailyLoss: null, maxContracts: null, maxMicros: null,
+        consistency: null, minDays: 0, priceOnce: 499,
+        notes: ['Limitierter Labs-Drop, 90 Tage gültig, Payout-Cap $25.000. Drawdown-Typ/Detailregeln nicht offiziell bestätigt – vor Kauf prüfen.'],
+      },
+    ],
   },
   {
     id: 'mffu',
@@ -132,9 +155,9 @@ export const FIRMS = [
         id: 'tradeify-300k-select', label: '300K Select',
         size: 300000, profitTarget: 14000,
         drawdown: { type: 'eod_trailing', amount: 8000, breachCheck: 'realtime', lockFloorAt: 300100 },
-        dailyLoss: null, maxContracts: null, maxMicros: null,
+        dailyLoss: { amount: 4000, onHit: 'lock' }, maxContracts: 16, maxMicros: 160,
         consistency: { pct: 40, scope: 'eval' }, minDays: 3, priceOnce: null,
-        notes: ['Limitierte Auflage, kein Reset möglich; Angaben teils widersprüchlich – vor Kauf genau prüfen.'],
+        notes: ['V2 (aktuell verkauft): $8.000 DD + $4.000 DLL, 16 Minis. Limitierte Auflage, kein Reset – vor Kauf genau prüfen.'],
       },
       ...[[25, 1000, null, 1, 345], [50, 2000, 1250, 4, 479], [100, 4000, 2500, 8, 660], [150, 5250, 3000, 12, 796]].map(([k, dd, dll, contracts, price]) => ({
         id: `tradeify-${k}k-lightning`, label: `${k}K Lightning`,
@@ -149,7 +172,7 @@ export const FIRMS = [
   {
     id: 'lucid',
     name: 'Lucid',
-    note: 'Lineup Sept. 2026: LucidFlex, LucidPro und LucidDaily (Drawdown-Typ bei Daily am Checkout wählbar). DLL ist seit Aug. 2026 ein optionaler Toggle (Werte gezeigt) und sperrt nur den Tag. Kein Overnight, Auto-Flat 16:45 ET. Einmalzahlung.',
+    note: 'Lineup Sept. 2026: LucidFlex, LucidPro und LucidDaily (Drawdown-Typ bei Daily am Checkout wählbar; Toggle gilt für Eval UND Funded). DLL ist seit Aug. 2026 optional (Werte gezeigt) und sperrt nur den Tag. Kein Overnight, Auto-Flat zum Session-Close. Einmalzahlung. LucidDirect (Instant Funding) ist hier nicht abgebildet.',
     sources: [
       'https://support.lucidtrading.com/en/articles/12945790-lucidflex-evaluation-account',
       'https://support.lucidtrading.com/en/articles/12890029-lucidpro-evaluation-account',
