@@ -207,6 +207,19 @@ function bindImport() {
   $('run-btn').addEventListener('click', goToResults);
   $('back-btn').addEventListener('click', () => showView('setup'));
 
+  // Auch auf der Ergebnisseite lassen sich weitere Exporte hinzufügen:
+  // per Button oder indem man Dateien einfach irgendwo fallen lässt.
+  $('add-btn').addEventListener('click', () => fi.click());
+  document.addEventListener('dragover', (e) => {
+    if (state.view === 'results' && e.dataTransfer?.types?.includes('Files')) e.preventDefault();
+  });
+  document.addEventListener('drop', async (e) => {
+    if (state.view === 'results' && e.dataTransfer?.files?.length) {
+      e.preventDefault();
+      await readFiles([...e.dataTransfer.files]);
+    }
+  });
+
   for (const id of ['tz-select', 'day-select', 'range-start', 'range-end']) {
     $(id).addEventListener('change', () => {
       store.set(id, $(id).value);
@@ -335,6 +348,12 @@ function renderResults() {
   if (!result || result.status === 'empty') return;
   const account = currentAccount();
   renderContextSelect();
+  const filesInfo = $('results-files');
+  if (filesInfo) {
+    filesInfo.textContent = state.isDemo
+      ? 'sample data'
+      : `${state.sources.length} file${state.sources.length === 1 ? '' : 's'} · ${result.days.length} days`;
+  }
   renderHero(result, account);
   renderTiles(result, account);
   renderEquityChart($('chart-host'), result, account);
@@ -410,8 +429,8 @@ function renderTiles(result, account) {
     tile('Closest call', usd(st.minRoom), st.minRoom < account.drawdown.amount * 0.15 ? 'neg' : '', 'minimum room to the limit'),
     tile('Trading days', `${st.tradingDays}`, '', `${st.winDays} green / ${st.lossDays} red · min ${account.minDays ?? 0}`),
   );
-  if (st.bestDay) host.append(tile('Best day', usdSigned(st.bestDay.pnl), 'pos', fmtDay(st.bestDay.day)));
-  if (st.worstDay) host.append(tile('Worst day', usdSigned(st.worstDay.pnl), 'neg', fmtDay(st.worstDay.day)));
+  if (st.bestDay && st.bestDay.pnl > 0) host.append(tile('Best day', usdSigned(st.bestDay.pnl), 'pos', fmtDay(st.bestDay.day)));
+  if (st.worstDay && st.worstDay.pnl < 0) host.append(tile('Worst day', usdSigned(st.worstDay.pnl), 'neg', fmtDay(st.worstDay.day)));
   if (st.usage) host.append(tile('Max contracts', `${Math.round(st.usage.maxTotalMinis * 10) / 10}`, '', `in minis · allowed ${account.maxContracts ?? '–'}`));
 }
 

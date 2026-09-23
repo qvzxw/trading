@@ -486,6 +486,7 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
   background: linear-gradient(92deg, var(--accent), var(--accent-2));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+.results-files { color: var(--muted); font-size: 12px; font-family: "IBM Plex Mono", monospace; }
 .ctx-opt { min-width: 0; }
 .ctx-opt select { max-width: min(320px, 70vw); }
 .visually-hidden {
@@ -691,6 +692,8 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
     <div class="results-bar">
       <button class="btn ghost" id="back-btn">← Setup</button>
       <span class="results-brand" aria-hidden="true">Prop<span>Replay</span></span>
+      <span class="results-files" id="results-files"></span>
+      <button class="btn" id="add-btn" title="Add more CSV exports to this account">+ Add CSVs</button>
       <label class="opt ctx-opt">
         <span class="visually-hidden">Switch account</span>
         <select id="ctx-select" aria-label="Switch firm and account"></select>
@@ -2313,6 +2316,19 @@ function bindImport() {
   $('run-btn').addEventListener('click', goToResults);
   $('back-btn').addEventListener('click', () => showView('setup'));
 
+  // Auch auf der Ergebnisseite lassen sich weitere Exporte hinzufügen:
+  // per Button oder indem man Dateien einfach irgendwo fallen lässt.
+  $('add-btn').addEventListener('click', () => fi.click());
+  document.addEventListener('dragover', (e) => {
+    if (state.view === 'results' && e.dataTransfer?.types?.includes('Files')) e.preventDefault();
+  });
+  document.addEventListener('drop', async (e) => {
+    if (state.view === 'results' && e.dataTransfer?.files?.length) {
+      e.preventDefault();
+      await readFiles([...e.dataTransfer.files]);
+    }
+  });
+
   for (const id of ['tz-select', 'day-select', 'range-start', 'range-end']) {
     $(id).addEventListener('change', () => {
       store.set(id, $(id).value);
@@ -2441,6 +2457,12 @@ function renderResults() {
   if (!result || result.status === 'empty') return;
   const account = currentAccount();
   renderContextSelect();
+  const filesInfo = $('results-files');
+  if (filesInfo) {
+    filesInfo.textContent = state.isDemo
+      ? 'sample data'
+      : `${state.sources.length} file${state.sources.length === 1 ? '' : 's'} · ${result.days.length} days`;
+  }
   renderHero(result, account);
   renderTiles(result, account);
   renderEquityChart($('chart-host'), result, account);
@@ -2516,8 +2538,8 @@ function renderTiles(result, account) {
     tile('Closest call', usd(st.minRoom), st.minRoom < account.drawdown.amount * 0.15 ? 'neg' : '', 'minimum room to the limit'),
     tile('Trading days', `${st.tradingDays}`, '', `${st.winDays} green / ${st.lossDays} red · min ${account.minDays ?? 0}`),
   );
-  if (st.bestDay) host.append(tile('Best day', usdSigned(st.bestDay.pnl), 'pos', fmtDay(st.bestDay.day)));
-  if (st.worstDay) host.append(tile('Worst day', usdSigned(st.worstDay.pnl), 'neg', fmtDay(st.worstDay.day)));
+  if (st.bestDay && st.bestDay.pnl > 0) host.append(tile('Best day', usdSigned(st.bestDay.pnl), 'pos', fmtDay(st.bestDay.day)));
+  if (st.worstDay && st.worstDay.pnl < 0) host.append(tile('Worst day', usdSigned(st.worstDay.pnl), 'neg', fmtDay(st.worstDay.day)));
   if (st.usage) host.append(tile('Max contracts', `${Math.round(st.usage.maxTotalMinis * 10) / 10}`, '', `in minis · allowed ${account.maxContracts ?? '–'}`));
 }
 

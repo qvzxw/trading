@@ -476,6 +476,7 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
   background: linear-gradient(92deg, var(--accent), var(--accent-2));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+.results-files { color: var(--muted); font-size: 12px; font-family: "IBM Plex Mono", monospace; }
 .ctx-opt { min-width: 0; }
 .ctx-opt select { max-width: min(320px, 70vw); }
 .visually-hidden {
