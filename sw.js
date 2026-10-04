@@ -1,9 +1,10 @@
 // Service Worker: Network-first mit Cache-Fallback – App bleibt offline nutzbar,
 // bekommt aber immer die frischeste Version, sobald Netz da ist.
-const CACHE = 'prop-replay-v2';
+const CACHE = 'prop-replay-v3';
 const CORE = [
   './',
   'index.html',
+  'charts.html',
   'css/app.css',
   'js/main.js',
   'js/engine.js',
@@ -11,7 +12,12 @@ const CORE = [
   'js/firms.js',
   'js/symbols.js',
   'js/chart.js',
+  'js/calendar.js',
   'js/demo.js',
+  'js/charts/app.js',
+  'js/charts/data.js',
+  'js/charts/compute.js',
+  'js/charts/paint.js',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',
