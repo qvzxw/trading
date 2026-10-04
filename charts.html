@@ -2,101 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Prop Replay Charts</title>
-<meta name="theme-color" content="#0d0d0d">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon-192.png" type="image/png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="css/app.css">
+<!-- The chart workstation lives inside the main page now. -->
+<meta http-equiv="refresh" content="0; url=./#charts">
+<script>location.replace('./#charts');</script>
 </head>
-<body>
-<div class="wrap wide">
-
-  <div class="results-bar">
-    <a class="btn ghost" href="index.html">← Evaluator</a>
-    <span class="results-brand" aria-hidden="true">Prop<span>Charts</span></span>
-    <span class="feed-chip" id="feed-chip">connecting…</span>
-    <label class="opt ctx-opt"><span class="visually-hidden">Symbol</span>
-      <select id="symbol-select" aria-label="Symbol"></select>
-    </label>
-    <label class="opt ctx-opt"><span class="visually-hidden">Interval</span>
-      <select id="interval-select" aria-label="Interval"></select>
-    </label>
-    <label class="opt ctx-opt"><span class="visually-hidden">Session</span>
-      <select id="day-select" aria-label="Session"></select>
-    </label>
-  </div>
-
-  <div class="tabbar">
-    <button class="chip" data-tab="candles" aria-pressed="true">Candles</button>
-    <button class="chip" data-tab="tpo" aria-pressed="false">TPO</button>
-    <button class="chip" data-tab="vp" aria-pressed="false">Volume Profile</button>
-    <button class="chip" data-tab="footprint" aria-pressed="false">Footprint</button>
-    <button class="chip" data-tab="odds" aria-pressed="false">Odds</button>
-    <span class="tab-spacer"></span>
-    <button class="chip" id="panel-levels-btn" aria-pressed="false">Levels</button>
-    <button class="chip" id="panel-colors-btn" aria-pressed="false">Colors</button>
-  </div>
-
-  <div class="chart-wrap">
-    <div class="chart-stage" id="stage-candles"><canvas id="cv-candles"></canvas></div>
-    <div class="chart-stage" id="stage-tpo" hidden><canvas id="cv-tpo"></canvas></div>
-    <div class="chart-stage" id="stage-vp" hidden><canvas id="cv-vp"></canvas></div>
-    <div class="chart-stage" id="stage-footprint" hidden><canvas id="cv-footprint"></canvas></div>
-    <div class="odds-stage" id="stage-odds" hidden><div id="odds-host"></div></div>
-
-    <aside class="side-panel" id="side-panel" hidden data-active="">
-      <div id="panel-levels" hidden>
-        <h3>Levels</h3>
-        <div class="level-form">
-          <input type="number" id="level-price" step="0.25" placeholder="Price">
-          <input type="text" id="level-label" maxlength="16" placeholder="Label (e.g. LVN)">
-          <button class="btn primary" id="level-add">Add</button>
-          <button class="btn ghost" id="level-at-cursor" title="Adds a level at the crosshair price on the candles chart">At cursor</button>
-        </div>
-        <div id="levels-list"></div>
-        <button class="btn ghost" id="notify-btn">🔔 Enable browser notifications</button>
-        <p class="muted-note">Alerts fire when a polled or replayed bar touches a level — once per level, click “HIT” to re-arm. Feed is ~10–15 min delayed.</p>
-      </div>
-      <div id="panel-colors" hidden>
-        <h3>Colors</h3>
-        <div class="color-grid" id="color-grid"></div>
-        <button class="btn ghost" id="color-reset">Reset to defaults</button>
-      </div>
-    </aside>
-  </div>
-
-  <div class="chart-info-row">
-    <span class="chart-info" id="chart-info">loading…</span>
-    <span class="muted-note" id="fp-note" hidden>Footprint is approximated from 1m bars via tick rule — real bid/ask needs licensed tick data.</span>
-  </div>
-
-  <div class="replay-bar">
-    <button class="btn" id="replay-play" title="Replay the selected session">▶</button>
-    <select id="replay-speed" class="replay-speed" aria-label="Replay speed">
-      <option value="2">2 bars/s</option>
-      <option value="4" selected>4 bars/s</option>
-      <option value="10">10 bars/s</option>
-      <option value="25">25 bars/s</option>
-    </select>
-    <input type="range" id="replay-range" min="1" max="100" value="100" aria-label="Replay position">
-    <button class="btn active" id="live-btn" title="Back to the live edge">LIVE</button>
-  </div>
-
-  <p class="footer-note">Free delayed feed (Yahoo Finance, ~10–15 min on futures). Profiles, footprint and odds are computed in your browser from the loaded history. Not financial advice.</p>
-</div>
-
-<div id="toast-host" class="toast-host"></div>
-
-<script type="module" src="js/charts/app.js"></script>
-<script>
-try {
-  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
-} catch (e) { /* fine */ }
-</script>
-</body>
+<body><a href="./#charts">Continue to the charts →</a></body>
 </html>

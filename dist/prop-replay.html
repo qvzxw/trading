@@ -576,6 +576,96 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
 
 .hidden-input { display: none; }
 
+/* ---------- Chart-Workstation (charts.html) ---------- */
+
+.wrap.wide { max-width: 1280px; }
+
+.feed-chip {
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: 0.04em;
+  padding: 4px 10px; border-radius: 6px; border: 1px solid var(--hairline); color: var(--muted);
+  white-space: nowrap;
+}
+.feed-chip.live { border-color: var(--good); color: var(--pos-text); box-shadow: 0 0 12px var(--good-glow); }
+.feed-chip.warn { border-color: var(--warning); color: var(--warning); }
+
+.tabbar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; align-items: center; }
+.tab-spacer { flex: 1; }
+
+.chart-wrap { position: relative; margin-top: 12px; }
+.chart-stage {
+  border: 1px solid transparent; border-radius: 14px; overflow: hidden;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--card-grad) border-box;
+  height: min(62vh, 640px);
+  padding: 6px;
+}
+.chart-stage canvas { width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: none; }
+.odds-stage {
+  border: 1px solid transparent; border-radius: 14px;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--card-grad) border-box;
+  min-height: 300px; padding: 18px 20px;
+}
+.odds-stage h3 { font-size: 15px; font-weight: 600; }
+
+.side-panel {
+  position: absolute; top: 10px; right: 10px; z-index: 6;
+  width: min(330px, calc(100vw - 48px));
+  max-height: calc(100% - 20px); overflow-y: auto;
+  background: var(--raised); border: 1px solid var(--ring); border-radius: 12px;
+  box-shadow: var(--shadow); padding: 14px 16px;
+}
+.side-panel h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+
+.level-form { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.level-form input {
+  background: var(--inset); color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: 8px; padding: 7px 9px; font-size: 13px; min-width: 0;
+}
+.level-row {
+  display: flex; align-items: center; gap: 8px; padding: 6px 0;
+  border-bottom: 1px solid var(--hairline); font-family: "IBM Plex Mono", monospace; font-size: 12.5px;
+}
+.level-row input[type="color"] { width: 22px; height: 22px; border: none; background: none; padding: 0; cursor: pointer; }
+.lv-price { font-weight: 600; }
+.lv-label { color: var(--ink-2); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lv-hit { font-size: 10px; letter-spacing: 0.06em; color: var(--muted); cursor: pointer; }
+.lv-hit.on { color: var(--warning); font-weight: 700; }
+.lv-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 13px; }
+.lv-del:hover { color: var(--critical); }
+
+.color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; margin-bottom: 12px; }
+.color-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2); cursor: pointer; }
+.color-row input { width: 24px; height: 24px; border: none; background: none; padding: 0; cursor: pointer; }
+
+.chart-info-row { display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; margin-top: 8px; }
+.chart-info { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-2); }
+.muted-note { color: var(--muted); font-size: 11.5px; }
+
+.replay-bar {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+  background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--card-grad) border-box;
+  border: 1px solid transparent; border-radius: 12px; padding: 10px 14px;
+}
+.replay-bar input[type="range"] { flex: 1; accent-color: var(--accent); min-width: 0; }
+.replay-speed {
+  background: var(--raised); color: var(--ink); border: 1px solid var(--hairline);
+  border-radius: 8px; padding: 6px 8px; font-size: 12.5px;
+}
+#live-btn.active { border-color: var(--good); color: var(--pos-text); box-shadow: 0 0 10px var(--good-glow); }
+
+.toast-host { position: fixed; right: 16px; bottom: 16px; z-index: 50; display: grid; gap: 8px; }
+.toast {
+  background: var(--raised); border: 1px solid var(--accent); border-radius: 10px;
+  padding: 10px 14px; font-size: 13.5px; color: var(--ink);
+  box-shadow: 0 0 20px var(--accent-glow); animation: toast-in 0.2s ease-out;
+}
+@keyframes toast-in { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+@media (max-width: 700px) {
+  .chart-stage { height: 56vh; }
+  .level-form { grid-template-columns: 1fr; }
+  .color-grid { grid-template-columns: 1fr; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
   .ticker-track { animation: none !important; }
@@ -592,6 +682,7 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
     <header class="site-head">
       <h1 class="brand"><span class="brand-a">Prop</span><span class="brand-b">Replay</span></h1>
       <p class="sub">Run your TradingView paper trading against real prop firm rules — would you be funded or blown?</p>
+      <div><a class="btn" href="#charts">📊 Live charts — TPO · VP · Footprint · Levels →</a></div>
     </header>
     <div class="ticker" id="ticker" aria-hidden="true"></div>
 
@@ -692,6 +783,7 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
     <div class="results-bar">
       <button class="btn ghost" id="back-btn">← Setup</button>
       <span class="results-brand" aria-hidden="true">Prop<span>Replay</span></span>
+      <a class="btn ghost" href="#charts">Charts →</a>
       <span class="results-files" id="results-files"></span>
       <button class="btn" id="add-btn" title="Add more CSV exports to this account">+ Add CSVs</button>
       <label class="opt ctx-opt">
@@ -734,11 +826,93 @@ table.days td .flag.lock { background: var(--warning-soft); color: var(--ink); b
 
   </div>
 
+  <!-- ===================== CHARTS PAGE ===================== -->
+  <div id="view-charts" hidden>
+
+    <div class="results-bar">
+      <button class="btn ghost" id="charts-back-btn">← Evaluator</button>
+      <span class="results-brand" aria-hidden="true">Prop<span>Charts</span></span>
+      <span class="feed-chip" id="feed-chip">connecting…</span>
+      <label class="opt ctx-opt"><span class="visually-hidden">Symbol</span>
+        <select id="symbol-select" aria-label="Symbol"></select>
+      </label>
+      <label class="opt ctx-opt"><span class="visually-hidden">Interval</span>
+        <select id="interval-select" aria-label="Interval"></select>
+      </label>
+      <label class="opt ctx-opt"><span class="visually-hidden">Session</span>
+        <select id="chart-day-select" aria-label="Session"></select>
+      </label>
+    </div>
+
+    <div class="tabbar">
+      <button class="chip" data-tab="candles" aria-pressed="true">Candles</button>
+      <button class="chip" data-tab="tpo" aria-pressed="false">TPO</button>
+      <button class="chip" data-tab="vp" aria-pressed="false">Volume Profile</button>
+      <button class="chip" data-tab="footprint" aria-pressed="false">Footprint</button>
+      <button class="chip" data-tab="odds" aria-pressed="false">Odds</button>
+      <span class="tab-spacer"></span>
+      <button class="chip" id="panel-levels-btn" aria-pressed="false">Levels</button>
+      <button class="chip" id="panel-colors-btn" aria-pressed="false">Colors</button>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-stage" id="stage-candles"><canvas id="cv-candles"></canvas></div>
+      <div class="chart-stage" id="stage-tpo" hidden><canvas id="cv-tpo"></canvas></div>
+      <div class="chart-stage" id="stage-vp" hidden><canvas id="cv-vp"></canvas></div>
+      <div class="chart-stage" id="stage-footprint" hidden><canvas id="cv-footprint"></canvas></div>
+      <div class="odds-stage" id="stage-odds" hidden><div id="odds-host"></div></div>
+
+      <aside class="side-panel" id="side-panel" hidden data-active="">
+        <div id="panel-levels" hidden>
+          <h3>Levels</h3>
+          <div class="level-form">
+            <input type="number" id="level-price" step="0.25" placeholder="Price">
+            <input type="text" id="level-label" maxlength="16" placeholder="Label (e.g. LVN)">
+            <button class="btn primary" id="level-add">Add</button>
+            <button class="btn ghost" id="level-at-cursor" title="Adds a level at the crosshair price on the candles chart">At cursor</button>
+          </div>
+          <div id="levels-list"></div>
+          <button class="btn ghost" id="notify-btn">🔔 Enable browser notifications</button>
+          <p class="muted-note">Alerts fire when a polled or replayed bar touches a level — once per level, click “HIT” to re-arm. Feed is ~10–15 min delayed.</p>
+        </div>
+        <div id="panel-colors" hidden>
+          <h3>Colors</h3>
+          <div class="color-grid" id="color-grid"></div>
+          <button class="btn ghost" id="color-reset">Reset to defaults</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="chart-info-row">
+      <span class="chart-info" id="chart-info">loading…</span>
+      <span class="muted-note" id="fp-note" hidden>Footprint is approximated from 1m bars via tick rule — real bid/ask needs licensed tick data.</span>
+    </div>
+
+    <div class="replay-bar">
+      <button class="btn" id="replay-play" title="Replay the selected session">▶</button>
+      <select id="replay-speed" class="replay-speed" aria-label="Replay speed">
+        <option value="2">2 bars/s</option>
+        <option value="4" selected>4 bars/s</option>
+        <option value="10">10 bars/s</option>
+        <option value="25">25 bars/s</option>
+      </select>
+      <input type="range" id="replay-range" min="1" max="100" value="100" aria-label="Replay position">
+      <button class="btn active" id="live-btn" title="Back to the live edge">LIVE</button>
+    </div>
+
+    <p class="footer-note">Free delayed feed (Yahoo Finance, ~10–15 min on futures). Profiles, footprint and odds are computed in your browser from the loaded history. Not financial advice.</p>
+
+  </div>
+
   <p class="footer-note" id="footer-note"></p>
 </div>
 
+<div id="toast-host" class="toast-host"></div>
+
 <script>
+const __PR = {};
 // ===== js/symbols.js =====
+Object.assign(__PR, (() => {
 // Kontrakt-Spezifikationen für gängige Futures (CME/CBOT/COMEX/NYMEX).
 // multiplier = USD pro vollem Indexpunkt/Preispunkt und Kontrakt.
 // miniEquiv = wie viele dieser Kontrakte einem Mini entsprechen (Micro = 0.1).
@@ -822,12 +996,15 @@ function symbolSpec(raw) {
 }
 
 
+return { SPECS, symbolRoot, symbolSpec };
+})());
 // ===== js/parse.js =====
+Object.assign(__PR, (() => {
 // Parser für TradingView-Paper-Trading-CSV-Exporte (deutsche + englische Header).
 // Erkennt die Tabs "Guthabenübersicht"/"Account balance", "Handelsverlauf"/"Trading Journal",
 // "Order-Verlauf"/"History" und "All Tabs"-Exporte mit mehreren Sektionen in einer Datei.
 
-
+const { symbolRoot } = __PR;
 // ---------- Low-level CSV ----------
 
 // Delimiter über die ersten ~10 nicht-leeren Zeilen sniffen – die erste Zeile kann
@@ -1176,7 +1353,10 @@ function mergeParsed(list) {
   return out;
 }
 
+return { sniffDelimiter, detectNumberStyle, parseCsv, parseNumber, parseTimestamp, parseAction, splitSections, parseTradingViewExport, mergeParsed };
+})());
 // ===== js/engine.js =====
+Object.assign(__PR, (() => {
 // Simulations-Engine: rechnet TradingView-Paper-Trading-Daten gegen Prop-Firm-Regeln.
 //
 // Account-Konfiguration (aus js/firms.js):
@@ -1191,7 +1371,7 @@ function mergeParsed(list) {
 //   minDays,
 // }
 
-
+const { symbolSpec } = __PR;
 // ---------- Zeit ----------
 
 function tzOffsetMs(epoch, timeZone) {
@@ -1570,7 +1750,10 @@ function fmtUsd(n) {
 function round1(n) { return Math.round(n * 10) / 10; }
 
 
+return { fmtUsd, ddLabel, toEpoch, tradingDay, pnlFromFills, contractUsage, simulate, consistencyState };
+})());
 // ===== js/firms.js =====
+Object.assign(__PR, (() => {
 // Regel-Datenbank der Prop-Firm-Evaluations.
 // Recherchiert und gegengeprüft im September 2026 (offizielle Seiten + Help-Center,
 // quer-gecheckt mit unabhängigen Quellen). Prop Firms ändern Regeln laufend –
@@ -1788,7 +1971,10 @@ const FIRMS = [
   },
 ];
 
+return { RULES_AS_OF, FIRMS };
+})());
 // ===== js/chart.js =====
+Object.assign(__PR, (() => {
 // SVG-Equity-Chart: Equity-Linie, Drawdown-Floor (Step-Linie), Profit-Target,
 // EOD-Marker, Bruch-Marker, Crosshair + Tooltip (Maus + Tastatur).
 
@@ -2025,7 +2211,118 @@ function nearestIndex(points, t) {
 }
 function nearestPoint(points, t) { return points[nearestIndex(points, t)]; }
 
+return { renderEquityChart };
+})());
+// ===== js/calendar.js =====
+Object.assign(__PR, (() => {
+// P&L-Kalender im Trader-Style: Monatsraster Mo–Fr mit grün/rot eingefärbten
+// Handelstagen (Intensität nach P&L-Größe), Wochensummen und Blown/Passed-Markern.
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
+const el = (tag, cls, parent) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (parent) parent.appendChild(n);
+  return n;
+};
+
+const money = (n) => {
+  const a = Math.abs(n);
+  const s = n > 0 ? '+' : n < 0 ? '-' : '';
+  if (a >= 10000) return `${s}$${(a / 1000).toFixed(1)}K`;
+  return `${s}$${Math.round(a).toLocaleString('en-US')}`;
+};
+
+function parseDay(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return { y, m, d, date: new Date(Date.UTC(y, m - 1, d)) };
+}
+
+// result: Ausgabe von simulate()
+function renderCalendar(container, result) {
+  container.textContent = '';
+  if (!result.days || result.days.length === 0) return;
+
+  const byDay = new Map(result.days.map((d) => [d.day, d]));
+  const failDay = result.failed ? result.failed.day : null;
+  const passDay = result.passed ? result.passed.day : null;
+  const maxAbs = Math.max(1, ...result.days.map((d) => Math.abs(d.pnl)));
+
+  const first = parseDay(result.days[0].day);
+  const last = parseDay(result.days[result.days.length - 1].day);
+
+  for (let y = first.y, m = first.m; y < last.y || (y === last.y && m <= last.m); m === 12 ? (m = 1, y++) : m++) {
+    const monthDays = result.days.filter((d) => d.day.startsWith(`${y}-${String(m).padStart(2, '0')}`));
+    if (monthDays.length === 0) continue;
+
+    const month = el('div', 'cal-month', container);
+    const head = el('div', 'cal-month-head', month);
+    el('h4', '', head).textContent = `${MONTHS[m - 1]} ${y}`;
+    const monthTotal = monthDays.filter((d) => !d.afterFail && !d.afterPass).reduce((a, d) => a + d.pnl, 0);
+    const totalEl = el('span', 'cal-month-total ' + (monthTotal > 0 ? 'pos' : monthTotal < 0 ? 'neg' : ''), head);
+    totalEl.textContent = money(monthTotal);
+
+    const grid = el('div', 'cal-grid', month);
+    for (const dow of DOW) { el('div', 'cal-dow', grid).textContent = dow; }
+    el('div', 'cal-dow', grid).textContent = 'Week';
+
+    // Erster Montag der Rasterdarstellung (Mo=0 … So=6)
+    const firstOfMonth = new Date(Date.UTC(y, m - 1, 1));
+    const lastOfMonth = new Date(Date.UTC(y, m, 0));
+    const start = new Date(firstOfMonth);
+    start.setUTCDate(start.getUTCDate() - ((firstOfMonth.getUTCDay() + 6) % 7));
+
+    for (let wk = new Date(start); wk <= lastOfMonth; wk.setUTCDate(wk.getUTCDate() + 7)) {
+      let weekPnl = 0, weekHas = false;
+      let allPnl = 0, anyData = false; // inkl. Post-Fail/Post-Pass-Tage (gedimmt angezeigt)
+      for (let i = 0; i < 5; i++) {
+        const day = new Date(wk);
+        day.setUTCDate(day.getUTCDate() + i);
+        const iso = day.toISOString().slice(0, 10);
+        const inMonth = day.getUTCMonth() === m - 1;
+        const data = byDay.get(iso);
+
+        if (!inMonth) { el('div', 'cal-cell out', grid); continue; }
+
+        if (!data) {
+          const cell = el('div', 'cal-cell empty', grid);
+          el('span', 'd', cell).textContent = day.getUTCDate();
+          continue;
+        }
+
+        const off = data.afterFail || data.afterPass;
+        const cls = ['cal-cell', data.pnl > 0 ? 'pos' : data.pnl < 0 ? 'neg' : 'flat'];
+        if (off) cls.push('off');
+        if (iso === failDay) cls.push('blown');
+        if (iso === passDay) cls.push('passday');
+        const cell = el('div', cls.join(' '), grid);
+        // Farbintensität nach relativer P&L-Größe (8–55 %)
+        const heat = 8 + Math.round(47 * Math.min(1, Math.abs(data.pnl) / maxAbs));
+        cell.style.setProperty('--heatpc', heat + '%');
+        el('span', 'd', cell).textContent = day.getUTCDate();
+        el('span', 'p', cell).textContent = money(data.pnl);
+        const sub = el('span', 't', cell);
+        sub.textContent = `${data.trades} trade${data.trades === 1 ? '' : 's'}${data.locked ? ' · DLL' : ''}`;
+        if (iso === failDay) el('span', 'flagchip bad', cell).textContent = 'BLOWN';
+        else if (iso === passDay) el('span', 'flagchip good', cell).textContent = 'PASSED';
+        allPnl += data.pnl; anyData = true;
+        if (!off) { weekPnl += data.pnl; weekHas = true; }
+      }
+      // Wochen, die nur noch aus Post-Fail-/Post-Pass-Tagen bestehen, zeigen die Summe gedimmt
+      const sum = weekHas ? weekPnl : allPnl;
+      const cls = anyData ? (sum > 0 ? 'pos' : sum < 0 ? 'neg' : '') + (weekHas ? '' : ' off') : 'none';
+      const wt = el('div', 'cal-wtotal ' + cls, grid);
+      wt.textContent = anyData ? money(sum) : '—';
+    }
+  }
+}
+
+return { renderCalendar };
+})());
 // ===== js/demo.js =====
+Object.assign(__PR, (() => {
 // Deterministische Beispieldaten im TradingView-Exportformat („Alle Tabs“-Stil):
 // Guthabenübersicht + Handelsverlauf, konsistent zueinander. ~3 Wochen NQ/MNQ.
 
@@ -2107,13 +2404,1255 @@ function buildDemo() {
 
 const DEMO_CSV = buildDemo();
 
+return { DEMO_CSV };
+})());
+// ===== js/charts/data.js =====
+Object.assign(__PR, (() => {
+// Live-OHLCV für die Chart-Engine: kostenloser Yahoo-Finance-Chart-Feed
+// (NQ=F & Co., ~10-15 Min. delayed) mit CORS-Fallback-Proxies, localStorage-Cache
+// und deterministischen Demo-Bars als letzter Rückfallebene.
+
+const { tradingDay } = __PR;
+const SYMBOLS = [
+  { id: 'NQ=F', label: 'NQ · Nasdaq-100 futures', tick: 0.25 },
+  { id: 'ES=F', label: 'ES · S&P 500 futures', tick: 0.25 },
+  { id: 'YM=F', label: 'YM · Dow futures', tick: 1 },
+  { id: 'GC=F', label: 'GC · Gold futures', tick: 0.1 },
+  { id: 'CL=F', label: 'CL · Crude Oil futures', tick: 0.01 },
+  { id: '^NDX', label: 'NDX · Nasdaq-100 index (RTH only)', tick: 0.25 },
+  { id: 'BTC-USD', label: 'BTC · Bitcoin spot (24/7)', tick: 1 },
+];
+
+const INTERVALS = [
+  { id: '1m', label: '1m · last 5 days', range: '5d', ms: 60000 },
+  { id: '5m', label: '5m · last 30 days', range: '30d', ms: 300000 },
+];
+
+// Direkt zuerst; öffentliche CORS-Proxies als Fallback (Reihenfolge wird gemerkt)
+const PROXIES = [
+  (u) => u,
+  (u) => 'https://corsproxy.io/?url=' + encodeURIComponent(u),
+  (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+];
+let workingProxy = 0;
+
+function yahooUrl(symbol, interval, range) {
+  return `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}` +
+    `?interval=${interval}&range=${range}&includePrePost=true`;
+}
+
+async function fetchWithTimeout(url, ms) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms);
+  try {
+    const res = await fetch(url, { signal: ctl.signal, cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.json();
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+function parseYahoo(json) {
+  const r = json && json.chart && json.chart.result && json.chart.result[0];
+  if (!r || !r.timestamp) throw new Error('empty chart payload');
+  const q = r.indicators.quote[0];
+  const bars = [];
+  for (let i = 0; i < r.timestamp.length; i++) {
+    const o = q.open[i], h = q.high[i], l = q.low[i], c = q.close[i];
+    if (o == null || h == null || l == null || c == null) continue;
+    bars.push({ epoch: r.timestamp[i] * 1000, o, h, l, c, v: Math.max(0, q.volume[i] || 0) });
+  }
+  return { bars, meta: { symbol: r.meta.symbol, last: r.meta.regularMarketPrice, delay: r.meta.exchangeDataDelayedBy || 0 } };
+}
+
+// Holt Bars; probiert direkte Verbindung und Proxies der Reihe nach durch.
+async function fetchBars(symbol, interval, range) {
+  const url = yahooUrl(symbol, interval, range);
+  let lastErr = null;
+  for (let k = 0; k < PROXIES.length; k++) {
+    const idx = (workingProxy + k) % PROXIES.length;
+    try {
+      const json = await fetchWithTimeout(PROXIES[idx](url), 9000);
+      const parsed = parseYahoo(json);
+      if (parsed.bars.length === 0) throw new Error('no bars');
+      workingProxy = idx;
+      return parsed;
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw lastErr || new Error('feed unreachable');
+}
+
+// ---------- Cache (letzter guter Stand überlebt Reloads/Offline) ----------
+
+const cacheKey = (s, i) => `propcharts.cache.${s}.${i}`;
+
+function saveCache(symbol, interval, bars, meta) {
+  try {
+    const slim = bars.map((b) => [b.epoch, b.o, b.h, b.l, b.c, b.v]);
+    localStorage.setItem(cacheKey(symbol, interval), JSON.stringify({ t: 0, meta, slim }));
+  } catch { /* voll/blockiert – egal */ }
+}
+
+function loadCache(symbol, interval) {
+  try {
+    const raw = localStorage.getItem(cacheKey(symbol, interval));
+    if (!raw) return null;
+    const d = JSON.parse(raw);
+    return { bars: d.slim.map((a) => ({ epoch: a[0], o: a[1], h: a[2], l: a[3], c: a[4], v: a[5] })), meta: d.meta || {} };
+  } catch { return null; }
+}
+
+// Neue Bars in bestehende Serie mergen (Poll-Updates)
+function mergeBars(oldBars, newBars) {
+  if (!oldBars || oldBars.length === 0) return newBars.slice();
+  const map = new Map(oldBars.map((b) => [b.epoch, b]));
+  for (const b of newBars) map.set(b.epoch, b); // neuere Version derselben Bar gewinnt
+  return [...map.values()].sort((a, b) => a.epoch - b.epoch);
+}
+
+// Bars -> Map(CME-Handelstag -> bars[])
+function splitSessions(bars) {
+  const map = new Map();
+  for (const b of bars) {
+    const day = tradingDay(b.epoch, 'exchange');
+    if (!map.has(day)) map.set(day, []);
+    map.get(day).push(b);
+  }
+  return map;
+}
+
+function tickFor(symbol) {
+  const s = SYMBOLS.find((x) => x.id === symbol);
+  return s ? s.tick : 0.25;
+}
+
+// ---------- Demo-Bars (deterministisch) als letzte Rückfallebene ----------
+
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function demoBars() {
+  const rnd = mulberry32(31337);
+  const bars = [];
+  let price = 31000;
+  const days = [29, 30, 1, 2, 3];
+  const months = [8, 8, 9, 9, 9]; // Sep/Okt 2026 (0-basiert)
+  for (let d = 0; d < 5; d++) {
+    const drift = (rnd() - 0.45) * 0.9;
+    const sessionStartUtc = Date.UTC(2026, months[d], days[d] - 1, 22, 0, 0); // 18:00 ET (EDT)
+    for (let i = 0; i < 1380; i++) {
+      const epoch = sessionStartUtc + i * 60000;
+      const rth = i >= 930 && i <= 1320;
+      const uShape = rth ? 1 + 1.6 * Math.exp(-((i - 940) ** 2) / 8000) + 1.2 * Math.exp(-((i - 1310) ** 2) / 6000) : 0.12;
+      const vol = Math.max(5, Math.round((rth ? 900 : 90) * uShape * (0.5 + rnd())));
+      const sigma = (rth ? 6 : 2.2) * (0.6 + rnd());
+      const o = price;
+      let c = o + drift * (rth ? 1.4 : 0.4) + (rnd() - 0.5) * 2 * sigma;
+      if (rnd() < 0.012) c = o + (rnd() < 0.5 ? -1 : 1) * sigma * (4 + rnd() * 5);
+      const h = Math.max(o, c) + rnd() * sigma * 0.9;
+      const l = Math.min(o, c) - rnd() * sigma * 0.9;
+      const q = (x) => Math.round(x * 4) / 4;
+      bars.push({ epoch, o: q(o), h: q(h), l: q(l), c: q(c), v: vol });
+      price = c;
+    }
+    price += (rnd() - 0.5) * 30;
+  }
+  return bars;
+}
+
+return { SYMBOLS, INTERVALS, fetchBars, saveCache, loadCache, mergeBars, splitSessions, tickFor, demoBars };
+})());
+// ===== js/charts/compute.js =====
+Object.assign(__PR, (() => {
+// Rechenkern der Chart-Engine: Volume Profile (POC/VA/LVN/HVN), TPO
+// (Letters, Single Prints, Poor Highs/Lows), Footprint-Approximation,
+// Session-VWAP und Walk-Forward-Odds aus der geladenen Historie.
+
+// ---------- Helpers ----------
+
+function binIndex(price, minPrice, binSize) {
+  return Math.floor((price - minPrice) / binSize + 1e-9);
+}
+
+function chooseBinSize(low, high, tick, targetBins = 90) {
+  const raw = (high - low) / targetBins;
+  const mult = Math.max(1, Math.round(raw / tick));
+  return mult * tick;
+}
+
+// 70%-Value-Area: am POC starten, in 2er-Paaren nach oben/unten erweitern (klassischer Algorithmus)
+function valueArea(vols, pocIdx, totalVol, pct = 0.7) {
+  let covered = vols[pocIdx];
+  let up = pocIdx, dn = pocIdx;
+  const target = totalVol * pct;
+  while (covered < target && (up < vols.length - 1 || dn > 0)) {
+    const upPair = (up + 1 < vols.length ? vols[up + 1] : 0) + (up + 2 < vols.length ? vols[up + 2] : 0);
+    const dnPair = (dn - 1 >= 0 ? vols[dn - 1] : 0) + (dn - 2 >= 0 ? vols[dn - 2] : 0);
+    if (upPair >= dnPair && up < vols.length - 1) {
+      covered += vols[++up] || 0;
+      if (up < vols.length - 1 && covered < target) covered += vols[++up] || 0;
+    } else if (dn > 0) {
+      covered += vols[--dn] || 0;
+      if (dn > 0 && covered < target) covered += vols[--dn] || 0;
+    } else if (up < vols.length - 1) {
+      covered += vols[++up] || 0;
+    }
+  }
+  return { vaLowIdx: dn, vaHighIdx: up };
+}
+
+// LVNs/HVNs als zusammenhängende Läufe niedriger/hoher Volumina.
+// Lauf-basiert statt striktes lokales Minimum, damit auch flache
+// Null-Volumen-Täler zwischen zwei Clustern als LVN erkannt werden.
+function findNodes(vols) {
+  const n = vols.length;
+  const smooth = vols.map((_, i) => {
+    let s = 0, c = 0;
+    for (let k = -2; k <= 2; k++) { const j = i + k; if (j >= 0 && j < n) { s += vols[j]; c++; } }
+    return s / c;
+  });
+  const maxV = Math.max(...smooth, 1);
+  const lowThr = maxV * 0.25, flankThr = maxV * 0.45, highThr = maxV * 0.6;
+  const lvns = [], hvns = [];
+  const runsBelow = [];
+  let start = -1;
+  for (let i = 0; i <= n; i++) {
+    const low = i < n && smooth[i] < lowThr;
+    if (low && start < 0) start = i;
+    if (!low && start >= 0) { runsBelow.push([start, i - 1]); start = -1; }
+  }
+  for (const [a, b] of runsBelow) {
+    // LVN nur, wenn auf BEIDEN Seiten echtes Volumen flankiert (kein Profil-Rand)
+    const hasAbove = smooth.slice(b + 1).some((v) => v >= flankThr);
+    const hasBelow = smooth.slice(0, a).some((v) => v >= flankThr);
+    if (hasAbove && hasBelow) lvns.push(Math.round((a + b) / 2));
+  }
+  start = -1;
+  for (let i = 0; i <= n; i++) {
+    const high = i < n && smooth[i] >= highThr;
+    if (high && start < 0) start = i;
+    if (!high && start >= 0) { hvns.push(Math.round((start + i - 1) / 2)); start = -1; }
+  }
+  return { lvns, hvns };
+}
+
+// ---------- Volume Profile ----------
+
+function volumeProfile(bars, tick, targetBins = 90) {
+  if (!bars.length) return null;
+  let low = Infinity, high = -Infinity, total = 0;
+  for (const b of bars) { if (b.l < low) low = b.l; if (b.h > high) high = b.h; total += b.v; }
+  const binSize = chooseBinSize(low, high, tick, targetBins);
+  const nBins = Math.max(1, binIndex(high, low, binSize) + 1);
+  const vols = new Array(nBins).fill(0);
+  for (const b of bars) {
+    const i0 = binIndex(b.l, low, binSize);
+    const i1 = binIndex(b.h, low, binSize);
+    const per = b.v / (i1 - i0 + 1); // Volumen gleichmäßig über die Bar-Spanne verteilen
+    for (let i = i0; i <= i1; i++) vols[i] += per;
+  }
+  let pocIdx = 0;
+  for (let i = 1; i < nBins; i++) if (vols[i] > vols[pocIdx]) pocIdx = i;
+  const { vaLowIdx, vaHighIdx } = valueArea(vols, pocIdx, total);
+  const { lvns, hvns } = findNodes(vols);
+  const price = (i) => low + (i + 0.5) * binSize;
+  return {
+    low, high, binSize, vols, total,
+    poc: price(pocIdx), pocIdx,
+    val: low + vaLowIdx * binSize, vah: low + (vaHighIdx + 1) * binSize,
+    vaLowIdx, vaHighIdx,
+    lvns: lvns.map(price), hvns: hvns.map(price),
+    maxVol: Math.max(...vols, 1),
+    priceAt: price,
+  };
+}
+
+// ---------- TPO ----------
+
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+function tpoProfile(bars, tick, blockMs = 30 * 60000, targetBins = 70) {
+  if (!bars.length) return null;
+  let low = Infinity, high = -Infinity;
+  for (const b of bars) { if (b.l < low) low = b.l; if (b.h > high) high = b.h; }
+  const binSize = chooseBinSize(low, high, tick, targetBins);
+  const nBins = Math.max(1, binIndex(high, low, binSize) + 1);
+  const t0 = bars[0].epoch;
+  const rows = Array.from({ length: nBins }, () => new Set());
+  let nBlocks = 0;
+  for (const b of bars) {
+    const block = Math.min(LETTERS.length - 1, Math.floor((b.epoch - t0) / blockMs));
+    nBlocks = Math.max(nBlocks, block + 1);
+    const i0 = binIndex(b.l, low, binSize);
+    const i1 = binIndex(b.h, low, binSize);
+    for (let i = i0; i <= i1; i++) rows[i].add(block);
+  }
+  const counts = rows.map((s) => s.size);
+  const total = counts.reduce((a, c) => a + c, 0);
+  let pocIdx = 0;
+  for (let i = 1; i < nBins; i++) if (counts[i] > counts[pocIdx]) pocIdx = i;
+  const { vaLowIdx, vaHighIdx } = valueArea(counts, pocIdx, total);
+  // Single Prints: Zeilen mit genau 1 TPO, nicht am äußersten Rand
+  const singles = [];
+  for (let i = 1; i < nBins - 1; i++) if (counts[i] === 1) singles.push(i);
+  // Poor High/Low: >=2 TPOs in der äußersten Zeile = unfertige Auktion
+  const poorHigh = counts[nBins - 1] >= 2;
+  const poorLow = counts[0] >= 2;
+  const price = (i) => low + (i + 0.5) * binSize;
+  return {
+    low, high, binSize, rows, counts, nBlocks, letters: LETTERS,
+    poc: price(pocIdx), pocIdx,
+    val: low + vaLowIdx * binSize, vah: low + (vaHighIdx + 1) * binSize,
+    vaLowIdx, vaHighIdx,
+    singles, poorHigh, poorLow,
+    maxCount: Math.max(...counts, 1),
+    priceAt: price,
+  };
+}
+
+// ---------- Footprint (Approximation aus 1m/5m-Bars, Tick-Rule) ----------
+
+function footprint(bars, tick, cellMs = 15 * 60000, targetBins = 60) {
+  if (!bars.length) return null;
+  let low = Infinity, high = -Infinity;
+  for (const b of bars) { if (b.l < low) low = b.l; if (b.h > high) high = b.h; }
+  const binSize = chooseBinSize(low, high, tick, targetBins);
+  const t0 = Math.floor(bars[0].epoch / cellMs) * cellMs;
+  const cells = new Map(); // cellStart -> { bins: Map(binIdx -> {up,dn}), delta, vol, o,h,l,c }
+  let prevC = bars[0].o, prevDir = 1;
+  for (const b of bars) {
+    const dir = b.c > prevC ? 1 : b.c < prevC ? -1 : prevDir;
+    prevC = b.c; prevDir = dir;
+    const cellStart = Math.floor((b.epoch - t0) / cellMs) * cellMs + t0;
+    let cell = cells.get(cellStart);
+    if (!cell) { cell = { bins: new Map(), delta: 0, vol: 0, o: b.o, h: b.h, l: b.l, c: b.c }; cells.set(cellStart, cell); }
+    cell.h = Math.max(cell.h, b.h); cell.l = Math.min(cell.l, b.l); cell.c = b.c;
+    const i0 = binIndex(b.l, low, binSize);
+    const i1 = binIndex(b.h, low, binSize);
+    const per = b.v / (i1 - i0 + 1);
+    for (let i = i0; i <= i1; i++) {
+      let bin = cell.bins.get(i);
+      if (!bin) { bin = { up: 0, dn: 0 }; cell.bins.set(i, bin); }
+      if (dir >= 0) bin.up += per; else bin.dn += per;
+    }
+    cell.vol += b.v;
+    cell.delta += dir >= 0 ? b.v : -b.v;
+  }
+  let maxBinVol = 1;
+  for (const c of cells.values()) for (const bin of c.bins.values()) maxBinVol = Math.max(maxBinVol, bin.up + bin.dn);
+  return {
+    low, high, binSize, cellMs, maxBinVol,
+    cells: [...cells.entries()].sort((a, b) => a[0] - b[0]).map(([start, c]) => ({ start, ...c })),
+    priceAt: (i) => low + (i + 0.5) * binSize,
+    binIndex: (p) => binIndex(p, low, binSize),
+  };
+}
+
+// ---------- VWAP ----------
+
+function sessionVwap(bars) {
+  const out = new Array(bars.length);
+  let pv = 0, vv = 0;
+  for (let i = 0; i < bars.length; i++) {
+    const b = bars[i];
+    const typ = (b.h + b.l + b.c) / 3;
+    pv += typ * b.v; vv += b.v;
+    out[i] = vv > 0 ? pv / vv : typ;
+  }
+  return out;
+}
+
+// ---------- Odds (Walk-Forward über die geladene Historie) ----------
+
+// sessions: Map(day -> bars[]) chronologisch; level optional
+function computeOdds(sessions, { level = null, reactionPts = null } = {}) {
+  const days = [...sessions.entries()].filter(([, b]) => b.length > 20);
+  const n = days.length;
+  if (n === 0) return null;
+  const reachUps = [], reachDns = [], ranges = [];
+  let closedHigher = 0;
+  for (const [, b] of days) {
+    const open = b[0].o, close = b[b.length - 1].c;
+    let hi = -Infinity, lo = Infinity;
+    for (const bar of b) { hi = Math.max(hi, bar.h); lo = Math.min(lo, bar.l); }
+    reachUps.push(hi - open); reachDns.push(open - lo); ranges.push(hi - lo);
+    if (close > open) closedHigher++;
+  }
+  const med = (arr) => { const s = [...arr].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]; };
+  const out = {
+    n,
+    medianReachUp: med(reachUps),
+    medianReachDown: med(reachDns),
+    medianRange: med(ranges),
+    closedHigherPct: Math.round((closedHigher / n) * 100),
+  };
+  if (level != null) {
+    const R = reactionPts || Math.max(1, Math.round(med(ranges) * 0.15));
+    let touched = 0, reversed = 0, broke = 0;
+    for (const [, b] of days) {
+      // Touch = Bar enthält das Level ODER zwei aufeinanderfolgende Bars überspringen es (Gap)
+      let idx = -1, side = 0;
+      for (let i = 0; i < b.length; i++) {
+        const bar = b[i];
+        if (bar.l <= level && level <= bar.h) {
+          idx = i;
+          side = i > 0 ? (b[i - 1].c >= level ? 1 : -1) : (bar.o >= level ? 1 : -1);
+          break;
+        }
+        if (i > 0) {
+          const prev = b[i - 1];
+          if (prev.l > level && bar.h < level) { idx = i; side = 1; break; }  // Gap nach unten durchs Level
+          if (prev.h < level && bar.l > level) { idx = i; side = -1; break; } // Gap nach oben durchs Level
+        }
+      }
+      if (idx < 0) continue;
+      touched++;
+      let rev = false, cont = false;
+      for (let i = idx; i < b.length && !rev && !cont; i++) {
+        if (side === 1) { // Touch von oben -> Reversal = hoch, Continuation = durchbrechen
+          if (b[i].h >= level + R) rev = true;
+          else if (b[i].l <= level - R) cont = true;
+        } else {
+          if (b[i].l <= level - R) rev = true;
+          else if (b[i].h >= level + R) cont = true;
+        }
+      }
+      if (rev) reversed++; else if (cont) broke++;
+    }
+    out.level = {
+      price: level, reactionPts: R, touched,
+      touchPct: Math.round((touched / n) * 100),
+      reversedPct: touched ? Math.round((reversed / touched) * 100) : null,
+      brokePct: touched ? Math.round((broke / touched) * 100) : null,
+    };
+  }
+  return out;
+}
+
+return { chooseBinSize, volumeProfile, tpoProfile, footprint, sessionVwap, computeOdds };
+})());
+// ===== js/charts/paint.js =====
+Object.assign(__PR, (() => {
+// Canvas-Renderer der Chart-Engine. Alle Farben kommen aus der übergebenen
+// Palette (vom User anpassbar); Text/Grid nutzen die Theme-Ink-Töne.
+
+function setupCanvas(canvas) {
+  const dpr = Math.min(3, window.devicePixelRatio || 1);
+  const rect = canvas.getBoundingClientRect();
+  const W = Math.max(50, Math.round(rect.width));
+  const H = Math.max(50, Math.round(rect.height));
+  if (canvas.width !== W * dpr || canvas.height !== H * dpr) {
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, W, H };
+}
+
+const AXIS_W = 64;
+const FONT = '10.5px "IBM Plex Mono", monospace';
+
+function priceTicks(lo, hi, n = 6) {
+  const span = hi - lo;
+  const step0 = span / n;
+  const mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const norm = step0 / mag;
+  const step = (norm >= 5 ? 10 : norm >= 2 ? 5 : norm >= 1 ? 2 : 1) * mag;
+  const out = [];
+  for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) out.push(v);
+  return out;
+}
+
+const fmtP = (p) => p >= 1000 ? p.toLocaleString('en-US', { maximumFractionDigits: 2 }) : String(Math.round(p * 100) / 100);
+
+function drawFrame(ctx, W, H, lo, hi, pal) {
+  ctx.fillStyle = pal.bg;
+  ctx.fillRect(0, 0, W, H);
+  ctx.font = FONT;
+  const y = (p) => H - ((p - lo) / (hi - lo)) * H;
+  for (const t of priceTicks(lo, hi, 8)) {
+    const yy = y(t);
+    ctx.strokeStyle = pal.grid; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(W - AXIS_W, yy); ctx.stroke();
+    ctx.fillStyle = pal.muted;
+    ctx.fillText(fmtP(t), W - AXIS_W + 6, yy + 3.5);
+  }
+  return y;
+}
+
+function hline(ctx, W, y, color, width = 1, dash = null, label = null, pal = null) {
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = width;
+  if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W - AXIS_W, y); ctx.stroke();
+  ctx.restore();
+  if (label) {
+    ctx.font = FONT;
+    const w = ctx.measureText(label).width + 10;
+    ctx.fillStyle = color;
+    ctx.fillRect(W - AXIS_W - w, y - 8, w, 16);
+    ctx.fillStyle = pal ? pal.bg : '#000';
+    ctx.fillText(label, W - AXIS_W - w + 5, y + 3.5);
+  }
+}
+
+// ---------- Candles ----------
+
+function drawCandles(canvas, s) {
+  const { ctx, W, H } = setupCanvas(canvas);
+  const { bars, view, pal } = s;
+  const slice = bars.slice(view.start, view.start + view.count);
+  if (!slice.length) { ctx.fillStyle = pal.bg; ctx.fillRect(0, 0, W, H); return null; }
+  let lo = Infinity, hi = -Infinity;
+  for (const b of slice) { if (b.l < lo) lo = b.l; if (b.h > hi) hi = b.h; }
+  for (const lv of s.levels || []) { if (lv.price > lo - 40 && lv.price < hi + 40) { lo = Math.min(lo, lv.price); hi = Math.max(hi, lv.price); } }
+  const pad = (hi - lo) * 0.06 || 1;
+  lo -= pad; hi += pad;
+  const y = drawFrame(ctx, W, H, lo, hi, pal);
+  const plotW = W - AXIS_W;
+  const bw = plotW / slice.length;
+  const x = (i) => i * bw + bw / 2;
+
+  // Value-Linien der Vortagssession
+  if (s.prior) {
+    if (s.prior.vah != null) hline(ctx, W, y(s.prior.vah), pal.vah, 1, [5, 4], 'pVAH ' + fmtP(s.prior.vah), pal);
+    if (s.prior.val != null) hline(ctx, W, y(s.prior.val), pal.val, 1, [5, 4], 'pVAL ' + fmtP(s.prior.val), pal);
+    if (s.prior.poc != null) hline(ctx, W, y(s.prior.poc), pal.poc, 1, [2, 3], 'nPOC ' + fmtP(s.prior.poc), pal);
+  }
+
+  // Candles
+  for (let i = 0; i < slice.length; i++) {
+    const b = slice[i];
+    const up = b.c >= b.o;
+    const col = up ? pal.up : pal.dn;
+    const cx = x(i);
+    ctx.strokeStyle = col; ctx.lineWidth = Math.max(1, bw * 0.12);
+    ctx.beginPath(); ctx.moveTo(cx, y(b.h)); ctx.lineTo(cx, y(b.l)); ctx.stroke();
+    const top = y(Math.max(b.o, b.c));
+    const hgt = Math.max(1, Math.abs(y(b.o) - y(b.c)));
+    ctx.fillStyle = col;
+    ctx.fillRect(cx - bw * 0.33, top, bw * 0.66, hgt);
+  }
+
+  // VWAP
+  if (s.vwap) {
+    ctx.strokeStyle = pal.vwap; ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    for (let i = 0; i < slice.length; i++) {
+      const v = s.vwap[view.start + i];
+      if (v == null) continue;
+      const yy = y(v);
+      if (i === 0) ctx.moveTo(x(i), yy); else ctx.lineTo(x(i), yy);
+    }
+    ctx.stroke();
+  }
+
+  // User-Levels
+  for (const lv of s.levels || []) {
+    if (lv.price < lo || lv.price > hi) continue;
+    hline(ctx, W, y(lv.price), lv.color, 1.6, lv.hit ? null : [7, 5], `${lv.label || 'LVL'} ${fmtP(lv.price)}`, pal);
+  }
+
+  // Letzter Preis
+  const last = slice[slice.length - 1];
+  hline(ctx, W, y(last.c), last.c >= last.o ? pal.up : pal.dn, 1, [2, 2], fmtP(last.c), pal);
+
+  // Crosshair
+  if (s.cross && s.cross.x != null && s.cross.x < plotW) {
+    const i = Math.max(0, Math.min(slice.length - 1, Math.floor(s.cross.x / bw)));
+    const b = slice[i];
+    ctx.strokeStyle = pal.muted; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(x(i), 0); ctx.lineTo(x(i), H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, s.cross.y); ctx.lineTo(plotW, s.cross.y); ctx.stroke();
+    ctx.setLineDash([]);
+    const p = lo + (1 - s.cross.y / H) * (hi - lo);
+    ctx.fillStyle = pal.raised;
+    ctx.fillRect(W - AXIS_W, s.cross.y - 8, AXIS_W, 16);
+    ctx.fillStyle = pal.text;
+    ctx.fillText(fmtP(p), W - AXIS_W + 6, s.cross.y + 3.5);
+    return { bar: b, price: p, index: view.start + i };
+  }
+  return null;
+}
+
+// ---------- Volume Profile ----------
+
+function drawVP(canvas, s) {
+  const { ctx, W, H } = setupCanvas(canvas);
+  const { profile: p, pal } = s;
+  if (!p) { ctx.fillStyle = pal.bg; ctx.fillRect(0, 0, W, H); return; }
+  const lo = p.low - p.binSize, hi = p.high + p.binSize;
+  const y = drawFrame(ctx, W, H, lo, hi, pal);
+  const plotW = W - AXIS_W - 10;
+  const rowH = Math.max(1, (y(p.low) - y(p.low + p.binSize)));
+
+  for (let i = 0; i < p.vols.length; i++) {
+    const price = p.low + i * p.binSize;
+    const w = (p.vols[i] / p.maxVol) * plotW * 0.92;
+    const inVa = i >= p.vaLowIdx && i <= p.vaHighIdx;
+    ctx.fillStyle = i === p.pocIdx ? pal.poc : inVa ? pal.vpVa : pal.vpBar;
+    ctx.fillRect(0, y(price + p.binSize) + 0.5, w, Math.max(1, rowH - 1));
+  }
+  hline(ctx, W, y(p.vah), pal.vah, 1.4, null, 'VAH ' + fmtP(p.vah), pal);
+  hline(ctx, W, y(p.val), pal.val, 1.4, null, 'VAL ' + fmtP(p.val), pal);
+  hline(ctx, W, y(p.poc), pal.poc, 1.6, null, 'POC ' + fmtP(p.poc), pal);
+
+  ctx.font = FONT;
+  for (const price of p.lvns) {
+    ctx.fillStyle = pal.lvn;
+    ctx.fillText('◄ LVN ' + fmtP(price), plotW * 0.55, y(price) + 3.5);
+  }
+  for (const price of p.hvns) {
+    ctx.fillStyle = pal.muted;
+    ctx.fillText('◄ HVN', plotW * 0.78, y(price) + 3.5);
+  }
+}
+
+// ---------- TPO ----------
+
+function drawTPO(canvas, s) {
+  const { ctx, W, H } = setupCanvas(canvas);
+  const { profile: p, pal } = s;
+  if (!p) { ctx.fillStyle = pal.bg; ctx.fillRect(0, 0, W, H); return; }
+  const lo = p.low - p.binSize, hi = p.high + p.binSize;
+  const y = drawFrame(ctx, W, H, lo, hi, pal);
+  const rowH = y(p.low) - y(p.low + p.binSize);
+  const fontPx = Math.max(7, Math.min(13, rowH - 1));
+  ctx.font = `${fontPx}px "IBM Plex Mono", monospace`;
+  const chW = ctx.measureText('M').width + 1;
+
+  // Value Area Hintergrund
+  ctx.fillStyle = pal.vaWash;
+  ctx.fillRect(0, y(p.vah), W - AXIS_W, y(p.val) - y(p.vah));
+
+  for (let i = 0; i < p.rows.length; i++) {
+    const price = p.low + i * p.binSize;
+    const blocks = [...p.rows[i]].sort((a, b) => a - b);
+    const yy = y(price) - rowH * 0.15;
+    const isSingle = p.counts[i] === 1;
+    for (let k = 0; k < blocks.length; k++) {
+      const letter = p.letters[blocks[k]] || '·';
+      ctx.fillStyle = i === p.pocIdx ? pal.poc : isSingle ? pal.tpoSingle : pal.tpoLetter;
+      ctx.fillText(letter, 4 + k * chW, yy);
+    }
+    if (isSingle) {
+      ctx.fillStyle = pal.tpoSingle;
+      ctx.fillText('— single', 4 + blocks.length * chW + 6, yy);
+    }
+  }
+  if (p.poorHigh) { ctx.fillStyle = pal.dn; ctx.fillText('POOR HIGH', 6, y(p.high) - 4); }
+  if (p.poorLow) { ctx.fillStyle = pal.dn; ctx.fillText('POOR LOW', 6, y(p.low) + rowH + 10); }
+  hline(ctx, W, y(p.poc), pal.poc, 1.4, [2, 3], 'POC ' + fmtP(p.poc), pal);
+}
+
+// ---------- Footprint (Approximation) ----------
+
+function drawFootprint(canvas, s) {
+  const { ctx, W, H } = setupCanvas(canvas);
+  const { fp, pal } = s;
+  if (!fp || !fp.cells.length) { ctx.fillStyle = pal.bg; ctx.fillRect(0, 0, W, H); return; }
+  const cells = fp.cells.slice(-Math.max(4, s.maxCells || 14));
+  // y-Range nur aus den sichtbaren Zellen – sonst quetscht die ganze
+  // Session-Spanne die letzten Zellen in ein schmales Band
+  let cLo = Infinity, cHi = -Infinity;
+  for (const c of cells) { if (c.l < cLo) cLo = c.l; if (c.h > cHi) cHi = c.h; }
+  const lo = cLo - fp.binSize, hi = cHi + fp.binSize;
+  const y = drawFrame(ctx, W, H, lo, hi, pal);
+  const plotW = W - AXIS_W;
+  const cw = plotW / cells.length;
+  const rowH = Math.max(1, y(fp.low) - y(fp.low + fp.binSize));
+  ctx.font = FONT;
+
+  cells.forEach((cell, ci) => {
+    const x0 = ci * cw;
+    const half = (cw - 8) / 2;
+    for (const [binIdx, bin] of cell.bins) {
+      const price = fp.priceAt(binIdx) - fp.binSize / 2;
+      const yy = y(price + fp.binSize) + 0.5;
+      const hgt = Math.max(1, rowH - 1);
+      const dnW = (bin.dn / fp.maxBinVol) * half;
+      const upW = (bin.up / fp.maxBinVol) * half;
+      ctx.fillStyle = pal.fpSell;
+      ctx.fillRect(x0 + 4 + half - dnW, yy, dnW, hgt);
+      ctx.fillStyle = pal.fpBuy;
+      ctx.fillRect(x0 + 4 + half, yy, upW, hgt);
+    }
+    // Close-Markierung + Zell-Delta unten
+    ctx.strokeStyle = pal.muted; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0 + 2, y(cell.c)); ctx.lineTo(x0 + cw - 2, y(cell.c)); ctx.stroke();
+    const d = Math.round(cell.delta);
+    ctx.fillStyle = d >= 0 ? pal.up : pal.dn;
+    const txt = (d >= 0 ? '+' : '') + d.toLocaleString('en-US');
+    ctx.fillText(txt, x0 + 6, H - 6);
+    const t = new Date(cell.start);
+    ctx.fillStyle = pal.muted;
+    ctx.fillText(String(t.getUTCHours()).padStart(2, '0') + ':' + String(t.getUTCMinutes()).padStart(2, '0') + 'z', x0 + 6, 12);
+    if (ci > 0) {
+      ctx.strokeStyle = pal.grid;
+      ctx.beginPath(); ctx.moveTo(x0, 0); ctx.lineTo(x0, H); ctx.stroke();
+    }
+  });
+}
+
+return { setupCanvas, drawCandles, drawVP, drawTPO, drawFootprint };
+})());
+// ===== js/charts/app.js =====
+Object.assign(__PR, (() => {
+// Chart-Workstation: Live-Feed (delayed), Candles/TPO/VP/Footprint/Odds,
+// User-Levels mit Touch-Alerts (Toast + Sound + Browser-Notification),
+// Replay über die Historie und frei einstellbare Farben.
+
+const { SYMBOLS, INTERVALS, fetchBars, loadCache, saveCache, mergeBars, splitSessions, tickFor, demoBars } = __PR;
+const { volumeProfile, tpoProfile, footprint, sessionVwap, computeOdds } = __PR;
+const { drawCandles, drawVP, drawTPO, drawFootprint } = __PR;
+const $ = (id) => document.getElementById(id);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('propcharts.' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('propcharts.' + k, JSON.stringify(v)); } catch { /* egal */ } },
+};
+
+// ---------- Palette (alles vom User umfärbbar) ----------
+
+const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+const PALETTE_DEFS = [
+  ['up', 'Candle up / buy', '#17c584'],
+  ['dn', 'Candle down / sell', '#f6465d'],
+  ['vwap', 'VWAP', '#f7b731'],
+  ['poc', 'POC', '#37c6f5'],
+  ['vah', 'VAH', '#17c584'],
+  ['val', 'VAL', '#f6465d'],
+  ['vpBar', 'VP bars', '#2b5f9e'],
+  ['vpVa', 'VP value area', '#3b8ef0'],
+  ['lvn', 'LVN marker', '#f7b731'],
+  ['tpoLetter', 'TPO letters', '#aab3c2'],
+  ['tpoSingle', 'TPO single prints', '#f7b731'],
+  ['fpBuy', 'Footprint buy', '#17c584'],
+  ['fpSell', 'Footprint sell', '#f6465d'],
+  ['level', 'Default level color', '#37c6f5'],
+  ['bg', 'Chart background', '#0b0d11'],
+  ['grid', 'Grid lines', '#232833'],
+];
+
+function buildPalette() {
+  const saved = store.get('palette', {});
+  const pal = {};
+  for (const [key, , def] of PALETTE_DEFS) pal[key] = saved[key] || def;
+  pal.text = cssVar('--ink') || '#f2f5fa';
+  pal.muted = cssVar('--muted') || '#78818f';
+  pal.raised = cssVar('--raised') || '#171b22';
+  pal.vaWash = pal.vpVa + '22';
+  return pal;
+}
+
+// ---------- State ----------
+
+const state = {
+  symbol: store.get('symbol', 'NQ=F'),
+  interval: store.get('interval', '1m'),
+  bars: [],
+  sessions: new Map(),
+  day: null,
+  tab: 'candles',
+  view: { start: 0, count: 240 },
+  levels: [],
+  pal: buildPalette(),
+  replay: { on: false, idx: 0, timer: null, speed: 4 },
+  cross: null,
+  feed: 'connecting', // connecting | live | demo | error
+  lastUpdate: null,
+  pollTimer: null,
+  alertsArmed: true,
+};
+
+const levelsKey = () => 'levels.' + state.symbol;
+
+// ---------- Feed ----------
+
+async function loadData(initial = false) {
+  const iv = INTERVALS.find((i) => i.id === state.interval) || INTERVALS[0];
+  if (initial) {
+    const cached = loadCache(state.symbol, state.interval);
+    if (cached && cached.bars.length) {
+      state.bars = cached.bars;
+      afterData();
+      setFeed('cache');
+    }
+  }
+  try {
+    const { bars, meta } = await fetchBars(state.symbol, state.interval, iv.range);
+    const prevLastEpoch = state.bars.length ? state.bars[state.bars.length - 1].epoch : 0;
+    state.bars = mergeBars(state.feed === 'demo' ? [] : state.bars, bars);
+    saveCache(state.symbol, state.interval, state.bars, meta);
+    setFeed('live', meta);
+    afterData();
+    if (!state.replay.on) checkAlerts(state.bars.filter((b) => b.epoch > prevLastEpoch));
+  } catch (e) {
+    if (state.bars.length === 0) {
+      state.bars = demoBars();
+      setFeed('demo');
+      afterData();
+    } else {
+      setFeed('stale');
+    }
+  }
+}
+
+function schedulePoll() {
+  clearInterval(state.pollTimer);
+  state.pollTimer = setInterval(() => { if (!state.replay.on) loadData(false); }, 45000);
+}
+
+function setFeed(kind, meta) {
+  state.feed = kind;
+  state.lastUpdate = kind === 'live' ? new Date() : state.lastUpdate;
+  const el = $('feed-chip');
+  const time = state.lastUpdate ? state.lastUpdate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : '–';
+  const delay = meta && meta.delay ? ` · ~${meta.delay}min delayed` : ' · delayed feed';
+  if (kind === 'live') { el.textContent = `LIVE${delay} · upd ${time}`; el.className = 'feed-chip live'; }
+  else if (kind === 'cache') { el.textContent = 'cached data · connecting…'; el.className = 'feed-chip'; }
+  else if (kind === 'stale') { el.textContent = `feed hiccup · showing last state (upd ${time})`; el.className = 'feed-chip warn'; }
+  else if (kind === 'demo') { el.textContent = 'DEMO DATA · live feed unreachable here'; el.className = 'feed-chip warn'; }
+  else { el.textContent = 'connecting…'; el.className = 'feed-chip'; }
+}
+
+function afterData() {
+  state.sessions = splitSessions(state.bars);
+  const days = [...state.sessions.keys()];
+  if (!state.day || !state.sessions.has(state.day)) state.day = days[days.length - 1] || null;
+  rebuildDaySelect();
+  fitView();
+  renderAll();
+}
+
+// ---------- Derived ----------
+
+function dayBars() {
+  const all = state.sessions.get(state.day) || [];
+  if (state.replay.on) return all.slice(0, Math.max(1, state.replay.idx));
+  return all;
+}
+
+function priorProfile() {
+  const days = [...state.sessions.keys()];
+  const i = days.indexOf(state.day);
+  if (i <= 0) return null;
+  const p = volumeProfile(state.sessions.get(days[i - 1]), tickFor(state.symbol));
+  return p ? { poc: p.poc, vah: p.vah, val: p.val } : null;
+}
+
+// ---------- Rendering ----------
+
+function fitView() {
+  const n = dayBars().length;
+  state.view.count = Math.min(Math.max(60, n), 400);
+  state.view.start = Math.max(0, n - state.view.count);
+}
+
+function renderAll() {
+  const bars = dayBars();
+  const tick = tickFor(state.symbol);
+  const info = $('chart-info');
+  $('fp-note').hidden = state.tab !== 'footprint';
+  for (const t of ['candles', 'tpo', 'vp', 'footprint']) $('stage-' + t).hidden = state.tab !== t;
+  $('stage-odds').hidden = state.tab !== 'odds';
+
+  if (state.tab === 'candles') {
+    const hit = drawCandles($('cv-candles'), {
+      bars, view: clampView(bars), pal: state.pal, levels: state.levels,
+      vwap: sessionVwap(bars), prior: priorProfile(), cross: state.cross,
+    });
+    info.textContent = hit && hit.bar
+      ? `O ${hit.bar.o}  H ${hit.bar.h}  L ${hit.bar.l}  C ${hit.bar.c}  V ${hit.bar.v.toLocaleString('en-US')}  ·  cursor ${hit.price.toFixed(2)}`
+      : bars.length ? `${state.day} · ${bars.length} bars` : 'no data';
+  } else if (state.tab === 'vp') {
+    drawVP($('cv-vp'), { profile: volumeProfile(bars, tick), pal: state.pal });
+    info.textContent = `${state.day} · session volume profile`;
+  } else if (state.tab === 'tpo') {
+    drawTPO($('cv-tpo'), { profile: tpoProfile(bars, tick, 30 * 60000, 45), pal: state.pal });
+    info.textContent = `${state.day} · 30-min TPO`;
+  } else if (state.tab === 'footprint') {
+    drawFootprint($('cv-footprint'), { fp: footprint(bars, tick), pal: state.pal, maxCells: 16 });
+    info.textContent = `${state.day} · 15-min footprint`;
+  } else if (state.tab === 'odds') {
+    renderOdds();
+    info.textContent = `walk-forward stats · ${state.sessions.size} sessions loaded`;
+  }
+  renderLevelsPanel();
+  $('replay-range').max = (state.sessions.get(state.day) || []).length;
+  if (!state.replay.on) $('replay-range').value = $('replay-range').max;
+}
+
+function clampView(bars) {
+  const v = state.view;
+  v.count = Math.max(30, Math.min(v.count, Math.max(30, bars.length)));
+  v.start = Math.max(0, Math.min(v.start, Math.max(0, bars.length - v.count)));
+  return v;
+}
+
+// ---------- Odds ----------
+
+function renderOdds() {
+  const host = $('odds-host');
+  host.textContent = '';
+  const odds = computeOdds(state.sessions);
+  if (!odds) { host.textContent = 'Not enough sessions loaded yet.'; return; }
+  const tile = (label, value, sub) => {
+    const t = document.createElement('div'); t.className = 'tile';
+    const l = document.createElement('div'); l.className = 'label'; l.textContent = label;
+    const v = document.createElement('div'); v.className = 'value'; v.textContent = value;
+    t.append(l, v);
+    if (sub) { const s = document.createElement('div'); s.className = 'sub'; s.textContent = sub; t.appendChild(s); }
+    return t;
+  };
+  const grid = document.createElement('div'); grid.className = 'tiles';
+  grid.append(
+    tile('Sessions in sample', String(odds.n), `${state.symbol} · ${state.interval}`),
+    tile('Median reach up', '+' + odds.medianReachUp.toFixed(1) + ' pts', 'from session open'),
+    tile('Median reach down', '-' + odds.medianReachDown.toFixed(1) + ' pts', 'from session open'),
+    tile('Median range', odds.medianRange.toFixed(1) + ' pts', 'high – low'),
+    tile('Closed above open', odds.closedHigherPct + '%', 'of sessions'),
+  );
+  host.appendChild(grid);
+
+  // Pro markiertem Level: Touch-/Reaktions-Odds
+  if (state.levels.length) {
+    const h = document.createElement('h3'); h.textContent = 'Your levels — walk-forward checked';
+    h.style.marginTop = '18px';
+    host.appendChild(h);
+    const lg = document.createElement('div'); lg.className = 'tiles';
+    for (const lv of state.levels) {
+      const o = computeOdds(state.sessions, { level: lv.price });
+      if (!o || !o.level) continue;
+      const L = o.level;
+      lg.append(tile(
+        `${lv.label || 'LVL'} @ ${lv.price}`,
+        L.touched ? `${L.reversedPct ?? '–'}% rev` : 'untested',
+        L.touched
+          ? `touched in ${L.touchPct}% of sessions (${L.touched}/${o.n}) · ${L.brokePct ?? 0}% broke · ±${L.reactionPts} pts window`
+          : `0 touches in ${o.n} sessions`
+      ));
+    }
+    host.appendChild(lg);
+    const note = document.createElement('p');
+    note.className = 'muted-note';
+    note.textContent = 'Reversal = price moved the reaction window away from the level after the first touch before breaking it. Stats come from the loaded history only — small sample, no guarantee.';
+    host.appendChild(note);
+  }
+}
+
+// ---------- Levels & Alerts ----------
+
+function loadLevels() { state.levels = store.get(levelsKey(), []); }
+function saveLevels() { store.set(levelsKey(), state.levels); }
+
+function renderLevelsPanel() {
+  const host = $('levels-list');
+  host.textContent = '';
+  for (const lv of state.levels) {
+    const row = document.createElement('div'); row.className = 'level-row';
+    const sw = document.createElement('input'); sw.type = 'color'; sw.value = lv.color;
+    sw.addEventListener('input', () => { lv.color = sw.value; saveLevels(); renderAll(); });
+    const price = document.createElement('span'); price.className = 'lv-price'; price.textContent = String(lv.price);
+    const label = document.createElement('span'); label.className = 'lv-label'; label.textContent = lv.label || '';
+    const hit = document.createElement('span'); hit.className = 'lv-hit' + (lv.hit ? ' on' : ''); hit.textContent = lv.hit ? 'HIT' : 'armed';
+    hit.title = 'Click to re-arm the alert';
+    hit.addEventListener('click', () => { lv.hit = false; saveLevels(); renderAll(); });
+    const del = document.createElement('button'); del.className = 'lv-del'; del.textContent = '✕';
+    del.addEventListener('click', () => { state.levels = state.levels.filter((x) => x !== lv); saveLevels(); renderAll(); });
+    row.append(sw, price, label, hit, del);
+    host.appendChild(row);
+  }
+}
+
+function addLevel(price, label) {
+  if (!Number.isFinite(price)) return;
+  state.levels.push({ price: Math.round(price * 100) / 100, label: label || '', color: state.pal.level, hit: false });
+  saveLevels();
+  renderAll();
+}
+
+function checkAlerts(newBars) {
+  if (!state.alertsArmed || !newBars || !newBars.length) return;
+  for (const lv of state.levels) {
+    if (lv.hit) continue;
+    for (const b of newBars) {
+      if (b.l <= lv.price && lv.price <= b.h) {
+        lv.hit = true;
+        fireAlert(lv);
+        break;
+      }
+    }
+  }
+  saveLevels();
+}
+
+function fireAlert(lv) {
+  toast(`⚡ Level touched: ${lv.label || 'LVL'} @ ${lv.price}`);
+  beep();
+  try {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('Prop Replay — level touched', { body: `${state.symbol}: ${lv.label || 'level'} @ ${lv.price}` });
+    }
+  } catch { /* Sandbox ohne Notifications – Toast reicht */ }
+}
+
+function toast(msg) {
+  const host = $('toast-host');
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  host.appendChild(t);
+  setTimeout(() => t.remove(), 6000);
+}
+
+let audioCtx = null;
+function beep() {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value = 880; g.gain.value = 0.06;
+    o.start();
+    o.frequency.setValueAtTime(1320, audioCtx.currentTime + 0.09);
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
+    o.stop(audioCtx.currentTime + 0.26);
+  } catch { /* kein Audio – egal */ }
+}
+
+// ---------- Replay ----------
+
+function setReplay(on) {
+  state.replay.on = on;
+  clearInterval(state.replay.timer);
+  state.replay.timer = null;
+  $('replay-play').textContent = on && state.replay.timer ? '⏸' : '▶';
+  $('live-btn').classList.toggle('active', !on);
+  if (!on) { fitView(); renderAll(); }
+}
+
+function replayPlayPause() {
+  const bars = state.sessions.get(state.day) || [];
+  if (!state.replay.on) {
+    state.replay.on = true;
+    state.replay.idx = Math.max(10, Math.min(state.replay.idx || 10, bars.length));
+  }
+  if (state.replay.timer) {
+    clearInterval(state.replay.timer);
+    state.replay.timer = null;
+    $('replay-play').textContent = '▶';
+    return;
+  }
+  $('replay-play').textContent = '⏸';
+  $('live-btn').classList.remove('active');
+  state.replay.timer = setInterval(() => {
+    const all = state.sessions.get(state.day) || [];
+    if (state.replay.idx >= all.length) { replayPlayPause(); return; }
+    const prevIdx = state.replay.idx;
+    state.replay.idx += 1;
+    checkAlerts(all.slice(prevIdx, state.replay.idx));
+    $('replay-range').value = state.replay.idx;
+    fitView();
+    renderAll();
+  }, 1000 / state.replay.speed);
+}
+
+// ---------- UI-Verdrahtung ----------
+
+function rebuildDaySelect() {
+  const sel = $('chart-day-select');
+  const current = state.day;
+  sel.textContent = '';
+  for (const day of state.sessions.keys()) {
+    const o = document.createElement('option');
+    o.value = day; o.textContent = day;
+    if (day === current) o.selected = true;
+    sel.appendChild(o);
+  }
+}
+
+function buildStaticUi() {
+  const symSel = $('symbol-select');
+  for (const s of SYMBOLS) {
+    const o = document.createElement('option');
+    o.value = s.id; o.textContent = s.label;
+    if (s.id === state.symbol) o.selected = true;
+    symSel.appendChild(o);
+  }
+  const ivSel = $('interval-select');
+  for (const i of INTERVALS) {
+    const o = document.createElement('option');
+    o.value = i.id; o.textContent = i.label;
+    if (i.id === state.interval) o.selected = true;
+    ivSel.appendChild(o);
+  }
+  symSel.addEventListener('change', () => {
+    state.symbol = symSel.value; store.set('symbol', state.symbol);
+    state.bars = []; state.day = null; loadLevels(); setReplay(false);
+    setFeed('connecting'); loadData(true);
+  });
+  ivSel.addEventListener('change', () => {
+    state.interval = ivSel.value; store.set('interval', state.interval);
+    state.bars = []; setReplay(false);
+    setFeed('connecting'); loadData(true);
+  });
+  $('chart-day-select').addEventListener('change', () => { state.day = $('chart-day-select').value; setReplay(false); fitView(); renderAll(); });
+
+  // Tabs
+  document.querySelectorAll('[data-tab]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      state.tab = btn.dataset.tab;
+      document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      renderAll();
+    });
+  });
+
+  // Candles-Interaktion: Crosshair, Zoom, Pan
+  const cv = $('cv-candles');
+  let dragging = null;
+  cv.addEventListener('pointermove', (e) => {
+    const r = cv.getBoundingClientRect();
+    if (dragging != null) {
+      const bars = dayBars();
+      const perBar = (r.width - 64) / state.view.count;
+      const shift = Math.round((dragging - e.clientX) / perBar);
+      if (shift !== 0) {
+        state.view.start += shift;
+        clampView(bars);
+        dragging = e.clientX;
+      }
+    }
+    state.cross = { x: e.clientX - r.left, y: e.clientY - r.top };
+    renderAll();
+  });
+  cv.addEventListener('pointerleave', () => { state.cross = null; renderAll(); });
+  cv.addEventListener('pointerdown', (e) => { dragging = e.clientX; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointerup', (e) => { dragging = null; try { cv.releasePointerCapture(e.pointerId); } catch { /* ok */ } });
+  cv.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const bars = dayBars();
+    const factor = e.deltaY > 0 ? 1.2 : 1 / 1.2;
+    const anchorFrac = state.cross ? state.cross.x / cv.getBoundingClientRect().width : 0.5;
+    const anchorBar = state.view.start + anchorFrac * state.view.count;
+    state.view.count = Math.round(state.view.count * factor);
+    clampView(bars);
+    state.view.start = Math.round(anchorBar - anchorFrac * state.view.count);
+    clampView(bars);
+    renderAll();
+  }, { passive: false });
+
+  // Level-Form
+  $('level-add').addEventListener('click', () => {
+    addLevel(parseFloat($('level-price').value), $('level-label').value.trim());
+    $('level-price').value = ''; $('level-label').value = '';
+  });
+  $('level-at-cursor').addEventListener('click', () => {
+    if (!state.cross) { toast('Hover the candles chart first, then click this.'); return; }
+    const bars = dayBars();
+    const slice = bars.slice(state.view.start, state.view.start + state.view.count);
+    if (!slice.length) return;
+    let lo = Infinity, hi = -Infinity;
+    for (const b of slice) { lo = Math.min(lo, b.l); hi = Math.max(hi, b.h); }
+    const pad = (hi - lo) * 0.06 || 1;
+    lo -= pad; hi += pad;
+    const r = $('cv-candles').getBoundingClientRect();
+    addLevel(lo + (1 - state.cross.y / r.height) * (hi - lo), $('level-label').value.trim());
+  });
+  $('notify-btn').addEventListener('click', async () => {
+    try {
+      const p = await Notification.requestPermission();
+      toast(p === 'granted' ? 'Browser notifications enabled ✓' : 'Notifications blocked – in-app alerts still work.');
+    } catch { toast('Notifications not available here – in-app alerts still work.'); }
+  });
+
+  // Panels
+  $('panel-levels-btn').addEventListener('click', () => togglePanel('levels'));
+  $('panel-colors-btn').addEventListener('click', () => togglePanel('colors'));
+
+  // Replay
+  $('replay-play').addEventListener('click', replayPlayPause);
+  $('replay-range').addEventListener('input', () => {
+    state.replay.on = true;
+    state.replay.idx = +$('replay-range').value;
+    fitView(); renderAll();
+  });
+  $('replay-speed').addEventListener('change', () => { state.replay.speed = +$('replay-speed').value; if (state.replay.timer) { replayPlayPause(); replayPlayPause(); } });
+  $('live-btn').addEventListener('click', () => { setReplay(false); loadData(false); });
+
+  // Farben
+  const grid = $('color-grid');
+  for (const [key, label] of PALETTE_DEFS) {
+    const row = document.createElement('label');
+    row.className = 'color-row';
+    const input = document.createElement('input');
+    input.type = 'color'; input.value = state.pal[key];
+    input.addEventListener('input', () => {
+      const saved = store.get('palette', {});
+      saved[key] = input.value;
+      store.set('palette', saved);
+      state.pal = buildPalette();
+      renderAll();
+    });
+    const span = document.createElement('span'); span.textContent = label;
+    row.append(input, span);
+    grid.appendChild(row);
+  }
+  $('color-reset').addEventListener('click', () => {
+    store.set('palette', {});
+    state.pal = buildPalette();
+    document.querySelectorAll('#color-grid input').forEach((inp, i) => { inp.value = PALETTE_DEFS[i][2]; });
+    renderAll();
+  });
+
+  window.addEventListener('resize', renderAll);
+}
+
+function togglePanel(which) {
+  const panel = $('side-panel');
+  const show = panel.dataset.active !== which || panel.hidden;
+  panel.hidden = !show;
+  panel.dataset.active = show ? which : '';
+  $('panel-levels').hidden = which !== 'levels';
+  $('panel-colors').hidden = which !== 'colors';
+  $('panel-levels-btn').setAttribute('aria-pressed', String(show && which === 'levels'));
+  $('panel-colors-btn').setAttribute('aria-pressed', String(show && which === 'colors'));
+}
+
+// ---------- Init ----------
+
+// Wird von main.js beim ersten Wechsel auf die Charts-Ansicht aufgerufen –
+// vorher läuft kein Feed-Polling im Hintergrund.
+let started = false;
+function initCharts() {
+  if (started) return;
+  started = true;
+  loadLevels();
+  buildStaticUi();
+  setFeed('connecting');
+  loadData(true);
+  schedulePoll();
+}
+
+return { initCharts };
+})());
 // ===== js/main.js =====
-
-
-
-
-
-
+Object.assign(__PR, (() => {
+const { FIRMS, RULES_AS_OF } = __PR;
+const { parseTradingViewExport, mergeParsed } = __PR;
+const { simulate, ddLabel, toEpoch } = __PR;
+const { renderEquityChart } = __PR;
+const { renderCalendar } = __PR;
+const { DEMO_CSV } = __PR;
+const { initCharts } = __PR;
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -2148,7 +3687,10 @@ function showView(view) {
   state.view = view;
   $('view-setup').hidden = view !== 'setup';
   $('view-results').hidden = view !== 'results';
-  const hash = view === 'results' ? '#results' : '';
+  $('view-charts').hidden = view !== 'charts';
+  document.querySelector('.wrap').classList.toggle('wide', view === 'charts');
+  if (view === 'charts') initCharts(); // Feed startet erst beim ersten Besuch
+  const hash = view === 'results' ? '#results' : view === 'charts' ? '#charts' : '';
   if (location.hash !== hash) {
     try { history.pushState(null, '', location.pathname + location.search + hash); } catch { /* fine */ }
   }
@@ -2161,17 +3703,18 @@ function goToResults() {
   showView('results');
 }
 
-window.addEventListener('hashchange', () => {
-  if (location.hash === '#results' && state.result && state.result.status !== 'empty') {
+function routeFromHash() {
+  if (location.hash === '#charts') {
+    showView('charts');
+  } else if (location.hash === '#results' && state.result && state.result.status !== 'empty') {
     renderResults();
     showView('results');
   } else {
     showView('setup');
   }
-});
-window.addEventListener('popstate', () => {
-  if (location.hash !== '#results') showView('setup');
-});
+}
+window.addEventListener('hashchange', routeFromHash);
+window.addEventListener('popstate', routeFromHash);
 
 // ---------- Step 1: firm + account ----------
 
@@ -2315,6 +3858,7 @@ function bindImport() {
   });
   $('run-btn').addEventListener('click', goToResults);
   $('back-btn').addEventListener('click', () => showView('setup'));
+  $('charts-back-btn').addEventListener('click', () => showView('setup'));
 
   // Auch auf der Ergebnisseite lassen sich weitere Exporte hinzufügen:
   // per Button oder indem man Dateien einfach irgendwo fallen lässt.
@@ -2771,11 +4315,15 @@ function init() {
   if (location.hash === '#results') {
     // deep link straight to the sample results
     goToResults();
+  } else if (location.hash === '#charts') {
+    showView('charts');
   }
 }
 
 init();
 
+return {  };
+})());
 </script>
 
 </body>

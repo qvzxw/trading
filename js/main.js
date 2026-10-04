@@ -4,6 +4,7 @@ import { simulate, ddLabel, toEpoch } from './engine.js';
 import { renderEquityChart } from './chart.js';
 import { renderCalendar } from './calendar.js';
 import { DEMO_CSV } from './demo.js';
+import { initCharts } from './charts/app.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -39,7 +40,10 @@ function showView(view) {
   state.view = view;
   $('view-setup').hidden = view !== 'setup';
   $('view-results').hidden = view !== 'results';
-  const hash = view === 'results' ? '#results' : '';
+  $('view-charts').hidden = view !== 'charts';
+  document.querySelector('.wrap').classList.toggle('wide', view === 'charts');
+  if (view === 'charts') initCharts(); // Feed startet erst beim ersten Besuch
+  const hash = view === 'results' ? '#results' : view === 'charts' ? '#charts' : '';
   if (location.hash !== hash) {
     try { history.pushState(null, '', location.pathname + location.search + hash); } catch { /* fine */ }
   }
@@ -52,17 +56,18 @@ function goToResults() {
   showView('results');
 }
 
-window.addEventListener('hashchange', () => {
-  if (location.hash === '#results' && state.result && state.result.status !== 'empty') {
+function routeFromHash() {
+  if (location.hash === '#charts') {
+    showView('charts');
+  } else if (location.hash === '#results' && state.result && state.result.status !== 'empty') {
     renderResults();
     showView('results');
   } else {
     showView('setup');
   }
-});
-window.addEventListener('popstate', () => {
-  if (location.hash !== '#results') showView('setup');
-});
+}
+window.addEventListener('hashchange', routeFromHash);
+window.addEventListener('popstate', routeFromHash);
 
 // ---------- Step 1: firm + account ----------
 
@@ -206,6 +211,7 @@ function bindImport() {
   });
   $('run-btn').addEventListener('click', goToResults);
   $('back-btn').addEventListener('click', () => showView('setup'));
+  $('charts-back-btn').addEventListener('click', () => showView('setup'));
 
   // Auch auf der Ergebnisseite lassen sich weitere Exporte hinzufügen:
   // per Button oder indem man Dateien einfach irgendwo fallen lässt.
@@ -662,6 +668,8 @@ function init() {
   if (location.hash === '#results') {
     // deep link straight to the sample results
     goToResults();
+  } else if (location.hash === '#charts') {
+    showView('charts');
   }
 }
 

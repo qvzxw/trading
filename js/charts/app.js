@@ -359,7 +359,7 @@ function replayPlayPause() {
 // ---------- UI-Verdrahtung ----------
 
 function rebuildDaySelect() {
-  const sel = $('day-select');
+  const sel = $('chart-day-select');
   const current = state.day;
   sel.textContent = '';
   for (const day of state.sessions.keys()) {
@@ -395,7 +395,7 @@ function buildStaticUi() {
     state.bars = []; setReplay(false);
     setFeed('connecting'); loadData(true);
   });
-  $('day-select').addEventListener('change', () => { state.day = $('day-select').value; setReplay(false); fitView(); renderAll(); });
+  $('chart-day-select').addEventListener('change', () => { state.day = $('chart-day-select').value; setReplay(false); fitView(); renderAll(); });
 
   // Tabs
   document.querySelectorAll('[data-tab]').forEach((btn) => {
@@ -519,8 +519,15 @@ function togglePanel(which) {
 
 // ---------- Init ----------
 
-loadLevels();
-buildStaticUi();
-setFeed('connecting');
-loadData(true);
-schedulePoll();
+// Wird von main.js beim ersten Wechsel auf die Charts-Ansicht aufgerufen –
+// vorher läuft kein Feed-Polling im Hintergrund.
+let started = false;
+export function initCharts() {
+  if (started) return;
+  started = true;
+  loadLevels();
+  buildStaticUi();
+  setFeed('connecting');
+  loadData(true);
+  schedulePoll();
+}
